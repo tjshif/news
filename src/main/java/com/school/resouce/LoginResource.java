@@ -1,5 +1,6 @@
 package com.school.resouce;
 
+import com.school.AOP.LogAnnotation;
 import com.school.Gson.LoginRegisterGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.LoginService;
@@ -24,6 +25,7 @@ public class LoginResource {
 	@Path(("/loginregister"))
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
 	public String loginRegister(@FormParam("phoneNo") String phoneNumber, @FormParam("smsCode") String smsCode)
 	{
 		logger.info(String.format("phoneNo: %s; smsCode:%s", phoneNumber, smsCode));
@@ -34,6 +36,7 @@ public class LoginResource {
 			logger.error(String.format("invalid loginregister:phoneNo: %s; smsCode:%s", phoneNumber, smsCode));
 		}
 		LoginRegisterGson retResult = mLoginService.loginRegister(phoneNumber, smsCode);
+
 		return GsonUtil.toJson(retResult);
 	}
 }
