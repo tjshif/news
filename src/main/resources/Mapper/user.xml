@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.IUserDao" >
+    <sql id="Column_List">
+        phoneNumber,
+        nickName,
+        CreateAt,
+        CreateBy,
+        UpdateAt,
+        UpdateBy
+    </sql>
+
+    <sql id ="Full_Column">
+        id,
+        <include refid="Column_List"/>
+    </sql>
+
+    <insert id="insert" parameterType="com.school.Entity.UserDTO" useGeneratedKeys="true" keyProperty="id">
+        insert into User (<include refid="Column_List"/>) values
+        (#{phoneNumber},
+        #{nickName},
+        now(),
+        #{createBy},
+        now(),
+        #{updateBy})
+    </insert>
+
+    <select id="selectByPhoneNo" parameterType="java.lang.String" resultType="com.school.Entity.UserDTO">
+        select <include refid="Full_Column"/> from User where PhoneNumber = #{mPhoneNo}
+    </select>
+</mapper>

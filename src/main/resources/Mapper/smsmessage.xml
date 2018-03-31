@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.ISmsMessageDao" >
+    <sql id="Column_List">
+        phoneNumber,
+        code,
+        count,
+        CreateAt,
+        CreateBy,
+        UpdateAt,
+        UpdateBy
+    </sql>
+
+    <select id="selectSmsSendToday" resultType="com.school.Entity.SmsMessageDTO" >
+        SELECT <include refid="Column_List"/>
+        FROM Smsmessage where phoneNumber = #{phoneNumber} and hour(TIMEDIFF(NOW(),`updateAt`)) &lt; 24  order by updateAt DESC;
+    </select>
+
+    <insert id="insert" parameterType="com.school.Entity.SmsMessageDTO">
+        insert into Smsmessage (<include refid="Column_List"/>) values
+        (#{phoneNumber},
+        #{code},
+        #{count},
+        now(),
+        #{createBy},
+        now(),
+        #{updateBy})
+        ON DUPLICATE KEY UPDATE code = #{code}, UpdateAt=now(), count=#{count}
+    </insert>
+
+</mapper>
