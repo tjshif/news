@@ -25,4 +25,12 @@ public class NewsTestcase {
 		Date date = sdf.parse("2018-03-30 12:10:12");
 		newsService.selectNewsByCreateAt(date);
 	}
+
+	@Test
+	public void getNewsByIDTests() throws ParseException {
+		//TODO, refine later
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = sdf.parse("2018-03-30 12:10:12");
+		newsService.selectNewsByCreateAtFromID(date, 3L);
+	}
 }

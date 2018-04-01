@@ -30,4 +30,17 @@ public class NewsService {
 		}
 		return news;
 	}
+
+	public List<NewsDTO> selectNewsByCreateAtFromID(Date date, Long fromID)
+	{
+		List<NewsDTO> news = null;
+		try {
+			news = newsDao.selectNewsByCreateAtFromID(date, fromID);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+		}
+		return news;
+	}
 }
