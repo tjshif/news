@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 
 @Service
 public class LoginService {
+	Logger logger = Logger.getLogger(LoginService.class.getName());
+
 	@Resource
 	private ISmsMessageDao smsMessageDao;
 
@@ -28,8 +30,6 @@ public class LoginService {
 
 	@Resource
 	private IFeedbackDao feedbackDao;
-
-	Logger logger = Logger.getLogger(LoginService.class.getName());
 
 	@Transactional
 	public UserDTO createUser(String phoneNo, String nickName)

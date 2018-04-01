@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.INewsDao" >
+    <sql id="Column_List">
+	  subject,
+	  newType,
+      newSubEnum,
+	  postDate,
+	  location,
+	  isHot,
+	  CreateAt,
+	  CreateBy
+    </sql>
+
+    <select id="selectNewsByCreateAt" resultType="com.school.Entity.NewsDTO" >
+        SELECT <include refid="Column_List"/>
+        FROM News where  CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
+    </select>
+</mapper>
