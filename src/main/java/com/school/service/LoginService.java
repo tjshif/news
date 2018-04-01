@@ -3,11 +3,14 @@ package com.school.service;
 import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.DAO.IFeedbackDao;
 import com.school.DAO.ISmsMessageDao;
 import com.school.DAO.IUserDao;
+import com.school.Entity.FeedbackDTO;
 import com.school.Entity.SmsMessageDTO;
 import com.school.Entity.UserDTO;
 import com.school.Gson.LoginRegisterGson;
+import com.school.Gson.RetResultGson;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class LoginService {
 
 	@Resource
 	private IUserDao userDao;
+
+	@Resource
+	private IFeedbackDao feedbackDao;
 
 	Logger logger = Logger.getLogger(LoginService.class.getName());
 
@@ -68,5 +74,21 @@ public class LoginService {
 			logRegGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return logRegGson;
+	}
+
+	public RetResultGson insertFeedback(String contactInfo, String feedback)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try
+		{
+			FeedbackDTO feedbackDTO = new FeedbackDTO(contactInfo, feedback);
+			feedbackDao.insert(feedbackDTO);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
 	}
 }

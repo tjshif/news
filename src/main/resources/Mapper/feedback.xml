@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.IFeedbackDao" >
+    <sql id="Column_List">
+        ContantInfo,
+        Feedback,
+        CreateAt
+    </sql>
+
+
+    <insert id="insert" parameterType="com.school.Entity.FeedbackDTO" useGeneratedKeys="true" keyProperty="id">
+        insert into Feedback (<include refid="Column_List"/>) values
+        (#{contantInfo},
+        #{feedback},
+        now())
+    </insert>
+</mapper>

@@ -1,7 +1,10 @@
 package com.school.resouce;
 
 import com.school.AOP.LogAnnotation;
+import com.school.Constants.RetCode;
+import com.school.Constants.RetMsg;
 import com.school.Gson.LoginRegisterGson;
+import com.school.Gson.RetResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.LoginService;
 import com.sun.jersey.api.core.InjectParam;
@@ -34,9 +37,29 @@ public class LoginResource {
 		if (TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(smsCode))
 		{
 			logger.error(String.format("invalid loginregister:phoneNo: %s; smsCode:%s", phoneNumber, smsCode));
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
 		}
 		LoginRegisterGson retResult = mLoginService.loginRegister(phoneNumber, smsCode);
 
 		return GsonUtil.toJson(retResult);
+	}
+
+	//用户反馈
+	@POST
+	@Path("/sendfeedback")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String sendFeedback(@FormParam("contactInfo") String contactInfo, @FormParam("feedback") String feedback)
+	{
+		if (TextUtils.isEmpty(feedback))
+		{
+			logger.error("feedback can't be empty!");
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		RetResultGson resultGson = mLoginService.insertFeedback(contactInfo, feedback);
+		return GsonUtil.toJson(resultGson);
 	}
 }
