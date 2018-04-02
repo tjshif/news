@@ -3,8 +3,8 @@
 <mapper namespace="com.school.DAO.INewsDao" >
     <sql id="Column_List">
 	  subject,
-	  newType,
-      newSubEnum,
+	  newsType,
+      newsSubEnum,
 	  postDate,
 	  location,
 	  isHot,

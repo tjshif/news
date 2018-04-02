@@ -22,7 +22,7 @@ public class NewsTestcase {
 	public void getNewsTest() throws ParseException {
 		//TODO, refine later
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = sdf.parse("2018-03-30 12:10:12");
+		Date date = sdf.parse("2018-04-01 12:10:12");
 		newsService.selectNewsByCreateAt(date);
 	}
 
@@ -30,7 +30,7 @@ public class NewsTestcase {
 	public void getNewsByIDTests() throws ParseException {
 		//TODO, refine later
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = sdf.parse("2018-03-30 12:10:12");
+		Date date = sdf.parse("2018-04-01 12:10:12");
 		newsService.selectNewsByCreateAtFromID(date, 3L);
 	}
 }
