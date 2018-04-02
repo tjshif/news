@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface INewsDao {
 	List<NewsDTO> selectNewsByCreateAt(Date createDay);
+
 	List<NewsDTO> selectNewsByCreateAtFromID(@Param(value = "createDay")Date createDay, @Param(value = "fromID")Long fromID);
 }
