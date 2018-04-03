@@ -11,4 +11,6 @@ public interface INewsDao {
 	List<NewsDTO> selectNewsByCreateAt(Date createDay);
 
 	List<NewsDTO> selectNewsByCreateAtFromID(@Param(value = "createDay")Date createDay, @Param(value = "fromID")Long fromID);
+
+	List<NewsDTO> selectNewsLessId(@Param("newsType") Integer newsType, @Param("id") Long id, @Param("count")Integer count);
 }

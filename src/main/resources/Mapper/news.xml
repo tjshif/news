@@ -22,4 +22,9 @@
         FROM News where ID >= #{fromID} and CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
     </select>
 
+    <select id="selectNewsLessId" resultType="com.school.Entity.NewsDTO" >
+        SELECT id, <include refid="Column_List"/>
+        FROM News WHERE NewsType = #{newsType} and id &gt; #{id} order by id Limit 0, #{count}
+    </select>
+
 </mapper>

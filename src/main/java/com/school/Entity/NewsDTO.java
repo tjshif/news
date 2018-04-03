@@ -9,4 +9,16 @@ public class NewsDTO extends BaseDTO {
 	private Timestamp	postDate;	//post的时间
 	private Integer    location;	//地点，可以更加学校所在地填写
 	private Integer    isHot;		//是否热点
+
+	public Integer getNewsType() {
+		return newsType;
+	}
+
+	public Integer getLocation() {
+		return location;
+	}
+
+	public Integer getNewsSubType() {
+		return newsSubEnum;
+	}
 }

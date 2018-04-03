@@ -1,8 +1,11 @@
 package cases;
 
+import com.school.Constants.LocationConst;
+import com.school.Constants.NewsTypeConst;
 import com.school.Enum.NewsEnum;
 import com.school.Redis.LoadDateToRedis;
 import com.school.Redis.StoredCacheService;
+import com.school.service.NewsService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +21,19 @@ public class RedisTest {
 	@Resource
 	private LoadDateToRedis loadDateToRedis;
 
+	@Resource
+	private NewsService newsService;
+
 	@Test
 	public void testRedis()
 	{
-		loadDateToRedis.LoadDataToRedisByDate(new Date(), NewsEnum.NEWS_JOB);
+		loadDateToRedis.LoadDataToRedisByDate(NewsTypeConst.FRIENDS, 10);
+		loadDateToRedis.removeDataFromRedis();
+	}
+
+	@Test
+	public void testReadFromRedis()
+	{
+		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationConst.ALL, -1, 1);
 	}
 }
