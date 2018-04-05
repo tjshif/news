@@ -1,7 +1,7 @@
 package cases;
 
-import com.school.Constants.NewsTypeConst;
 import com.school.Enum.LocationEnum;
+import com.school.Enum.NewsTypeEnum;
 import com.school.Redis.LoadDateToRedis;
 import com.school.service.NewsService;
 import org.junit.Test;
@@ -23,13 +23,13 @@ public class RedisTest {
 	@Test
 	public void testRedis()
 	{
-		loadDateToRedis.LoadDataToRedisByDate(NewsTypeConst.FRIENDS, 10);
+		loadDateToRedis.LoadDataToRedisByDate(NewsTypeEnum.NEWS_JOB, 10);
 		loadDateToRedis.removeDataFromRedis();
 	}
 
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 5);
+		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 5);
 	}
 }

@@ -4,6 +4,8 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDTO;
+import com.school.Enum.NewsSubTypeEnum;
+import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Redis.ReadDataFromRedis;
 import org.apache.log4j.Logger;
@@ -49,16 +51,16 @@ public class NewsService {
 		return news;
 	}
 
-	public NewsSubjectResultGson getNewsSubjectList(Integer newsType, Integer subNewsType, Integer location,
+	public NewsSubjectResultGson getNewsSubjectList(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location,
 													Long startFrom, Integer count)
 	{
 		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 
-		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListLessThanId(newsType, subNewsType, location, startFrom, count);
+		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListLessThanId(newsType, newsSubType, location, startFrom, count);
 
 		if (newsDTOList == null)//表示redis里面没有取到数据
 		{//data from db
-			newsDTOList = newsDao.selectNewsLessThanId(newsType, subNewsType, location, startFrom, count);
+			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType.getNewsSubTypeCode(), location, startFrom, count);
 		}
 		resultGson.setNewsList(newsDTOList);
 		return resultGson;

@@ -1,6 +1,8 @@
 package com.school.Redis;
 
 import com.school.Entity.NewsDTO;
+import com.school.Enum.NewsSubTypeEnum;
+import com.school.Enum.NewsTypeEnum;
 import com.school.Utils.GsonUtil;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
@@ -17,12 +19,12 @@ public class ReadDataFromRedis extends RedisHandler {
 
 	//null表示需要从db读取，
 	//不包括startfrom
-	public List<NewsDTO> getNewsSubjectListLessThanId(Integer newsType, Integer subNewsType, Integer location, Long startFrom,
-											Integer count)
+	public List<NewsDTO> getNewsSubjectListLessThanId(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
+													  Integer count)
 	{
-		String key = getNewsTypeLocationKey(newsType, location);
+		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
 		if (subNewsType != null)
-			key = getNewsTypeSubTypeLocationKey(newsType, subNewsType, location);
+			key = getNewsTypeSubTypeLocationKey(newsType.getNewsTypeCode(), subNewsType.getNewsSubTypeCode(), location);
 		//获取最新的
 		Set<String> resultIdxList = null;
 		if (startFrom == null || startFrom == -1)
