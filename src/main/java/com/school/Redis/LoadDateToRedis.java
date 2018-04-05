@@ -1,19 +1,16 @@
 package com.school.Redis;
 
 import com.school.Constants.EnvConst;
-import com.school.Constants.LocationConst;
 import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDTO;
-import com.school.Enum.NewsEnum;
+import com.school.Enum.LocationEnum;
 import com.school.Utils.GsonUtil;
-import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Tuple;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +46,7 @@ public class LoadDateToRedis extends RedisHandler{
 				{
 					LoadNewsToRedis(item);
 					storedCacheService.zadd(getNewsTypeKey(item.getNewsType()), Long.parseLong(item.getId()), item.getId());
-					storedCacheService.zadd(getTrimKey(), LocationConst.ALL, getNewsTypeKey(item.getNewsType()));
+					storedCacheService.zadd(getTrimKey(), LocationEnum.ALL.getZipCode(), getNewsTypeKey(item.getNewsType()));
 				}
 			}
 			else
@@ -102,7 +99,7 @@ public class LoadDateToRedis extends RedisHandler{
 				for (Tuple trimKey : trimKeys)
 				{
 					Integer location = (int)trimKey.getScore();
-					if (location.intValue() == LocationConst.ALL)
+					if (location.intValue() == LocationEnum.ALL.getZipCode())
 					{
 						trimSortedListAndNewsItem(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ALL_LOCATION);
 					}

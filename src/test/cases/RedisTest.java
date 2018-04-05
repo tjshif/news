@@ -1,19 +1,15 @@
 package cases;
 
-import com.school.Constants.LocationConst;
 import com.school.Constants.NewsTypeConst;
-import com.school.Enum.NewsEnum;
+import com.school.Enum.LocationEnum;
 import com.school.Redis.LoadDateToRedis;
-import com.school.Redis.StoredCacheService;
 import com.school.service.NewsService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)     //表示继承了SpringJUnit4ClassRunner类
 @ContextConfiguration(locations = {"classpath:applicationContex.xml"})
@@ -34,6 +30,6 @@ public class RedisTest {
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationConst.SHANGHAI, 9L, 5);
+		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 5);
 	}
 }

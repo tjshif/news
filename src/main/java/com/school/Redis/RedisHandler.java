@@ -1,7 +1,6 @@
 package com.school.Redis;
 
-import com.school.Constants.LocationConst;
-import com.school.resouce.LoginResource;
+import com.school.Enum.LocationEnum;
 import org.apache.log4j.Logger;
 
 import javax.annotation.Resource;
@@ -34,7 +33,7 @@ public class RedisHandler {
 
 	protected String getNewsTypeKey(Integer newsType)
 	{
-		return String.format("type:%d;location:%d", newsType, LocationConst.ALL);
+		return String.format("type:%d;location:%d", newsType, LocationEnum.ALL.getZipCode());
 	}
 
 	protected String getTrimKey()
