@@ -60,7 +60,8 @@ public class NewsService {
 
 		if (newsDTOList == null)//表示redis里面没有取到数据
 		{//data from db
-			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType.getNewsSubTypeCode(), location, startFrom, count);
+			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
+					location, startFrom, count);
 		}
 		resultGson.setNewsList(newsDTOList);
 		return resultGson;

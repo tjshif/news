@@ -6,8 +6,9 @@
 	  newsType,
       newsSubEnum,
 	  postDate,
-	  location,
+	  locationCode,
 	  isHot,
+	  linkUrl,
 	  CreateAt,
 	  CreateBy
     </sql>
@@ -29,8 +30,8 @@
             <if test="newsSubEnum != null">
                and newsSubEnum = #newsSubEnum
             </if>
-            <if test="location != null and location != 0">
-                and location = #{location}
+            <if test="locationCode != null and locationCode != 0">
+                and locationCode = #{locationCode}
             </if>
             <if test="id != null">
                 and id &gt; #{id}
@@ -44,8 +45,8 @@
         <if test="newsSubEnum != null">
             and newsSubEnum = #newsSubEnum
         </if>
-        <if test="location != null and location != 0">
-            and location = #{location}
+        <if test="locationCode != null and locationCode != 0">
+            and locationCode = #{locationCode}
         </if>
         <if test="id != null">
             and id &lt; #{id}

@@ -30,6 +30,6 @@ public class RedisTest {
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 5);
+		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 3);
 	}
 }
