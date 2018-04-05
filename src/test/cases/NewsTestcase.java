@@ -33,4 +33,6 @@ public class NewsTestcase {
 		Date date = sdf.parse("2018-04-01 12:10:12");
 		newsService.selectNewsByCreateAtFromID(date, 3L);
 	}
+
+
 }

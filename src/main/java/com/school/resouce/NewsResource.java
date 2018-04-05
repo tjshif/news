@@ -32,8 +32,8 @@ public class NewsResource {
 	public String getNewsSubjectList(@QueryParam("newstype") Integer newsType,
 									 @QueryParam("subnewstype") Integer subNewsType,
 									 @QueryParam("location")Integer location,
-									 @QueryParam("startfrom")Integer startFrom,
-									 @QueryParam("count")Integer count)
+									 @QueryParam("startfrom")Long startFrom, //不包括startfrom
+									 @DefaultValue("20")@QueryParam("count")Integer count)
 	{
 		if (!NewsTypeConst.isValidType(newsType) || count.intValue() < 1)
 		{

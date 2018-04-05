@@ -50,14 +50,17 @@ public class NewsService {
 	}
 
 	public NewsSubjectResultGson getNewsSubjectList(Integer newsType, Integer subNewsType, Integer location,
-													Integer startFrom, Integer count)
+													Long startFrom, Integer count)
 	{
 		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 
-		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectList(newsType, subNewsType, location, startFrom, count);
+		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListLessThanId(newsType, subNewsType, location, startFrom, count);
 
-		if (newsDTOList != null)
-			resultGson.setNewsList(newsDTOList);
+		if (newsDTOList == null)//表示redis里面没有取到数据
+		{//data from db
+			newsDTOList = newsDao.selectNewsLessThanId(newsType, subNewsType, location, startFrom, count);
+		}
+		resultGson.setNewsList(newsDTOList);
 		return resultGson;
 	}
 }

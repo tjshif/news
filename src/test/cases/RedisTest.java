@@ -34,6 +34,6 @@ public class RedisTest {
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationConst.ALL, -1, 1);
+		newsService.getNewsSubjectList(NewsTypeConst.FRIENDS, null, LocationConst.SHANGHAI, 9L, 5);
 	}
 }

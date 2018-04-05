@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.school.DAO.INewsDao" >
     <sql id="Column_List">
 	  subject,
@@ -22,9 +22,35 @@
         FROM News where ID >= #{fromID} and CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
     </select>
 
-    <select id="selectNewsLessId" resultType="com.school.Entity.NewsDTO" >
+    <select id="selectNewsGreaterThanId" resultType="com.school.Entity.NewsDTO" >
         SELECT id, <include refid="Column_List"/>
-        FROM News WHERE NewsType = #{newsType} and id &gt; #{id} order by id Limit 0, #{count}
+        FROM News
+        WHERE NewsType = #{newsType}
+            <if test="newsSubEnum != null">
+               and newsSubEnum = #newsSubEnum
+            </if>
+            <if test="location != null and location != 0">
+                and location = #{location}
+            </if>
+            <if test="id != null">
+                and id &gt; #{id}
+            </if>  order by id Limit 0, #{count}
     </select>
+
+    <select id="selectNewsLessThanId" resultType="com.school.Entity.NewsDTO" >
+        SELECT id, <include refid="Column_List"/>
+        FROM News
+        WHERE NewsType = #{newsType}
+        <if test="newsSubEnum != null">
+            and newsSubEnum = #newsSubEnum
+        </if>
+        <if test="location != null and location != 0">
+            and location = #{location}
+        </if>
+        <if test="id != null">
+            and id &lt; #{id}
+        </if>  order by id desc Limit 0, #{count}
+    </select>
+
 
 </mapper>

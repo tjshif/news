@@ -212,6 +212,40 @@ public class StoredCacheService {
 		}
 		return ret;
 	}
+
+	public String getSet(String key, String value)
+	{
+		ShardedJedis resource = null;
+		String ret = null;
+		boolean broken = false;
+		try {
+			resource = shardedJedisSentinelPool.getResource();
+			ret = resource.getSet(key, value);
+		} catch (Exception e) {
+			broken = true;
+			e.printStackTrace();
+		} finally {
+			close(resource,broken);
+		}
+		return ret;
+	}
+
+	public Long setnx(String key, String value)
+	{
+		ShardedJedis resource = null;
+		Long ret = null;
+		boolean broken = false;
+		try {
+			resource = shardedJedisSentinelPool.getResource();
+			ret = resource.setnx(key, value);
+		} catch (Exception e) {
+			broken = true;
+			e.printStackTrace();
+		} finally {
+			close(resource,broken);
+		}
+		return ret;
+	}
 	/**
 	 * 注意，此方法需要try-catch，因为当master发生变更后，监控线程会重新初始化连接池中的连接，造成抛错
 	 */

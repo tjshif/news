@@ -21,24 +21,49 @@ import java.util.Set;
 public class LoadDateToRedis extends RedisHandler{
 	private Logger logger = Logger.getLogger(LoadDateToRedis.class.getName());
 
+	private static final String LoadDateToRedisLock = "LoadDateToRedisLock";
+
+	private static final String RemoveDateFromRedisLock = "RemoveDateFromRedisLock";
+
 	@Resource
 	private INewsDao newsDao;
 
+	@Resource
+	private DistributedLock distributedLock;
+
 	public void LoadDataToRedisByDate(Integer newsType, Integer count)
 	{
-		//TODO add Lock
-
-
-		if (count < 1)
-			return;
-		Long storedNewsIdx = getStoredIndex(newsType);
-		List<NewsDTO> items = newsDao.selectNewsLessId(newsType, storedNewsIdx, count);
-
-		for (NewsDTO item : items)
+		//用分布式锁，timout是1个小时。
+		Boolean ownTheLock = false;
+		try
 		{
-			LoadNewsToRedis(item);
-			storedCacheService.zadd(getNewsTypeKey(item.getNewsType()), Long.parseLong(item.getId()), item.getId());
-			storedCacheService.zadd(getTrimKey(), LocationConst.ALL, getNewsTypeKey(item.getNewsType()));
+			if (distributedLock.tryLock(LoadDateToRedisLock))
+			{
+				ownTheLock = true;
+				if (count < 1)
+					return;
+				Long storedNewsIdx = getStoredIndex(newsType);
+				List<NewsDTO> items = newsDao.selectNewsGreaterThanId(newsType, null, null, storedNewsIdx, count);
+
+				for (NewsDTO item : items)
+				{
+					LoadNewsToRedis(item);
+					storedCacheService.zadd(getNewsTypeKey(item.getNewsType()), Long.parseLong(item.getId()), item.getId());
+					storedCacheService.zadd(getTrimKey(), LocationConst.ALL, getNewsTypeKey(item.getNewsType()));
+				}
+			}
+			else
+			{
+				logger.warn("can't get the lock");
+			}
+		}
+		catch (Throwable t)
+		{
+			logger.error(t.getMessage());
+		}
+		finally {
+			if (ownTheLock)
+				distributedLock.unlock(LoadDateToRedisLock);
 		}
 	}
 
@@ -68,19 +93,35 @@ public class LoadDateToRedis extends RedisHandler{
 
 	public void removeDataFromRedis()
 	{
-		Set<Tuple> trimKeys = storedCacheService.zrangeWithScores(getTrimKey(), 0, -1);
-		for (Tuple trimKey : trimKeys)
-		{
-			Integer location = (int)trimKey.getScore();
-			if (location.intValue() == LocationConst.ALL)
-			{
-				trimSortedListAndNewsItem(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ALL_LOCATION);
-			}
-			else
-			{
-				trimSortedList(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ONE_LOCATION);
+		//用分布式锁，timout是1个小时。
+		Boolean ownTheLock = false;
+		try {
+			if (distributedLock.tryLock(RemoveDateFromRedisLock)) {
+				ownTheLock = true;
+				Set<Tuple> trimKeys = storedCacheService.zrangeWithScores(getTrimKey(), 0, -1);
+				for (Tuple trimKey : trimKeys)
+				{
+					Integer location = (int)trimKey.getScore();
+					if (location.intValue() == LocationConst.ALL)
+					{
+						trimSortedListAndNewsItem(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ALL_LOCATION);
+					}
+					else
+					{
+						trimSortedList(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ONE_LOCATION);
+					}
+				}
 			}
 		}
+		catch (Throwable t)
+		{
+			logger.error(t.getMessage());
+		}
+		finally {
+			if (ownTheLock)
+				distributedLock.unlock(RemoveDateFromRedisLock);
+		}
+
 	}
 
 	private void trimSortedList(String key, Integer limitSize)
@@ -103,8 +144,8 @@ public class LoadDateToRedis extends RedisHandler{
 		Set<String> candidateRemoves = storedCacheService.zrange(key, 0, removeMaxIdx);
 		for (String candidate : candidateRemoves)
 		{
-			String removeItemIdx = getNewsItemKey(candidate);
-			storedCacheService.del(removeItemIdx);
+			String removeItemKey = getNewsItemKey(candidate);
+			storedCacheService.del(removeItemKey);
 		}
 		storedCacheService.zremrangeByRank(key, 0, removeMaxIdx);
 	}

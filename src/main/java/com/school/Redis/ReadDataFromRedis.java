@@ -16,7 +16,8 @@ public class ReadDataFromRedis extends RedisHandler {
 	private Logger logger = Logger.getLogger(ReadDataFromRedis.class.getName());
 
 	//null表示需要从db读取，
-	public List<NewsDTO> getNewsSubjectList(Integer newsType, Integer subNewsType, Integer location, Integer startFrom,
+	//不包括startfrom
+	public List<NewsDTO> getNewsSubjectListLessThanId(Integer newsType, Integer subNewsType, Integer location, Long startFrom,
 											Integer count)
 	{
 		String key = getNewsTypeLocationKey(newsType, location);
@@ -30,6 +31,7 @@ public class ReadDataFromRedis extends RedisHandler {
 		}
 		else
 		{
+			startFrom = startFrom - 1;
 			resultIdxList = storedCacheService.zrevrangeByScore(key, startFrom, 0, 0, count);
 		}
 		if (resultIdxList == null || resultIdxList.size() != count)
