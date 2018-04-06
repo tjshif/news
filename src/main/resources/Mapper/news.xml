@@ -4,7 +4,7 @@
     <sql id="Column_List">
 	  subject,
 	  newsType,
-      newsSubEnum,
+      newsSubType,
 	  postDate,
 	  locationCode,
 	  isHot,
@@ -27,8 +27,8 @@
         SELECT id, <include refid="Column_List"/>
         FROM News
         WHERE NewsType = #{newsType}
-            <if test="newsSubEnum != null">
-               and newsSubEnum = #newsSubEnum
+            <if test="newsSubType != null">
+               and newsSubType = #newsSubType
             </if>
             <if test="locationCode != null and locationCode != 0">
                 and locationCode = #{locationCode}
@@ -42,8 +42,8 @@
         SELECT id, <include refid="Column_List"/>
         FROM News
         WHERE NewsType = #{newsType}
-        <if test="newsSubEnum != null">
-            and newsSubEnum = #newsSubEnum
+        <if test="newsSubType != null">
+            and newsSubType = #newsSubType
         </if>
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}

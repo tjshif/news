@@ -23,13 +23,13 @@ public class RedisTest {
 	@Test
 	public void testRedis()
 	{
-		loadDateToRedis.LoadDataToRedisByDate(NewsTypeEnum.NEWS_JOB, 10);
+		loadDateToRedis.LoadDataToRedisByDate(NewsTypeEnum.NEWS_FRIENDS, 100);
 		loadDateToRedis.removeDataFromRedis();
 	}
 
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.SHANGHAI.getZipCode(), 9L, 3);
+		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_FRIENDS, null, LocationEnum.SHANGHAI.getZipCode(), null, 30);
 	}
 }
