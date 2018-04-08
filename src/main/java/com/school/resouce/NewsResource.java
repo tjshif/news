@@ -24,7 +24,7 @@ public class NewsResource {
 	private NewsService newsService;
 
 	@GET
-	@Path("/getnewssubject")
+	@Path("/getnewslistsubjects")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation

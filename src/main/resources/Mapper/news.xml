@@ -8,7 +8,6 @@
 	  postDate,
 	  locationCode,
 	  isHot,
-	  linkUrl,
 	  CreateAt,
 	  CreateBy
     </sql>
