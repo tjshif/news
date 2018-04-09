@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.ISpiderEnumDao" >
+    <select id="selectSupportedCities" resultType="com.school.Entity.CityDTO">
+        SELECT enumComment cityName, enumValue cityCode FROM SpiderEnum where enumType = 'LOCATION_ENUM';
+    </select>
+</mapper>
