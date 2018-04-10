@@ -1,7 +1,11 @@
 package cases;
 
+import com.school.Constants.RetCode;
 import com.school.DAO.INewsDao;
+import com.school.Entity.NewsDetailDTO;
+import com.school.Gson.NewsDetailResultGson;
 import com.school.service.NewsService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,5 +38,11 @@ public class NewsTestcase {
 		newsService.selectNewsByCreateAtFromID(date, 3L);
 	}
 
+	@Test
+	public void getNewsDetailTest()
+	{
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L);
+		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
+	}
 
 }

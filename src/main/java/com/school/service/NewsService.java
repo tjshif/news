@@ -3,9 +3,12 @@ package com.school.service;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.INewsDao;
+import com.school.DAO.INewsDetailDao;
 import com.school.Entity.NewsDTO;
+import com.school.Entity.NewsDetailDTO;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
+import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Redis.ReadDataFromRedis;
 import org.apache.log4j.Logger;
@@ -17,13 +20,16 @@ import java.util.List;
 
 @Service
 public class NewsService {
-	Logger logger = Logger.getLogger(NewsService.class.getName());
+	private Logger logger = Logger.getLogger(NewsService.class.getName());
 
 	@Resource
 	private ReadDataFromRedis readDataFromRedis;
 
 	@Resource
 	private INewsDao newsDao;
+
+	@Resource
+	private INewsDetailDao newsDetailDao;
 
 	public List<NewsDTO> selectNewsByCreateAt(Date date)
 	{
@@ -65,5 +71,20 @@ public class NewsService {
 		}
 		resultGson.setNewsList(newsDTOList);
 		return resultGson;
+	}
+
+	public NewsDetailResultGson getNewsDetail(Long newsID)
+	{
+		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
+			newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			newsDetailResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return newsDetailResultGson;
 	}
 }

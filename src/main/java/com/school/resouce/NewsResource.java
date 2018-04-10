@@ -5,6 +5,7 @@ import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.NewsService;
@@ -48,5 +49,16 @@ public class NewsResource {
 		}
 		NewsSubjectResultGson retResult = newsService.getNewsSubjectList(newsTypeEnum, newsSubTypeNem, location, startFrom, count);
 		return GsonUtil.toJson(retResult);
+	}
+
+	@GET
+	@Path("/getnewsdetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getNewsDetail(@QueryParam("newsid") Long newsID)
+	{
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID);
+		return GsonUtil.toJson(resultGson);
 	}
 }
