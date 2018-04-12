@@ -23,7 +23,7 @@ public class RedisTest {
 	@Test
 	public void testRedis()
 	{
-		loadDateToRedis.LoadDataToRedisByDate(NewsTypeEnum.NEWS_JOB, 100);
+		loadDateToRedis.LoadDataToRedisByDate(2, 100);
 		loadDateToRedis.removeDataFromRedis();
 	}
 

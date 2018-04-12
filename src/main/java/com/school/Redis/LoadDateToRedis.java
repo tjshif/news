@@ -2,16 +2,21 @@ package com.school.Redis;
 
 import com.school.Constants.EnvConst;
 import com.school.DAO.INewsDao;
+import com.school.DAO.ISpiderEnumDao;
 import com.school.Entity.NewsDTO;
+import com.school.Entity.SpiderEnumDTO;
 import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Utils.GsonUtil;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Tuple;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +28,33 @@ public class LoadDateToRedis extends RedisHandler{
 
 	private static final String RemoveDateFromRedisLock = "RemoveDateFromRedisLock";
 
+	private static final String NewsTypeEnumKey = "NEWS_TYPE_ENUM";
+
 	@Resource
 	private INewsDao newsDao;
 
 	@Resource
+	private ISpiderEnumDao spiderEnumDao;
+
+	@Resource
 	private DistributedLock distributedLock;
 
-	public void LoadDataToRedisByDate(NewsTypeEnum newsType, Integer count)
+	@Scheduled(cron = "0 0/10 * * * ?")
+	public void LoadDataToRedis()
+	{
+		Date date = new Date();
+		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateStr = sim.format(date);
+		logger.info("sheduler job: " + dateStr);
+		List<SpiderEnumDTO> spiderEnumDTOS = spiderEnumDao.selectEnumValuesByType(NewsTypeEnumKey);
+		for (SpiderEnumDTO spiderEnumDTO : spiderEnumDTOS)
+		{
+			if (spiderEnumDTO.getEnumValue() != null)
+				LoadDataToRedisByDate(spiderEnumDTO.getEnumValue(), EnvConst.PAGE_SIZE);
+		}
+	}
+
+	public void LoadDataToRedisByDate(Integer newsType, Integer count)
 	{
 		//用分布式锁，timout是1个小时。
 		Boolean ownTheLock = false;
@@ -40,8 +65,8 @@ public class LoadDateToRedis extends RedisHandler{
 				ownTheLock = true;
 				if (count < 1)
 					return;
-				Long storedNewsIdx = getStoredIndex(newsType.getNewsTypeCode());
-				List<NewsDTO> items = newsDao.selectNewsGreaterThanId(newsType.getNewsTypeCode(), null, null, storedNewsIdx, count);
+				Long storedNewsIdx = getStoredIndex(newsType);
+				List<NewsDTO> items = newsDao.selectNewsGreaterThanId(newsType, null, null, storedNewsIdx, count);
 
 				for (NewsDTO item : items)
 				{

@@ -4,4 +4,9 @@
     <select id="selectSupportedCities" resultType="com.school.Entity.CityDTO">
         SELECT enumComment cityName, enumValue cityCode FROM SpiderEnum where enumType = 'LOCATION_ENUM';
     </select>
+
+    <select id="selectEnumValuesByType" resultType="com.school.Entity.SpiderEnumDTO">
+        select enumKey, enumValue from SpiderEnum where enumType = #{enumType}
+    </select>
+
 </mapper>
