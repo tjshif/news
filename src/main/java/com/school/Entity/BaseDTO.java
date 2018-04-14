@@ -3,18 +3,18 @@ package com.school.Entity;
 import java.sql.Timestamp;
 
 public class BaseDTO {
-	private String		id;
+	private String		ID;
 	private Timestamp  updateAt;
 	private String		updateBy = "sys";
 	private Timestamp	createAt;
 	private String		createBy = "sys";
 
 	public String getId() {
-		return id;
+		return ID;
 	}
 	public void setId(String id)
 	{
-		this.id = id;
+		this.ID = id;
 	}
 
 	public String getCreateBy() {

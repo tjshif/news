@@ -159,4 +159,19 @@ public class NewsService {
 		return resultGson;
 	}
 
+	public NewsSubjectResultGson getFavoriteNews(Long userID, Long offset, Integer pageSize)
+	{
+		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			List<NewsDTO> newsDTOs = favoriteNewsDao.selectNewsByUserID(userID, offset, pageSize);
+			resultGson.setNewsList(newsDTOs);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 }

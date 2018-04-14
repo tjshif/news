@@ -13,17 +13,17 @@
     </sql>
 
     <select id="selectNewsByCreateAt" resultType="com.school.Entity.NewsDTO" >
-        SELECT id, <include refid="Column_List"/>
+        SELECT ID, <include refid="Column_List"/>
         FROM News where CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
     </select>
 
     <select id="selectNewsByCreateAtFromID" resultType="com.school.Entity.NewsDTO" >
-        SELECT id, <include refid="Column_List"/>
+        SELECT ID, <include refid="Column_List"/>
         FROM News where ID >= #{fromID} and CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
     </select>
 
     <select id="selectNewsGreaterThanId" resultType="com.school.Entity.NewsDTO" >
-        SELECT id, <include refid="Column_List"/>
+        SELECT ID, <include refid="Column_List"/>
         FROM News
         WHERE NewsType = #{newsType}
             <if test="newsSubType != null">
@@ -32,13 +32,13 @@
             <if test="locationCode != null and locationCode != 0">
                 and locationCode = #{locationCode}
             </if>
-            <if test="id != null">
-                and id &gt; #{id}
-            </if>  order by id Limit 0, #{count}
+            <if test="ID != null">
+                and ID &gt; #{ID}
+            </if>  order by ID Limit 0, #{count}
     </select>
 
     <select id="selectNewsLessThanId" resultType="com.school.Entity.NewsDTO" >
-        SELECT id, <include refid="Column_List"/>
+        SELECT ID, <include refid="Column_List"/>
         FROM News
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
@@ -47,9 +47,9 @@
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}
         </if>
-        <if test="id != null">
-            and id &lt; #{id}
-        </if>  order by id desc Limit 0, #{count}
+        <if test="ID != null">
+            and ID &lt; #{ID}
+        </if>  order by ID desc Limit 0, #{count}
     </select>
 
 

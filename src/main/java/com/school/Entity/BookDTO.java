@@ -1,17 +1,17 @@
 package com.school.Entity;
 
 public class BookDTO {
-	private String		id;
+	private String		ID;
 	private String 	book_name;
 	private Integer 	grade;
 	private String  	image;
 
 	public String getId() {
-		return id;
+		return ID;
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		this.ID = id;
 	}
 
 	public void setGrade(Integer grade) {

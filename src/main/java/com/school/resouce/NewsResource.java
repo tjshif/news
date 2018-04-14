@@ -97,4 +97,23 @@ public class NewsResource {
 		NewsFavoriteResultGson resultGson = newsService.getIsFavorite(newsID, userID);
 		return GsonUtil.toJson(resultGson);
 	}
+
+	@GET
+	@Path("/getfavoritenews")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getFavoriteNews(@QueryParam("newsid") Long userID,
+												 @DefaultValue("0")@QueryParam("offset") Long offset,
+												 @DefaultValue("20")@QueryParam("pageSize") Integer pageSize)
+	{
+		if (userID == null)
+		{
+			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+
+		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(userID, offset, pageSize);
+		return GsonUtil.toJson(resultGson);
+	}
 }

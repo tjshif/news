@@ -11,11 +11,11 @@
     </sql>
 
     <sql id ="Full_Column">
-        id,
+        ID,
         <include refid="Column_List"/>
     </sql>
 
-    <insert id="insert" parameterType="com.school.Entity.UserDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.school.Entity.UserDTO" useGeneratedKeys="true" keyProperty="ID">
         insert into User (<include refid="Column_List"/>) values
         (#{phoneNumber},
         #{nickName},

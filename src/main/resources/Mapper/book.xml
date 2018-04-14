@@ -8,7 +8,7 @@
     </sql>
 
     <sql id ="Full_Column">
-        id,
+        ID,
         <include refid="Column_List"/>
     </sql>
 

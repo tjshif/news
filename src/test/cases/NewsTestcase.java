@@ -4,6 +4,7 @@ import com.school.Constants.RetCode;
 import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDetailDTO;
 import com.school.Gson.NewsDetailResultGson;
+import com.school.Gson.NewsSubjectResultGson;
 import com.school.service.NewsService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,4 +46,10 @@ public class NewsTestcase {
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 
+	@Test
+	public void getFavList()
+	{
+		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(1L, 0L, 2);
+		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
+	}
 }

@@ -8,7 +8,7 @@
     </sql>
 
 
-    <insert id="insert" parameterType="com.school.Entity.FeedbackDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.school.Entity.FeedbackDTO" useGeneratedKeys="true" keyProperty="ID">
         insert into Feedback (<include refid="Column_List"/>) values
         (#{contantInfo},
         #{feedback},
