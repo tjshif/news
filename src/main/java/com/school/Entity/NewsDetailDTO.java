@@ -6,6 +6,7 @@ public class NewsDetailDTO {
 	private Long newsID;
 	private String Subject;
 	private String detailContent;
+	private Boolean favorite;
 
 	//TODo
 	private Timestamp postDate;	//post的时间
@@ -63,5 +64,9 @@ public class NewsDetailDTO {
 
 	public void setPublisher_name(String publisher_name) {
 		this.publisher_name = publisher_name;
+	}
+
+	public void setFavorite(Boolean favorite) {
+		this.favorite = favorite;
 	}
 }

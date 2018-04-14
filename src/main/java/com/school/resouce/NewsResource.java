@@ -6,6 +6,7 @@ import com.school.Enum.NewsTypeEnum;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.NewsDetailResultGson;
+import com.school.Gson.NewsFavoriteResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Utils.GsonUtil;
@@ -57,9 +58,9 @@ public class NewsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String getNewsDetail(@QueryParam("newsid") Long newsID)
+	public String getNewsDetail(@QueryParam("newsid") Long newsID, @QueryParam("userid")Long userID)
 	{
-		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID);
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID, userID);
 		return GsonUtil.toJson(resultGson);
 	}
 
@@ -74,10 +75,26 @@ public class NewsResource {
 	{
 		if (userID == null || newsID == null)
 		{
-			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
-		RetResultGson retResultGson = newsService.addOrDeleteFavoriteNews(bAdd, userID, newsID);
+		NewsFavoriteResultGson retResultGson = newsService.addOrDeleteFavoriteNews(bAdd, userID, newsID);
 		return GsonUtil.toJson(retResultGson);
+	}
+
+	@GET
+	@Path("/getisfavorite")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getIsFavorite(@QueryParam("newsid") Long newsID, @QueryParam("userid")Long userID)
+	{
+		if (newsID == null)
+		{
+			NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		NewsFavoriteResultGson resultGson = newsService.getIsFavorite(newsID, userID);
+		return GsonUtil.toJson(resultGson);
 	}
 }

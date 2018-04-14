@@ -41,7 +41,7 @@ public class NewsTestcase {
 	@Test
 	public void getNewsDetailTest()
 	{
-		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L);
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 

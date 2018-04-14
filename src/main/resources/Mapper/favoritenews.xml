@@ -17,4 +17,9 @@
     <delete id="delete">
         DELETE FROM FavoriteNews WHERE userID = #{userID} and newsID = #{newsID};
     </delete>
+
+    <select id="selectByUK" resultType="com.school.Entity.FavoriteNewsDTO">
+        SELECT ID, <include refid="Column_List"/>
+        FROM FavoriteNews where userID = #{userID} and newsID = #{newsID};
+    </select>
 </mapper>

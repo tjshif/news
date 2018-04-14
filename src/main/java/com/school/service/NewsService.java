@@ -11,10 +11,12 @@ import com.school.Entity.NewsDetailDTO;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
+import com.school.Gson.NewsFavoriteResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Redis.ReadDataFromRedis;
 import org.apache.log4j.Logger;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,11 +82,22 @@ public class NewsService {
 		return resultGson;
 	}
 
-	public NewsDetailResultGson getNewsDetail(Long newsID)
+	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID)
 	{
 		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
+			if (newsDetailDTO == null)
+				return newsDetailResultGson;
+			newsDetailDTO.setFavorite(false);
+			if (userID != null)
+			{
+				FavoriteNewsDTO favoriteNewsDTO = new FavoriteNewsDTO(userID, newsID);
+				favoriteNewsDTO = favoriteNewsDao.selectByUK(favoriteNewsDTO);
+				if (favoriteNewsDTO != null)
+					newsDetailDTO.setFavorite(true);
+			}
+
 			//TODO: load from DB
 
 			newsDetailDTO.setPublisher_avatar_url("https://res.cngoldres.com/upload/focus/2015/11/23/eadad762f4d1e1690d06ac2c364a8e8a.jpg");
@@ -101,15 +114,20 @@ public class NewsService {
 	}
 
 	@Transactional
-	public RetResultGson addOrDeleteFavoriteNews(Boolean bAdd, Long userID, Long newsID)
+	public NewsFavoriteResultGson addOrDeleteFavoriteNews(Boolean bAdd, Long userID, Long newsID)
 	{
-		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			FavoriteNewsDTO favoriteNewsDTO = new FavoriteNewsDTO(userID, newsID);
 			if (bAdd)
 				favoriteNewsDao.insert(favoriteNewsDTO);
 			else
 				favoriteNewsDao.delete(favoriteNewsDTO);
+			resultGson.setFavorite(bAdd);
+		}
+		catch (DuplicateKeyException ex)
+		{
+			resultGson.setFavorite(true);
 		}
 		catch (Exception ex)
 		{
@@ -119,5 +137,26 @@ public class NewsService {
 		return resultGson;
 	}
 
+	public NewsFavoriteResultGson getIsFavorite(Long newsID, Long userID)
+	{
+		NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		resultGson.setFavorite(false);
+		if (userID == null)
+			return resultGson;
+
+		try
+		{
+			FavoriteNewsDTO favoriteNewsDTO = new FavoriteNewsDTO(userID, newsID);
+			favoriteNewsDTO = favoriteNewsDao.selectByUK(favoriteNewsDTO);
+			if (favoriteNewsDTO != null)
+				resultGson.setFavorite(true);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
 
 }
