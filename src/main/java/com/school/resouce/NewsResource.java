@@ -7,6 +7,7 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
+import com.school.Gson.RetResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.NewsService;
 import com.sun.jersey.api.core.InjectParam;
@@ -60,5 +61,23 @@ public class NewsResource {
 	{
 		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID);
 		return GsonUtil.toJson(resultGson);
+	}
+
+	@POST
+	@Path("/addorremovefavoritenews")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String addOrDeleteFavoriteNews(@FormParam("addordelete") Boolean bAdd,
+										  @FormParam("userid")Long userID,
+										  @FormParam("newsid") Long newsID)
+	{
+		if (userID == null || newsID == null)
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		RetResultGson retResultGson = newsService.addOrDeleteFavoriteNews(bAdd, userID, newsID);
+		return GsonUtil.toJson(retResultGson);
 	}
 }

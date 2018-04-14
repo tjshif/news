@@ -2,17 +2,21 @@ package com.school.service;
 
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.DAO.IFavoriteNewsDao;
 import com.school.DAO.INewsDao;
 import com.school.DAO.INewsDetailDao;
+import com.school.Entity.FavoriteNewsDTO;
 import com.school.Entity.NewsDTO;
 import com.school.Entity.NewsDetailDTO;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
+import com.school.Gson.RetResultGson;
 import com.school.Redis.ReadDataFromRedis;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -27,6 +31,9 @@ public class NewsService {
 
 	@Resource
 	private INewsDao newsDao;
+
+	@Resource
+	private IFavoriteNewsDao favoriteNewsDao;
 
 	@Resource
 	private INewsDetailDao newsDetailDao;
@@ -78,6 +85,11 @@ public class NewsService {
 		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
+			//TODO: load from DB
+
+			newsDetailDTO.setPublisher_avatar_url("https://res.cngoldres.com/upload/focus/2015/11/23/eadad762f4d1e1690d06ac2c364a8e8a.jpg");
+			newsDetailDTO.setPublisher_name("同济大学论坛");
+			newsDetailDTO.setPublisher_id(1L);
 			newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
 		}
 		catch (Exception ex)
@@ -87,4 +99,25 @@ public class NewsService {
 		}
 		return newsDetailResultGson;
 	}
+
+	@Transactional
+	public RetResultGson addOrDeleteFavoriteNews(Boolean bAdd, Long userID, Long newsID)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			FavoriteNewsDTO favoriteNewsDTO = new FavoriteNewsDTO(userID, newsID);
+			if (bAdd)
+				favoriteNewsDao.insert(favoriteNewsDTO);
+			else
+				favoriteNewsDao.delete(favoriteNewsDTO);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
+
 }

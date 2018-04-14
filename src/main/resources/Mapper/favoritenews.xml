@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.IFavoriteNewsDao" >
+    <sql id="Column_List">
+        userID,
+        newsID,
+        createAt
+    </sql>
+
+    <insert id="insert" parameterType="com.school.Entity.FavoriteNewsDTO" useGeneratedKeys="true" keyProperty="ID">
+        insert into FavoriteNews (<include refid="Column_List"/>) values
+        (#{userID},
+        #{newsID},
+        now());
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM FavoriteNews WHERE userID = #{userID} and newsID = #{newsID};
+    </delete>
+</mapper>

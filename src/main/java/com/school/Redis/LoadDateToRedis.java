@@ -39,7 +39,7 @@ public class LoadDateToRedis extends RedisHandler{
 	@Resource
 	private DistributedLock distributedLock;
 
-	@Scheduled(cron = "0 0/10 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	public void LoadDataToRedis()
 	{
 		Date date = new Date();
