@@ -137,6 +137,22 @@ public class NewsService {
 		return resultGson;
 	}
 
+	@Transactional
+	public NewsFavoriteResultGson clearFav(Long userID)
+	{
+		NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			favoriteNewsDao.clear(userID);
+			resultGson.setFavorite(false);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 	public NewsFavoriteResultGson getIsFavorite(Long newsID, Long userID)
 	{
 		NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);

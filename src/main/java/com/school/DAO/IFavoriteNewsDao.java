@@ -12,6 +12,8 @@ public interface IFavoriteNewsDao {
 
 	FavoriteNewsDTO selectByUK(FavoriteNewsDTO favoriteNewsDTO);
 
+	void clear(Long userID);
+
 	List<NewsDTO> selectNewsByUserID(@Param("userID")Long userID,
 									 @Param("offset")Long offset,
 									 @Param("pageSize")Integer pageSize);

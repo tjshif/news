@@ -116,4 +116,20 @@ public class NewsResource {
 		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(userID, offset, pageSize);
 		return GsonUtil.toJson(resultGson);
 	}
+
+	@POST
+	@Path("/clearfav")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String clearFav(@FormParam("userid")Long userID)
+	{
+		if (userID == null)
+		{
+			NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		NewsFavoriteResultGson retResultGson = newsService.clearFav(userID);
+		return GsonUtil.toJson(retResultGson);
+	}
 }

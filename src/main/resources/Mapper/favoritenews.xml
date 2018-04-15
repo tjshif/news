@@ -18,6 +18,10 @@
         DELETE FROM FavoriteNews WHERE userID = #{userID} and newsID = #{newsID};
     </delete>
 
+    <delete id="clear">
+        DELETE FROM FavoriteNews WHERE userID = #{userID};
+    </delete>
+
     <select id="selectByUK" resultType="com.school.Entity.FavoriteNewsDTO">
         SELECT ID, <include refid="Column_List"/>
         FROM FavoriteNews where userID = #{userID} and newsID = #{newsID};
