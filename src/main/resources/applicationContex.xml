@@ -23,7 +23,7 @@
     <aop:aspectj-autoproxy/>
 
         <!-- 分解配置 jdbc.properites -->
-    <context:property-placeholder location="file:${catalina.home}/config/spider_jdbc_online.properties" />
+    <context:property-placeholder location="file:${catalina.home}/config/spider_jdbc.properties" />
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jd.driver}" />
