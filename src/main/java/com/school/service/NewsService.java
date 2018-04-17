@@ -5,9 +5,11 @@ import com.school.Constants.RetMsg;
 import com.school.DAO.IFavoriteNewsDao;
 import com.school.DAO.INewsDao;
 import com.school.DAO.INewsDetailDao;
+import com.school.DAO.IUserDao;
 import com.school.Entity.FavoriteNewsDTO;
 import com.school.Entity.NewsDTO;
 import com.school.Entity.NewsDetailDTO;
+import com.school.Entity.UserDTO;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
@@ -39,6 +41,9 @@ public class NewsService {
 
 	@Resource
 	private INewsDetailDao newsDetailDao;
+
+	@Resource
+	private IUserDao userDao;
 
 	public List<NewsDTO> selectNewsByCreateAt(Date date)
 	{
@@ -98,11 +103,13 @@ public class NewsService {
 					newsDetailDTO.setFavorite(true);
 			}
 
-			//TODO: load from DB
-
-			newsDetailDTO.setPublisher_avatar_url("https://res.cngoldres.com/upload/focus/2015/11/23/eadad762f4d1e1690d06ac2c364a8e8a.jpg");
-			newsDetailDTO.setPublisher_name("同济大学论坛");
-			newsDetailDTO.setPublisher_id(1L);
+			UserDTO userDTO = userDao.selectByID(newsDetailDTO.getPublisher_id());
+			if (userDTO != null)
+			{
+				newsDetailDTO.setPublisher_avatar_url(userDTO.getAvatarUrl());
+				newsDetailDTO.setPublisher_name(userDTO.getNickName());
+				newsDetailDTO.setPublisher_id(newsDetailDTO.getPublisher_id());
+			}
 			newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
 		}
 		catch (Exception ex)

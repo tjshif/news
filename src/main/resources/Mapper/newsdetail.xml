@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.school.DAO.INewsDetailDao" >
     <select id="selectNewsDetail" resultType="com.school.Entity.NewsDetailDTO">
-        SELECT newsID, Subject, detailContent, postDate FROM News N
+        SELECT newsID, Subject, detailContent, postDate, publisherId publisher_id FROM News N
         INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.ID = #{newsID};
     </select>
 </mapper>

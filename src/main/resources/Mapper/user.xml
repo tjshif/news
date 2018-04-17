@@ -4,6 +4,8 @@
     <sql id="Column_List">
         phoneNumber,
         nickName,
+        isVerified,
+        avatarUrl,
         CreateAt,
         CreateBy,
         UpdateAt,
@@ -19,6 +21,8 @@
         insert into User (<include refid="Column_List"/>) values
         (#{phoneNumber},
         #{nickName},
+        #{isVerified},
+        #{avatarUrl},
         now(),
         #{createBy},
         now(),
@@ -28,4 +32,9 @@
     <select id="selectByPhoneNo" parameterType="java.lang.String" resultType="com.school.Entity.UserDTO">
         select <include refid="Full_Column"/> from User where PhoneNumber = #{mPhoneNo}
     </select>
+
+    <select id="selectByID"  resultType="com.school.Entity.UserDTO">
+        select <include refid="Full_Column"/> from User where ID = #{id}
+    </select>
+
 </mapper>

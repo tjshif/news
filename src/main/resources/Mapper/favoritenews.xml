@@ -29,8 +29,8 @@
 
 
     <select id="selectNewsByUserID" resultType="com.school.Entity.NewsDTO">
-        SELECT NS.ID ID, NS.createAt createAt, subject FROM spider.FavoriteNews FN
-        inner join spider.News NS on FN.newsID = NS.ID
+        SELECT NS.ID ID, NS.createAt createAt, subject FROM FavoriteNews FN
+        inner join News NS on FN.newsID = NS.ID
         where FN.userID = #{userID} order by FN.ID desc Limit #{offset}, #{pageSize};
     </select>
 </mapper>

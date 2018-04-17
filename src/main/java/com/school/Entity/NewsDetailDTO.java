@@ -7,8 +7,6 @@ public class NewsDetailDTO {
 	private String Subject;
 	private String detailContent;
 	private Boolean favorite;
-
-	//TODo
 	private Timestamp postDate;	//post的时间
 	private Long    publisher_id;
 	private String    publisher_avatar_url;
