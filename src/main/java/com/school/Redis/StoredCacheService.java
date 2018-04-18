@@ -61,6 +61,23 @@ public class StoredCacheService {
 		}
 	}
 
+	public String setex(String key, int seconds, String value)
+	{
+		ShardedJedis resource = null;
+		String string = null;
+		boolean broken = false;
+		try {
+			resource = shardedJedisSentinelPool.getResource();
+			string = resource.setex(key, seconds, value);
+		} catch (Exception e) {
+			broken = true;
+			e.printStackTrace();
+		} finally {
+			close(resource,broken);
+		}
+		return string;
+	}
+
 	public String get(String key) {
 		ShardedJedis resource = null;
 		String string = null;

@@ -3,7 +3,9 @@ package cases;
 import com.school.Constants.RetCode;
 import com.school.Gson.LoginRegisterGson;
 import com.school.Gson.RetResultGson;
+import com.school.Gson.VersionResultGson;
 import com.school.service.LoginService;
+import junit.runner.Version;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,5 +48,12 @@ public class LoginTestcase {
 		RetResultGson retResultGson = loginService.insertFeedback("13918802002", "测试");
 		Assert.assertTrue(retResultGson != null);
 		Assert.assertTrue(retResultGson.getRetCode() == RetCode.RET_CODE_OK);
+	}
+
+	@Test
+	public void getLaestVersion()
+	{
+		VersionResultGson versionResultGson = loginService.getVersionInfo(1L);
+		Assert.assertTrue(versionResultGson != null);
 	}
 }

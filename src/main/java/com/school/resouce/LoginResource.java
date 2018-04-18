@@ -5,6 +5,7 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.LoginRegisterGson;
 import com.school.Gson.RetResultGson;
+import com.school.Gson.VersionResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.LoginService;
 import com.sun.jersey.api.core.InjectParam;
@@ -61,5 +62,21 @@ public class LoginResource {
 		}
 		RetResultGson resultGson = mLoginService.insertFeedback(contactInfo, feedback);
 		return GsonUtil.toJson(resultGson);
+	}
+
+	@GET
+	@Path("/latestverion")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String latestVersion(@QueryParam("versionid") Long versionid)
+	{
+		if (versionid == null)
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		VersionResultGson versionResultGson = mLoginService.getVersionInfo(versionid);
+		return GsonUtil.toJson(versionResultGson);
 	}
 }
