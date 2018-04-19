@@ -3,7 +3,7 @@ package com.school.Entity;
 public class UserDTO extends BaseDTO{
 	private String phoneNumber;
 	private String nickName;
-	private Boolean isVerified;
+	private Boolean isVerified = false;
 	private String avatarUrl;
 
 	public UserDTO()
