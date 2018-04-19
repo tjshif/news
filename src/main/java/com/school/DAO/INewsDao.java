@@ -19,4 +19,8 @@ public interface INewsDao {
 	List<NewsDTO> selectNewsLessThanId(@Param("newsType") Integer newsType, @Param("newsSubType") Integer newsSubType,
 										  @Param("locationCode") Integer locationCode, @Param("ID") Long ID,
 										  @Param("count")Integer count);
+
+	List<NewsDTO> selectNewsByPage(@Param("newsType") Integer newsType, @Param("newsSubType") Integer newsSubType,
+									   @Param("locationCode") Integer locationCode, @Param("offset") Long offset,
+									   @Param("pageSize")Integer pageSize);
 }

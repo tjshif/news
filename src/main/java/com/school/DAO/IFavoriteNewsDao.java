@@ -15,6 +15,6 @@ public interface IFavoriteNewsDao {
 	void clear(Long userID);
 
 	List<NewsDTO> selectNewsByUserID(@Param("userID")Long userID,
-									 @Param("offset")Long offset,
+									 @Param("offset")Integer offset,
 									 @Param("pageSize")Integer pageSize);
 }

@@ -2,8 +2,10 @@ package cases;
 
 import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
+import com.school.Gson.NewsSubjectResultGson;
 import com.school.Redis.LoadDateToRedis;
 import com.school.service.NewsService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,5 +33,13 @@ public class RedisTest {
 	public void testReadFromRedis()
 	{
 		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), null, 30);
+	}
+
+	@Test
+	public void testReadByPage()
+	{
+		NewsSubjectResultGson resultGson1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 3L, 4);
+		NewsSubjectResultGson resultGson2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 1, 4);
+		Assert.assertTrue(true);
 	}
 }

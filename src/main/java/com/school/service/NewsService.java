@@ -71,6 +71,21 @@ public class NewsService {
 		return news;
 	}
 
+	public NewsSubjectResultGson getNewsSubjectListByPage(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location,
+														  Integer page, Integer pageSize)
+	{
+		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListByPage(newsType, newsSubType, location, page, pageSize);
+		if (newsDTOList == null)
+		{
+			Long offset = (long)page * pageSize;
+			newsDTOList = newsDao.selectNewsByPage(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
+					location, offset, pageSize);
+		}
+		resultGson.setNewsList(newsDTOList);
+		return resultGson;
+	}
+
 	public NewsSubjectResultGson getNewsSubjectList(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location,
 													Long startFrom, Integer count)
 	{
@@ -182,10 +197,11 @@ public class NewsService {
 		return resultGson;
 	}
 
-	public NewsSubjectResultGson getFavoriteNews(Long userID, Long offset, Integer pageSize)
+	public NewsSubjectResultGson getFavoriteNews(Long userID, Integer page, Integer pageSize)
 	{
 		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
+			Integer offset = page * pageSize;
 			List<NewsDTO> newsDTOs = favoriteNewsDao.selectNewsByUserID(userID, offset, pageSize);
 			resultGson.setNewsList(newsDTOs);
 		}

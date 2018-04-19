@@ -54,6 +54,32 @@ public class NewsResource {
 	}
 
 	@GET
+	@Path("/getnewslistsubjectsbypage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getNewsSubjectListByPage(@QueryParam("newstype") Integer newsType,
+											 @QueryParam("subnewstype") Integer subNewsType,
+											 @QueryParam("location")Integer location,
+											 @QueryParam("page")Integer page, //不包括startfrom
+											 @DefaultValue("20")@QueryParam("pageSize")Integer pageSize)
+	{
+		NewsTypeEnum newsTypeEnum = null;
+		NewsSubTypeEnum newsSubTypeNem = null;
+		try {
+			newsTypeEnum = NewsTypeEnum.valueToNews(newsType);
+			newsSubTypeNem = (subNewsType != null ? NewsSubTypeEnum.valueToNewsSubType(subNewsType) : null);
+		}
+		catch (Exception ex)
+		{
+			logger.error(String.format("invalid type: newsType:%d; newsSubTypeNem:%d", newsType, subNewsType));
+			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		NewsSubjectResultGson retResult = newsService.getNewsSubjectListByPage(newsTypeEnum, newsSubTypeNem, location, page, pageSize);
+		return GsonUtil.toJson(retResult);
+	}
+	@GET
 	@Path("/getnewsdetail")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -104,7 +130,7 @@ public class NewsResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
 	public String getFavoriteNews(@QueryParam("newsid") Long userID,
-												 @DefaultValue("0")@QueryParam("offset") Long offset,
+												 @DefaultValue("0")@QueryParam("page") Integer page,
 												 @DefaultValue("20")@QueryParam("pageSize") Integer pageSize)
 	{
 		if (userID == null)
@@ -113,7 +139,7 @@ public class NewsResource {
 			return GsonUtil.toJson(resultGson);
 		}
 
-		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(userID, offset, pageSize);
+		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(userID, page, pageSize);
 		return GsonUtil.toJson(resultGson);
 	}
 

@@ -52,5 +52,17 @@
         </if>  order by ID desc Limit 0, #{count}
     </select>
 
+    <select id="selectNewsByPage" resultType="com.school.Entity.NewsDTO" >
+        SELECT ID, <include refid="Column_List"/>
+        FROM News
+        WHERE NewsType = #{newsType}
+        <if test="newsSubType != null">
+            and newsSubType = #newsSubType
+        </if>
+        <if test="locationCode != null and locationCode != 0">
+            and locationCode = #{locationCode}
+        </if>
+        order by ID desc Limit #{offset}, #{pageSize}
+    </select>
 
 </mapper>

@@ -17,6 +17,18 @@ import java.util.Set;
 public class ReadDataFromRedis extends RedisHandler {
 	private Logger logger = Logger.getLogger(ReadDataFromRedis.class.getName());
 
+	public List<NewsDTO> getNewsSubjectListByPage(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Integer page,
+												  Integer pageSize)
+	{
+		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
+		if (subNewsType != null)
+			key = getNewsTypeSubTypeLocationKey(newsType.getNewsTypeCode(), subNewsType.getNewsSubTypeCode(), location);
+
+		Integer offset = page * pageSize;
+
+		return getSubjectListByOffset(key, Integer.MAX_VALUE, 0, offset , pageSize);
+	}
+
 	//null表示需要从db读取，
 	//不包括startfrom
 	public List<NewsDTO> getNewsSubjectListLessThanId(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
@@ -26,16 +38,24 @@ public class ReadDataFromRedis extends RedisHandler {
 		if (subNewsType != null)
 			key = getNewsTypeSubTypeLocationKey(newsType.getNewsTypeCode(), subNewsType.getNewsSubTypeCode(), location);
 		//获取最新的
-		Set<String> resultIdxList = null;
+		double max = 0;
 		if (startFrom == null || startFrom == -1)
 		{
-			resultIdxList = storedCacheService.zrevrangeByScore(key, Integer.MAX_VALUE, 0, 0, count);
+			max = Integer.MAX_VALUE;
 		}
 		else
 		{
-			startFrom = startFrom - 1;
-			resultIdxList = storedCacheService.zrevrangeByScore(key, startFrom, 0, 0, count);
+			max = startFrom - 1;
 		}
+		return getSubjectListByOffset(key, max, 0, 0, count);
+	}
+
+	private List<NewsDTO> getSubjectListByOffset(String key, double max, double min, int offset, int count)
+	{
+		if (TextUtils.isEmpty(key))
+			return null;
+
+		Set<String> resultIdxList = storedCacheService.zrevrangeByScore(key, max, min, offset, count);
 		if (resultIdxList == null || resultIdxList.size() != count)
 			return null;
 
