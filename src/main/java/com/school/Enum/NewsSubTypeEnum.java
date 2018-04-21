@@ -2,9 +2,8 @@ package com.school.Enum;
 
 
 public enum NewsSubTypeEnum {
-	SUB_FULLTIME(1),
-	SUB_PARTTIME(2),
-	SUB_INTERN(3);
+	SUB_FULLTIME(1),  //全职
+	SUB_PARTTIME(2);  //兼职,实习
 
 	private Integer newsSubType;
 

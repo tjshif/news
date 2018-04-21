@@ -1,10 +1,12 @@
 package com.school.service;
 
+import com.school.AOP.CacheMethodLogo;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.ISpiderEnumDao;
 import com.school.Entity.CityDTO;
 import com.school.Gson.CityResultGson;
+import com.school.Utils.TimeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class ConfigureService {
 	@Resource
 	private ISpiderEnumDao spiderEnumDao;
 
+	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS * 10)
 	public CityResultGson getSupportedCities()
 	{
 		CityResultGson cityResultGson = new CityResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
