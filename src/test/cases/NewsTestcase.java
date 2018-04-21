@@ -3,6 +3,8 @@ package cases;
 import com.school.Constants.RetCode;
 import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDetailDTO;
+import com.school.Enum.NewsSubTypeEnum;
+import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.service.NewsService;
@@ -42,6 +44,7 @@ public class NewsTestcase {
 	@Test
 	public void getNewsDetailTest()
 	{
+		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, NewsSubTypeEnum.SUB_FULLTIME, 21, null, 100);
 		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}

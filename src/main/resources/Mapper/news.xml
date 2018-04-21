@@ -42,7 +42,7 @@
         FROM News
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
-            and newsSubType = #newsSubType
+            and newsSubType = #{newsSubType}
         </if>
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}
@@ -57,7 +57,7 @@
         FROM News
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
-            and newsSubType = #newsSubType
+            and newsSubType = #{newsSubType}
         </if>
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}
