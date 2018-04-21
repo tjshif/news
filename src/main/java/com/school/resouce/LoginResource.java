@@ -64,6 +64,25 @@ public class LoginResource {
 		return GsonUtil.toJson(resultGson);
 	}
 
+
+	@POST
+	@Path(("/sendSms"))
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String sendSms(@FormParam("phone") String phoneNumber)
+	{
+		phoneNumber = phoneNumber.trim();
+		logger.info("phone number: " + phoneNumber);
+		if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() != 11)
+		{
+			RetResultGson retResult = new RetResultGson(RetCode.RET_ERROR_CODE_PHONENUMBER, RetMsg.RET_MESSAGE_PHONENUMBER);
+			return GsonUtil.toJson(retResult);
+		}
+		RetResultGson retResult = mLoginService.sendSms(phoneNumber);
+		return GsonUtil.toJson(retResult);
+	}
+
+
 	@GET
 	@Path("/latestverion")
 	@Produces(MediaType.APPLICATION_JSON)

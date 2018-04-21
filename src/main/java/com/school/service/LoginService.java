@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.mysql.cj.jdbc.util.TimeUtil;
 import com.school.AOP.CacheMethodLogo;
 import com.school.AOP.LogAnnotation;
@@ -16,6 +17,7 @@ import com.school.Entity.VersionDTO;
 import com.school.Gson.LoginRegisterGson;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.VersionResultGson;
+import com.school.Utils.SendSmsUtil;
 import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
@@ -103,6 +105,49 @@ public class LoginService {
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
+	}
+
+	@Transactional
+	public RetResultGson sendSms(String phoneNumber)
+	{
+		RetResultGson retResult = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		Integer code = (int)(Math.random() * 10000);
+		try
+		{
+			SmsMessageDTO smsMessageDTO = smsMessageDao.selectSmsSendToday(phoneNumber);
+			if (smsMessageDTO != null)
+			{
+				if ( smsMessageDTO.getCount() >= 5)
+				{
+					retResult.setResult(RetCode.RET_ERROR_CODE_SENDSMSMAXCOUNT, RetMsg.RET_MESSAGE_SENDSMSMAXCOUNT);
+					return retResult;
+				}
+				else
+					smsMessageDTO.setCount(smsMessageDTO.getCount() + 1);
+			}
+			else
+			{
+				smsMessageDTO = new SmsMessageDTO();
+				smsMessageDTO.setCount(1);
+			}
+			smsMessageDTO.setCode(String.format("%04d", code));
+			smsMessageDTO.setPhoneNumber(phoneNumber);
+
+			SendSmsResponse sendSmsResponse = SendSmsUtil.sendSms(phoneNumber, smsMessageDTO.getCode());
+			if (sendSmsResponse.getCode() == null || !sendSmsResponse.getCode().equals("OK"))
+			{
+				logger.error("code: " + sendSmsResponse.getCode() + " ;Msg:" +sendSmsResponse.getMessage());
+				retResult.setResult(RetCode.RET_CODE_SMSERROR, RetMsg.RET_MSG_SMSERROR);
+				return retResult;
+			}
+			smsMessageDao.insert(smsMessageDTO);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			retResult.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return retResult;
 	}
 
 	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS * 5)

@@ -206,6 +206,20 @@
           <version>1.8.13</version>
       </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-core -->
+    <dependency>
+      <groupId>com.aliyun</groupId>
+      <artifactId>aliyun-java-sdk-core</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.aliyuncs.dysmsapi</groupId>
+      <artifactId>my-jar</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
+    </dependency>
   </dependencies>
   <build>
     <finalName>news</finalName>

@@ -6,6 +6,7 @@ public class RetMsg {
 	public static final String RET_MSG_SYSTEMERROR= "系统错误，请稍后再试。";
 	public static final String RET_MSG_GETSMSFIRST= "请先获取验证码再登陆";
 	public static final String RET_MSG_SMSERROR = "验证码错误";
-
+	public static final String RET_MESSAGE_SENDSMSMAXCOUNT= "超过了短信发送次数";
 	public static final String RET_MSG_REQUIREEMPTY = "必填项为空";
+	public static final String RET_MESSAGE_PHONENUMBER = "电话号无效";
 }
