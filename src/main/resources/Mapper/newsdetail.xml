@@ -3,6 +3,6 @@
 <mapper namespace="com.school.DAO.INewsDetailDao" >
     <select id="selectNewsDetail" resultType="com.school.Entity.NewsDetailDTO">
         SELECT newsID, Subject, detailContent, postDate, publisherId publisher_id FROM News N
-        INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.ID = #{newsID};
+        INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};
     </select>
 </mapper>
