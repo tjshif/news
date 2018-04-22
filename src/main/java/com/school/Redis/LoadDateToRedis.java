@@ -36,9 +36,6 @@ public class LoadDateToRedis extends RedisHandler{
 	private INewsDao newsDao;
 
 	@Resource
-	private IUserDao userDao;
-
-	@Resource
 	private ISpiderEnumDao spiderEnumDao;
 
 	@Resource
@@ -76,8 +73,6 @@ public class LoadDateToRedis extends RedisHandler{
 				for (NewsDTO item : items)
 				{
 					LoadNewsToRedis(item);
-					storedCacheService.zadd(getNewsTypeKey(item.getNewsType()), Long.parseLong(item.getId()), item.getId());
-					storedCacheService.zadd(getTrimKey(), LocationEnum.ALL.getZipCode(), getNewsTypeKey(item.getNewsType()));
 				}
 			}
 			else
@@ -95,40 +90,7 @@ public class LoadDateToRedis extends RedisHandler{
 		}
 	}
 
-	private void LoadNewsToRedis(NewsDTO newsItem)
-	{
-		if (newsItem == null)
-			return;
-
-		if (newsItem.getPublisherId() != null)
-		{
-			UserDTO userDTO = userDao.selectByID(newsItem.getPublisherId());
-			if (userDTO != null)
-			{
-				newsItem.setPublishSource(userDTO.getNickName());
-			}
-		}
-
-		storedCacheService.set(getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
-
-		String key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocation());
-		if (TextUtils.isEmpty(key))
-		{
-			logger.error("location can't be null.");
-			return;
-		}
-
-		storedCacheService.zadd(key, Long.parseLong(newsItem.getId()), newsItem.getId());
-		storedCacheService.zadd(getTrimKey(), newsItem.getLocation(), key);
-
-		//store id for record(type:subtype:location)
-		key = getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocation());
-		if (TextUtils.isEmpty(key))
-			return;
-		storedCacheService.zadd(key, Long.parseLong(newsItem.getId()), newsItem.getId());
-		storedCacheService.zadd(getTrimKey(), newsItem.getLocation(), key);
-	}
-
+	@Scheduled(cron = "0 10/30 * * * ?")
 	public void removeDataFromRedis()
 	{
 		//用分布式锁，timout是1个小时。

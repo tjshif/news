@@ -63,7 +63,7 @@ public class NewsTestcase {
 	@Test
 	public void updateRowTest()
 	{
-		RetResultGson resultGson = newsService.updateNewsValid(1L, true);
+		RetResultGson resultGson = newsService.updateNewsValid(6L, false);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 }

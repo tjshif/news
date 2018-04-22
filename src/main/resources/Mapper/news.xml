@@ -23,6 +23,11 @@
         FROM News where ID >= #{fromID} and CreateAt between date(#{createDay}) and date_add(date(#{createDay}), interval 1 day);
     </select>
 
+    <select id="selectNewsById" resultType="com.school.Entity.NewsDTO">
+        SELECT ID, <include refid="Column_List"/>
+        FROM News where ID = #{ID}
+    </select>
+
     <select id="selectNewsGreaterThanId" resultType="com.school.Entity.NewsDTO" >
         SELECT ID, <include refid="Column_List"/>
         FROM News
@@ -76,4 +81,6 @@
     <update id="updateNewsStatus">
         update News set isValid = #{isValid} where ID = #{ID}
     </update>
+
+
 </mapper>

@@ -17,6 +17,7 @@ import com.school.Gson.NewsFavoriteResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Redis.ReadDataFromRedis;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -186,6 +187,15 @@ public class NewsService {
 				logger.error("failed to find row : ID = " + newsID);
 				resultGson.setResult(RetCode.RET_ERROR_FIND_ROW, RetMsg.RET_MSG_FIND_ROW);
 				return resultGson;
+			}
+			NewsDTO newsDTO = newsDao.selectNewsById(newsID);
+			if (isValid)
+			{
+				readDataFromRedis.LoadNewsToRedis(newsDTO);
+			}
+			else
+			{
+				readDataFromRedis.removeNewsFromRedis(newsDTO);
 			}
 
 		}

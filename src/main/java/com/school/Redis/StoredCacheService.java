@@ -179,6 +179,23 @@ public class StoredCacheService {
 		return ret;
 	}
 
+	public Long zremrangeByScore(String key, String start, String end)
+	{
+		ShardedJedis resource = null;
+		Long ret = null;
+		boolean broken = false;
+		try {
+			resource = shardedJedisSentinelPool.getResource();
+			ret = resource.zremrangeByScore(key, start, end);
+		} catch (Exception e) {
+			broken = true;
+			e.printStackTrace();
+		} finally {
+			close(resource,broken);
+		}
+		return ret;
+	}
+
 	public Long zremrangeByRank(String key, long start, long end)
 	{
 		ShardedJedis resource = null;
