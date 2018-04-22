@@ -108,8 +108,12 @@ public class NewsService {
 		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
-			if (newsDetailDTO == null)
+			if (newsDetailDTO == null) {
+				newsDetailDTO = new NewsDetailDTO();
+				newsDetailDTO.setDetailContent("<b>你来晚了，改主题已经被删除了！</b>");
+				newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
 				return newsDetailResultGson;
+			}
 			newsDetailDTO.setFavorite(false);
 			if (userID != null)
 			{
