@@ -175,6 +175,28 @@ public class NewsService {
 		return resultGson;
 	}
 
+	@Transactional
+	public RetResultGson updateNewsValid(Long newsID, Boolean isValid)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			int row = newsDao.updateNewsStatus(newsID, isValid);
+			if (row != 1)
+			{
+				logger.error("failed to find row : ID = " + newsID);
+				resultGson.setResult(RetCode.RET_ERROR_FIND_ROW, RetMsg.RET_MSG_FIND_ROW);
+				return resultGson;
+			}
+
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 	public NewsFavoriteResultGson getIsFavorite(Long newsID, Long userID)
 	{
 		NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);

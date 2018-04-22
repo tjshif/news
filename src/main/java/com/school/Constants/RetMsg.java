@@ -9,4 +9,5 @@ public class RetMsg {
 	public static final String RET_MESSAGE_SENDSMSMAXCOUNT= "超过了当天短信发送次数";
 	public static final String RET_MSG_REQUIREEMPTY = "必填项为空";
 	public static final String RET_MESSAGE_PHONENUMBER = "电话号无效";
+	public static final String RET_MSG_FIND_ROW = "没有指定记录";
 }

@@ -129,7 +129,7 @@ public class NewsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String getFavoriteNews(@QueryParam("newsid") Long userID,
+	public String getFavoriteNews(@QueryParam("userid") Long userID,
 												 @DefaultValue("0")@QueryParam("page") Integer page,
 												 @DefaultValue("20")@QueryParam("pageSize") Integer pageSize)
 	{
@@ -158,4 +158,21 @@ public class NewsResource {
 		NewsFavoriteResultGson retResultGson = newsService.clearFav(userID);
 		return GsonUtil.toJson(retResultGson);
 	}
+
+	@POST
+	@Path("/updatenews")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String updateNews(@FormParam("newsid")Long newsID, @FormParam("isvalid") Boolean isValid)
+	{
+		if (newsID == null || isValid == null)
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		RetResultGson resultGson = newsService.updateNewsValid(newsID, isValid);
+		return GsonUtil.toJson(resultGson);
+	}
+
 }

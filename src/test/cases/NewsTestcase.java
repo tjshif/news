@@ -7,6 +7,7 @@ import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
+import com.school.Gson.RetResultGson;
 import com.school.service.NewsService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,6 +57,13 @@ public class NewsTestcase {
 	public void getFavList()
 	{
 		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(1L, 0, 2);
+		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
+	}
+
+	@Test
+	public void updateRowTest()
+	{
+		RetResultGson resultGson = newsService.updateNewsValid(1L, true);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 }

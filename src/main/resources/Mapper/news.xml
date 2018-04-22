@@ -73,4 +73,7 @@
         order by NN.ID desc Limit #{offset}, #{pageSize}
     </select>
 
+    <update id="updateNewsStatus">
+        update News set isValid = #{isValid} where ID = #{ID}
+    </update>
 </mapper>

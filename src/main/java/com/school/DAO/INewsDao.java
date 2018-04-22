@@ -23,4 +23,6 @@ public interface INewsDao {
 	List<NewsDTO> selectNewsByPage(@Param("newsType") Integer newsType, @Param("newsSubType") Integer newsSubType,
 									   @Param("locationCode") Integer locationCode, @Param("offset") Long offset,
 									   @Param("pageSize")Integer pageSize);
+
+	int updateNewsStatus(@Param("ID") Long ID, @Param("isValid") Boolean isValid);
 }
