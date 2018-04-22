@@ -51,8 +51,8 @@
             and locationCode = #{locationCode}
         </if>
         <if test="ID != null">
-            and ID &lt; #{ID}
-        </if>  order by ID desc Limit 0, #{count}
+            and NN.ID &lt; #{ID}
+        </if>  order by NN.ID desc Limit 0, #{count}
     </select>
 
     <select id="selectNewsByPage" resultType="com.school.Entity.NewsDTO" >
@@ -67,7 +67,7 @@
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}
         </if>
-        order by ID desc Limit #{offset}, #{pageSize}
+        order by NN.ID desc Limit #{offset}, #{pageSize}
     </select>
 
 </mapper>
