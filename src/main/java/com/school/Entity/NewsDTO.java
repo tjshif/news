@@ -10,7 +10,8 @@ public class NewsDTO extends BaseDTO {
 	private Integer    locationCode;	//地点，可以更加学校所在地填写
 	private Integer    isHot;		//是否热点
 	private String     linkUrl;
-
+	private Long 		publisherId;
+	private String     publishSource;
 
 	public Integer getNewsType() {
 		return newsType;
@@ -22,5 +23,13 @@ public class NewsDTO extends BaseDTO {
 
 	public Integer getNewsSubType() {
 		return newsSubType;
+	}
+
+	public Long getPublisherId() {
+		return publisherId;
+	}
+
+	public void setPublishSource(String publishSource) {
+		this.publishSource = publishSource;
 	}
 }

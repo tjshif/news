@@ -44,7 +44,10 @@ public class NewsTestcase {
 	@Test
 	public void getNewsDetailTest()
 	{
-		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, NewsSubTypeEnum.SUB_FULLTIME, 21, null, 100);
+		NewsSubjectResultGson r1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 25, null, 2);
+
+		NewsSubjectResultGson r2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null,25, 0, 2);
+
 		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}

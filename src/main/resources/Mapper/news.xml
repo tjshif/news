@@ -9,7 +9,8 @@
 	  locationCode,
 	  isHot,
 	  CreateAt,
-	  CreateBy
+	  CreateBy,
+      publisherId
     </sql>
 
     <select id="selectNewsByCreateAt" resultType="com.school.Entity.NewsDTO" >
@@ -38,8 +39,10 @@
     </select>
 
     <select id="selectNewsLessThanId" resultType="com.school.Entity.NewsDTO" >
-        SELECT ID, <include refid="Column_List"/>
-        FROM News
+        SELECT NN.ID ID, subject, newsType, newsSubType, postDate, locationCode,
+        isHot, NN.CreateAt CreateAt, NN.CreateBy CreateBy, publisherId, NickName publishSource
+        FROM News NN
+        inner join User UR on NN.publisherId = UR.ID
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
             and newsSubType = #{newsSubType}
@@ -53,8 +56,10 @@
     </select>
 
     <select id="selectNewsByPage" resultType="com.school.Entity.NewsDTO" >
-        SELECT ID, <include refid="Column_List"/>
-        FROM News
+        SELECT NN.ID ID, subject, newsType, newsSubType, postDate, locationCode,
+        isHot, NN.CreateAt CreateAt, NN.CreateBy CreateBy, publisherId, NickName publishSource
+        FROM News NN
+        inner join User UR on NN.publisherId = UR.ID
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
             and newsSubType = #{newsSubType}

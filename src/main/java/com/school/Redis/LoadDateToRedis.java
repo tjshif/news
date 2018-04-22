@@ -3,8 +3,10 @@ package com.school.Redis;
 import com.school.Constants.EnvConst;
 import com.school.DAO.INewsDao;
 import com.school.DAO.ISpiderEnumDao;
+import com.school.DAO.IUserDao;
 import com.school.Entity.NewsDTO;
 import com.school.Entity.SpiderEnumDTO;
+import com.school.Entity.UserDTO;
 import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Utils.GsonUtil;
@@ -32,6 +34,9 @@ public class LoadDateToRedis extends RedisHandler{
 
 	@Resource
 	private INewsDao newsDao;
+
+	@Resource
+	private IUserDao userDao;
 
 	@Resource
 	private ISpiderEnumDao spiderEnumDao;
@@ -94,6 +99,16 @@ public class LoadDateToRedis extends RedisHandler{
 	{
 		if (newsItem == null)
 			return;
+
+		if (newsItem.getPublisherId() != null)
+		{
+			UserDTO userDTO = userDao.selectByID(newsItem.getPublisherId());
+			if (userDTO != null)
+			{
+				newsItem.setPublishSource(userDTO.getNickName());
+			}
+		}
+
 		storedCacheService.set(getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
 
 		String key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocation());
