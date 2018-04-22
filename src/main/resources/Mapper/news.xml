@@ -35,7 +35,8 @@
             </if>
             <if test="ID != null">
                 and ID &gt; #{ID}
-            </if>  order by ID Limit 0, #{count}
+            </if>
+             AND isValid = '1' order by ID Limit 0, #{count}
     </select>
 
     <select id="selectNewsLessThanId" resultType="com.school.Entity.NewsDTO" >
@@ -52,7 +53,8 @@
         </if>
         <if test="ID != null">
             and NN.ID &lt; #{ID}
-        </if>  order by NN.ID desc Limit 0, #{count}
+        </if>
+        AND isValid = '1'  order by NN.ID desc Limit 0, #{count}
     </select>
 
     <select id="selectNewsByPage" resultType="com.school.Entity.NewsDTO" >
@@ -67,6 +69,7 @@
         <if test="locationCode != null and locationCode != 0">
             and locationCode = #{locationCode}
         </if>
+        AND isValid = '1'
         order by NN.ID desc Limit #{offset}, #{pageSize}
     </select>
 
