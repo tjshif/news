@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.DAO.ICommentDao">
+    <sql id="FL_List">
+        newsID,
+        userID,
+        nickName,
+        avatarUrl,
+        comment,
+        count,
+        createAt
+    </sql>
+
+    <resultMap id="commentMapper" type="com.school.Entity.FirstLevelCommentDTO">
+        <id column="ID" property="ID"/>
+        <id column="newsID" property="newsID"/>
+        <id column="userID" property="userID"/>
+        <id column="nickName" property="nickName"/>
+        <id column="avatarUrl" property="avatarUrl"/>
+        <id column="comment" property="comment"/>
+        <id column="count" property="count"/>
+        <id column="createAt" property="createAt"/>
+        <collection property="secondLevelComments" column="id" select="secondLevelTopComments" />
+    </resultMap>
+
+    <select id="selectComments" resultMap="commentMapper">
+        select * from FirstLevelComment where newsID = #{newsID} order by id desc limit #{offset}, #{pageSize};
+    </select>
+
+    <insert id="insertFirstLevelComment" parameterType="com.school.Entity.FirstLevelCommentDTO" useGeneratedKeys="true" keyProperty="ID">
+        insert into FirstLevelComment (<include refid="FL_List"/>) VALUES
+        (#{newsID},
+        #{userID},
+        #{nickName},
+        #{avatarUrl},
+        #{comment},
+        #{count},
+        now())
+    </insert>
+
+    <update id="increaseCommentCount">
+        UPDATE FirstLevelComment SET count=count+1 WHERE ID = #{ID};
+    </update>
+
+    <update id="decreaseCommentCount">
+        UPDATE FirstLevelComment SET count=count-1 WHERE ID = #{ID};
+    </update>
+
+    <delete id="deleteComment">
+        DELETE FROM FirstLevelComment WHERE ID = #{ID};
+    </delete>
+</mapper>

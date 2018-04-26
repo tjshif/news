@@ -10,4 +10,7 @@ public class RetMsg {
 	public static final String RET_MSG_REQUIREEMPTY = "必填项为空";
 	public static final String RET_MESSAGE_PHONENUMBER = "电话号无效";
 	public static final String RET_MSG_FIND_ROW = "没有指定记录";
+	public static final String RET_MSG_INVALID_USERID = "无效用户ID";
+	public static final String RET_MSG_INVALID_REPLYCOMMENT = "评论已经删除，无法回复了";
+
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.DAO.ICommentDao">
+    <sql id="Column_List">
+        flID,
+        fromUserID,
+        fromUserNickName,
+        toUserID,
+        toUserNickName,
+        replyComment,
+        createAt
+    </sql>
+
+    <select id="secondLevelTopComments" resultType="com.school.Entity.SecondLevelCommentDTO">
+        SELECT ID, <include refid="Column_List"/> FROM SecondLevelComment WHERE flID=#{flID} ORDER BY ID DESC Limit 0, 3;
+    </select>
+
+    <select id="selectSecondLevelComments" resultType="com.school.Entity.SecondLevelCommentDTO">
+        SELECT ID, <include refid="Column_List"/> FROM SecondLevelComment WHERE flID=#{flID} ORDER BY ID DESC Limit #{offset}, #{pageSize};
+    </select>
+
+    <select id="selectSLCommentByID" resultType="com.school.Entity.SecondLevelCommentDTO">
+        SELECT ID, <include refid="Column_List"/> FROM SecondLevelComment WHERE ID = #{ID};
+    </select>
+
+    <insert id="insertSecondLevelComment" parameterType="com.school.Entity.SecondLevelCommentDTO" useGeneratedKeys="true" keyProperty="ID">
+        insert into SecondLevelComment (<include refid="Column_List"/>) VALUES
+        (#{flID},
+        #{fromUserID},
+        #{fromUserNickName},
+        #{toUserID},
+        #{toUserNickName},
+        #{replyComment},
+        now())
+    </insert>
+
+    <delete id="deleteReplyComment">
+        DELETE FROM SecondLevelComment WHERE ID=#{ID};
+    </delete>
+</mapper>
