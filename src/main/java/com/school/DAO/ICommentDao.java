@@ -12,6 +12,8 @@ public interface ICommentDao {
 											  @Param("offset") Integer offset,
 											  @Param("pageSize") Integer pageSize);
 
+	List<FirstLevelCommentDTO> selectFLComments(Long newsID);
+
 	List<SecondLevelCommentDTO> selectSecondLevelComments(@Param("flID") Long flID,
 														  @Param("offset") Integer offset,
 														  @Param("pageSize") Integer pageSize);

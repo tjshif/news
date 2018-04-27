@@ -28,6 +28,10 @@
         select * from FirstLevelComment where newsID = #{newsID} order by id desc limit #{offset}, #{pageSize};
     </select>
 
+    <select id="selectFLComments" resultType="com.school.Entity.FirstLevelCommentDTO">
+        SELECT * from FirstLevelComment where newsID = #{newsID} order by id desc;
+    </select>
+
     <insert id="insertFirstLevelComment" parameterType="com.school.Entity.FirstLevelCommentDTO" useGeneratedKeys="true" keyProperty="ID">
         insert into FirstLevelComment (<include refid="FL_List"/>) VALUES
         (#{newsID},

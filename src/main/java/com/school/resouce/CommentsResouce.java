@@ -31,7 +31,7 @@ public class CommentsResouce {
 	@LogAnnotation
 	public String getComments(@QueryParam("newsID") Long newsID,
 							  @QueryParam("page") Integer page,
-							  @QueryParam("pageSize")@DefaultValue("6") Integer pageSize)
+							  @QueryParam("pageSize")@DefaultValue("5") Integer pageSize)
 	{
 		if (newsID == null || page == null)
 		{

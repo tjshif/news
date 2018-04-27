@@ -21,6 +21,8 @@ public class CommentsTestcase {
 		//commentsService.addSecComment(1L, 35L, 35L, "reply5");
 		//commentsService.getComments(1L, 1, 10);
 		//commentsService.removeReplyComments(5L);
-		commentsService.removeComments(1L);
+		//commentsService.removeComments(1L);
+
+		commentsService.getComments(1L, 2, 5);
 	}
 }

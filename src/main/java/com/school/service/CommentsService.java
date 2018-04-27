@@ -1,5 +1,6 @@
 package com.school.service;
 
+import com.school.AOP.CacheMethodLogo;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Entity.FirstLevelCommentDTO;
@@ -8,6 +9,7 @@ import com.school.Entity.UserDTO;
 import com.school.Gson.CommentsResultGson;
 import com.school.Gson.RetIDResultGson;
 import com.school.Gson.RetResultGson;
+import com.school.Utils.TimeUtils;
 import com.school.service.common.UserCommonService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -111,6 +113,20 @@ public class CommentsService extends UserCommonService {
 		try {
 			List<FirstLevelCommentDTO> firstLevelComments = commentDao.selectComments(newsID, offset, pageSize);
 			commentsResultGson.setFirstLevelCommentDTOS(firstLevelComments);
+
+			if (firstLevelComments.size() > 0)
+			{
+				List<FirstLevelCommentDTO> flComments = selectFLComments(newsID);
+				int nCount = 0;
+				for (FirstLevelCommentDTO firstLevelCommentDTO : flComments)
+				{
+					nCount += firstLevelCommentDTO.getCount();
+				}
+				commentsResultGson.setTotoalCount(nCount);
+
+				if (flComments.get(flComments.size() - 1).getId().equalsIgnoreCase(firstLevelComments.get(firstLevelComments.size() - 1).getId()))
+					commentsResultGson.setHasMore(false);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -119,4 +135,13 @@ public class CommentsService extends UserCommonService {
 		}
 		return commentsResultGson;
 	}
+
+	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS * 2)
+	public List<FirstLevelCommentDTO> selectFLComments(Long newsID)
+	{
+		if (newsID == null)
+			return null;
+		return commentDao.selectFLComments(newsID);
+	}
+
 }
