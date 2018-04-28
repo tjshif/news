@@ -13,4 +13,5 @@ public class RetMsg {
 	public static final String RET_MSG_INVALID_USERID = "无效用户ID";
 	public static final String RET_MSG_INVALID_REPLYCOMMENT = "评论已经删除，无法回复了";
 
+	public static final String RET_MSG_USRE_INVALID_NICKNAME = "昵称已经被使用了，请换一个试试";
 }

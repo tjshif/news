@@ -37,4 +37,20 @@
         select <include refid="Full_Column"/> from User where ID = #{id}
     </select>
 
+    <update id="updateNickName">
+        UPDATE User set nickName = #{nickName}, UpdateAt=now() where ID = #{ID};
+    </update>
+
+    <update id="updateSex">
+        Update User set sex = #{sex}, UpdateAt=now() where ID = #{ID};
+    </update>
+
+    <update id="updateCollege">
+        UPDATE User set college = #{college}, UpdateAt=now() where ID = #{ID};
+    </update>
+
+    <update id="updateAvatarUrl">
+        Update User set avatarUrl = #{avatarUrl}, UpdateAt=now() where ID = #{ID};
+    </update>
+
 </mapper>

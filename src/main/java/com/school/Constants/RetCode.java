@@ -16,4 +16,6 @@ public class RetCode {
 	public static final int RET_ERROR_INVALID_USERID = 0x3002;//无效用户ID
 	public static final int RET_ERROR_INVALID_REPLYCOMMENT = 0x3003; //"评论已经删除，无法回复了";
 
+	public static final int RET_ERROR_USRE_INVALID_NICKNAME = 0x4001;//nickname已经被使用了
+
 }
