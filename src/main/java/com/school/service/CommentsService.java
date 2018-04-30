@@ -3,6 +3,7 @@ package com.school.service;
 import com.school.AOP.CacheMethodLogo;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.Entity.CommentCountDTO;
 import com.school.Entity.FirstLevelCommentDTO;
 import com.school.Entity.SecondLevelCommentDTO;
 import com.school.Entity.UserDTO;
@@ -144,5 +145,6 @@ public class CommentsService extends UserCommonService {
 			return null;
 		return commentDao.selectFLComments(newsID);
 	}
+
 
 }

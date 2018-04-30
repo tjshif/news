@@ -54,4 +54,13 @@
     <delete id="deleteComment">
         DELETE FROM FirstLevelComment WHERE ID = #{ID};
     </delete>
+
+    <select id="selectCommentsCount" resultType="com.school.Entity.CommentCountDTO">
+        select newsID, SUM(count) totalCount from FirstLevelComment
+        where newsID in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by newsID ;
+    </select>
 </mapper>

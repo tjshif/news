@@ -12,6 +12,7 @@ public class NewsDTO extends BaseDTO {
 	private String     linkUrl;
 	private Long 		publisherId;
 	private String     publishSource;
+	private Integer	commentCount;
 
 	public Integer getNewsType() {
 		return newsType;
@@ -31,5 +32,9 @@ public class NewsDTO extends BaseDTO {
 
 	public void setPublishSource(String publishSource) {
 		this.publishSource = publishSource;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
 	}
 }

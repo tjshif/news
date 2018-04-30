@@ -32,7 +32,7 @@ public class CacheAspect {
 		String methodName = method.getName();
 		Object[] arguments = pjd.getArgs();
 
-		logger.debug(String.format("proccessTx, (class=%s, method=%s, arguments=%s)", targetName, methodName, arguments));
+		logger.info(String.format("proccessTx, (class=%s, method=%s, arguments=%s)", targetName, methodName, arguments));
 
 		String annotationKey = cacheMethodLogo.cacheKey();
 		boolean fixedKey = cacheMethodLogo.fixedkey();
@@ -70,7 +70,8 @@ public class CacheAspect {
 			}
 			return callResult;
 		}
-		logger.debug(String.format("proccessTx, calling gons.fromJson with returnType:%s", method.getReturnType()));
+		logger.info("Gson: " + cacheVal);
+		logger.info(String.format("proccessTx, calling gons.fromJson with returnType:%s", method.getReturnType()));
 		result = GsonUtil.fromJson(cacheVal, method.getReturnType());
 
 		return result;

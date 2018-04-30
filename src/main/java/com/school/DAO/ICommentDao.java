@@ -1,6 +1,7 @@
 package com.school.DAO;
 
 
+import com.school.Entity.CommentCountDTO;
 import com.school.Entity.FirstLevelCommentDTO;
 import com.school.Entity.SecondLevelCommentDTO;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,6 @@ public interface ICommentDao {
 	int deleteReplyComment(Long ID);
 
 	SecondLevelCommentDTO selectSLCommentByID(Long ID);
+
+	List<CommentCountDTO> selectCommentsCount(List<String> newsIDs);
 }

@@ -6,10 +6,7 @@ import com.school.DAO.IFavoriteNewsDao;
 import com.school.DAO.INewsDao;
 import com.school.DAO.INewsDetailDao;
 import com.school.DAO.IUserDao;
-import com.school.Entity.FavoriteNewsDTO;
-import com.school.Entity.NewsDTO;
-import com.school.Entity.NewsDetailDTO;
-import com.school.Entity.UserDTO;
+import com.school.Entity.*;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsDetailResultGson;
@@ -17,6 +14,7 @@ import com.school.Gson.NewsFavoriteResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Redis.ReadDataFromRedis;
+import com.school.service.common.CommentsServiceUtils;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -45,6 +45,9 @@ public class NewsService {
 
 	@Resource
 	private IUserDao userDao;
+
+	@Resource
+	private CommentsServiceUtils commentsServiceUtils;
 
 	public List<NewsDTO> selectNewsByCreateAt(Date date)
 	{
@@ -99,6 +102,32 @@ public class NewsService {
 			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
 					location, startFrom, count);
 		}
+		List<String> newsIDs = new ArrayList<>();
+		for (NewsDTO newsDTO : newsDTOList)
+		{
+			if (newsDTO == null)
+				continue;
+			newsIDs.add(newsDTO.getId());
+		}
+
+		if (newsIDs.size() > 0)
+		{
+			List<CommentCountDTO> commentCountDTOS = commentsServiceUtils.selectCommentCounts(newsIDs);
+
+			for (NewsDTO newsDTO : newsDTOList)
+			{
+				Iterator<CommentCountDTO> it = commentCountDTOS.iterator();
+				while(it.hasNext()){
+					CommentCountDTO commentCountDTO = it.next();
+					if(commentCountDTO.getNewsID().equalsIgnoreCase(newsDTO.getId())){
+						newsDTO.setCommentCount(commentCountDTO.getTotalCount());
+						it.remove();
+						break;
+					}
+				}
+			}
+		}
+
 		resultGson.setNewsList(newsDTOList);
 		return resultGson;
 	}
