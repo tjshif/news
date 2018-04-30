@@ -4,7 +4,9 @@ import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.CommentsResultGson;
+import com.school.Gson.RetFLCommentResultGson;
 import com.school.Gson.RetIDResultGson;
+import com.school.Gson.RetSecCommentResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.CommentsService;
 import com.sun.jersey.api.core.InjectParam;
@@ -57,7 +59,7 @@ public class CommentsResouce {
 			RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
-		RetIDResultGson resultGson = commentsService.addFLComment(newsID, userID, comment);
+		RetFLCommentResultGson resultGson = commentsService.addFLComment(newsID, userID, comment);
 		return GsonUtil.toJson(resultGson);
 	}
 
@@ -73,10 +75,10 @@ public class CommentsResouce {
 	{
 		if (flID == null || fromUserID == null || toUserID == null || TextUtils.isEmpty(replyComment))
 		{
-			RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			RetSecCommentResultGson resultGson = new RetSecCommentResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
-		RetIDResultGson retResultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		RetSecCommentResultGson retResultGson = new RetSecCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 
 		try {
 			retResultGson = commentsService.addSecComment(flID, fromUserID, toUserID, replyComment);

@@ -13,7 +13,7 @@
     </sql>
 
     <select id="secondLevelTopComments" resultType="com.school.Entity.SecondLevelCommentDTO">
-        SELECT ID, <include refid="Column_List"/> FROM SecondLevelComment WHERE flID=#{flID} ORDER BY ID DESC Limit 0, 3;
+        SELECT ID, <include refid="Column_List"/> FROM SecondLevelComment WHERE flID=#{flID} ORDER BY ID DESC /*Limit 0, 3*/;
     </select>
 
     <select id="selectSecondLevelComments" resultType="com.school.Entity.SecondLevelCommentDTO">

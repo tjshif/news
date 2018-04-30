@@ -47,12 +47,19 @@ public class LoginService {
 	private IVersionDao versionDao;
 
 	@Transactional
-	public UserDTO createUser(String phoneNo, String nickName)
+	public UserDTO createUser(String phoneNo)
 	{
+		String nickName = "SD_" + phoneNo;
 		UserDTO userDTO = new UserDTO(phoneNo, nickName);
 		try
 		{
 			userDao.insert(userDTO);
+			nickName = randString(10) + userDTO.getId();
+			Integer row = userDao.updateNickName(Long.parseLong(userDTO.getId()), nickName);
+			if (row == 1)
+			{
+				userDTO.setNickName(nickName);
+			}
 		}
 		catch (DuplicateKeyException ex)
 		{
@@ -76,8 +83,7 @@ public class LoginService {
 				logRegGson.setResult(RetCode.RET_CODE_SMSERROR, RetMsg.RET_MSG_SMSERROR);
 			else
 			{
-				String nickName = "SD_" + phoneNumber;
-				UserDTO userDTO = createUser(phoneNumber, nickName);
+				UserDTO userDTO = createUser(phoneNumber);
 				logRegGson.setUserId(userDTO.getId());
 				logRegGson.setPhoneNo(userDTO.getPhoneNo());
 				logRegGson.setNickName(userDTO.getNickName());
@@ -91,6 +97,16 @@ public class LoginService {
 		return logRegGson;
 	}
 
+	private String randString(int nCount)
+	{
+		String result = "";
+		String chars = "abcdefghijklmnopqrstuvwxyz";
+		for (int ii = 0; ii < nCount; ++ii)
+		{
+			result += chars.charAt((int)(Math.random() * 26));
+		}
+		return result;
+	}
 	public RetResultGson insertFeedback(String contactInfo, String feedback)
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);

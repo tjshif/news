@@ -6,9 +6,7 @@ import com.school.Constants.RetMsg;
 import com.school.Entity.FirstLevelCommentDTO;
 import com.school.Entity.SecondLevelCommentDTO;
 import com.school.Entity.UserDTO;
-import com.school.Gson.CommentsResultGson;
-import com.school.Gson.RetIDResultGson;
-import com.school.Gson.RetResultGson;
+import com.school.Gson.*;
 import com.school.Utils.TimeUtils;
 import com.school.service.common.UserCommonService;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.jws.soap.SOAPBinding;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -29,9 +28,9 @@ public class CommentsService extends UserCommonService {
 	private ICommentDao commentDao;
 
 	@Transactional
-	public RetIDResultGson addFLComment(Long newsID, Long userID, String comment)
+	public RetFLCommentResultGson addFLComment(Long newsID, Long userID, String comment)
 	{
-		RetIDResultGson retResultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		RetFLCommentResultGson retResultGson = new RetFLCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		UserDTO userDTO = getUserDTO(userID);
 		if (userDTO == null)
 		{
@@ -44,7 +43,8 @@ public class CommentsService extends UserCommonService {
 
 		try {
 			commentDao.insertFirstLevelComment(firstLevelCommentDTO);
-			retResultGson.setID(Long.parseLong(firstLevelCommentDTO.getId()));
+			firstLevelCommentDTO.setCreateAt(new Timestamp(System.currentTimeMillis()));
+			retResultGson.setFirstLevelCommentDTO(firstLevelCommentDTO);
 		}
 		catch (Exception ex)
 		{
@@ -55,9 +55,9 @@ public class CommentsService extends UserCommonService {
 	}
 
 	@Transactional
-	public RetIDResultGson addSecComment(Long flID, Long fromUserID, Long toUserID, String replyComment)
+	public RetSecCommentResultGson addSecComment(Long flID, Long fromUserID, Long toUserID, String replyComment)
 	{
-		RetIDResultGson retResultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		RetSecCommentResultGson retResultGson = new RetSecCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		UserDTO fromUserDTO = getUserDTO(fromUserID);
 		UserDTO toUserDTO = getUserDTO(toUserID);
 		if (fromUserDTO == null || toUserDTO == null)
@@ -70,7 +70,8 @@ public class CommentsService extends UserCommonService {
 		SecondLevelCommentDTO secondLevelCommentDTO = new SecondLevelCommentDTO(flID, fromUserID, fromUserDTO.getNickName(),
 				toUserID, toUserDTO.getNickName(), replyComment);
 		commentDao.insertSecondLevelComment(secondLevelCommentDTO);
-		retResultGson.setID(Long.parseLong(secondLevelCommentDTO.getId()));
+		secondLevelCommentDTO.setCreateAt(new Timestamp(System.currentTimeMillis()));
+		retResultGson.setSecondLevelCommentDTO(secondLevelCommentDTO);
 		commentDao.increaseCommentCount(flID);
 		return retResultGson;
 	}
