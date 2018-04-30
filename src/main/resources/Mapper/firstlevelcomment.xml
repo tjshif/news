@@ -61,6 +61,6 @@
         <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
-        group by newsID ;
+        group by newsID order by newsID desc ;
     </select>
 </mapper>
