@@ -86,6 +86,7 @@ public class NewsService {
 			newsDTOList = newsDao.selectNewsByPage(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
 					location, offset, pageSize);
 		}
+		appendCommentCount(newsDTOList);
 		resultGson.setNewsList(newsDTOList);
 		return resultGson;
 	}
@@ -102,6 +103,13 @@ public class NewsService {
 			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
 					location, startFrom, count);
 		}
+		appendCommentCount(newsDTOList);
+		resultGson.setNewsList(newsDTOList);
+		return resultGson;
+	}
+
+	private void appendCommentCount(List<NewsDTO> newsDTOList)
+	{
 		List<String> newsIDs = new ArrayList<>();
 		for (NewsDTO newsDTO : newsDTOList)
 		{
@@ -127,9 +135,6 @@ public class NewsService {
 				}
 			}
 		}
-
-		resultGson.setNewsList(newsDTOList);
-		return resultGson;
 	}
 
 	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID)
