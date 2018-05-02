@@ -85,7 +85,7 @@ public class LoginService {
 			{
 				UserDTO userDTO = createUser(phoneNumber);
 				logRegGson.setUserId(userDTO.getId());
-				logRegGson.setPhoneNo(userDTO.getPhoneNo());
+				logRegGson.setPhoneNo(userDTO.getPhoneNumber());
 				logRegGson.setNickName(userDTO.getNickName());
 			}
 		}

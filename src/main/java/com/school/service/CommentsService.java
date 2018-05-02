@@ -9,7 +9,7 @@ import com.school.Entity.SecondLevelCommentDTO;
 import com.school.Entity.UserDTO;
 import com.school.Gson.*;
 import com.school.Utils.TimeUtils;
-import com.school.service.common.UserCommonService;
+import com.school.service.common.UserCommonServiceUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.apache.log4j.Logger;
@@ -22,7 +22,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class CommentsService extends UserCommonService {
+public class CommentsService {
+	@Resource
+	UserCommonServiceUtil userCommonServiceUtil;
+
 	private Logger logger = Logger.getLogger(CommentsService.class.getName());
 
 	@Resource
@@ -32,7 +35,7 @@ public class CommentsService extends UserCommonService {
 	public RetFLCommentResultGson addFLComment(Long newsID, Long userID, String comment)
 	{
 		RetFLCommentResultGson retResultGson = new RetFLCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO userDTO = getUserDTO(userID);
+		UserDTO userDTO = userCommonServiceUtil.getUserDTO(userID);
 		if (userDTO == null)
 		{
 			retResultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
@@ -59,8 +62,8 @@ public class CommentsService extends UserCommonService {
 	public RetSecCommentResultGson addSecComment(Long flID, Long fromUserID, Long toUserID, String replyComment)
 	{
 		RetSecCommentResultGson retResultGson = new RetSecCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO fromUserDTO = getUserDTO(fromUserID);
-		UserDTO toUserDTO = getUserDTO(toUserID);
+		UserDTO fromUserDTO = userCommonServiceUtil.getUserDTO(fromUserID);
+		UserDTO toUserDTO = userCommonServiceUtil.getUserDTO(toUserID);
 		if (fromUserDTO == null || toUserDTO == null)
 		{
 			logger.error("fromUserID: " + fromUserID + " toUserID: " + toUserID);

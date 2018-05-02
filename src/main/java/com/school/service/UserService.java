@@ -3,10 +3,15 @@ package com.school.service;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.IUserDao;
+import com.school.Entity.UserDTO;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.UserInfoGson;
+import com.school.Gson.UserInfoResultGson;
+import com.school.service.common.UserCommonServiceUtil;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.util.BeanUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +23,9 @@ public class UserService {
 
 	@Resource
 	private IUserDao userDao;
+
+	@Resource
+	private UserCommonServiceUtil userCommonServiceUtil;
 
 	public RetResultGson updateUserNickName(Long userID, String nickName)
 	{
@@ -101,4 +109,25 @@ public class UserService {
 		}
 		return resultGson;
 	}
+
+	public UserInfoResultGson getUserInfo(Long userID)
+	{
+		UserInfoResultGson resultGson = new UserInfoResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			UserDTO userDTO = userCommonServiceUtil.getUserDTOWithoutCache(userID);
+			resultGson.setAvatarUrl(userDTO.getAvatarUrl());
+			resultGson.setPhoneNumber(userDTO.getPhoneNumber());
+			resultGson.setCollege(userDTO.getCollege());
+			resultGson.setNickName(userDTO.getNickName());
+			resultGson.setSex(userDTO.getSex());
+			resultGson.setVerified(userDTO.getVerified());
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 }

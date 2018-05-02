@@ -5,6 +5,7 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.UserInfoGson;
+import com.school.Gson.UserInfoResultGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.UserService;
 import com.sun.jersey.api.core.InjectParam;
@@ -109,4 +110,22 @@ public class UserResource {
 		RetResultGson resultGson = userService.updateUserInfo(userID, userInfoGson);
 		return GsonUtil.toJson(resultGson);
 	}
+
+	@GET
+	@Path("/{userID}/getuserinfo")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getUserInfo(@PathParam("userID") Long userID)
+	{
+		if (userID == null)
+		{
+			logger.error("getUserInfo params is null or empty");
+			UserInfoResultGson resultGson = new UserInfoResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		UserInfoResultGson resultGson = userService.getUserInfo(userID);
+		return GsonUtil.toJson(resultGson);
+	}
+
 }
