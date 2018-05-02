@@ -107,7 +107,7 @@ public class UserResource {
 			return GsonUtil.toJson(resultGson);
 		}
 		UserInfoGson userInfoGson = GsonUtil.fromJson(dto, UserInfoGson.class);
-		RetResultGson resultGson = userService.updateUserInfo(userID, userInfoGson);
+		UserInfoResultGson resultGson = userService.updateUserInfo(userID, userInfoGson);
 		return GsonUtil.toJson(resultGson);
 	}
 

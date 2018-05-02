@@ -88,15 +88,16 @@ public class UserService {
 		return resultGson;
 	}
 
-	public RetResultGson updateUserInfo(Long userID, UserInfoGson userInfoGson)
+	public UserInfoResultGson updateUserInfo(Long userID, UserInfoGson userInfoGson)
 	{
 		if (userID == null || userInfoGson == null)
 			return null;
 
-		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		UserInfoResultGson resultGson = new UserInfoResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			userInfoGson.setID(userID);
 			userDao.updateUserInfo(userInfoGson);
+			resultGson = getUserInfo(userID);
 		}
 		catch (DuplicateKeyException ex)
 		{
