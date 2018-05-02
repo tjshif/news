@@ -53,4 +53,18 @@
         Update User set avatarUrl = #{avatarUrl}, UpdateAt=now() where ID = #{ID};
     </update>
 
+    <update id="updateUserInfo" parameterType="com.school.Gson.UserInfoGson">
+        Update User set UpdateAt=now()
+        <if test="nickName != null">
+            , nickName = #{nickName}
+        </if>
+        <if test="sex != null">
+            , sex = #{sex}
+        </if>
+        <if test="college != null">
+            , college = #{college}
+        </if>
+        where ID = #{ID};
+    </update>
+
 </mapper>

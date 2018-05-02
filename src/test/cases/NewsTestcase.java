@@ -5,6 +5,7 @@ import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDetailDTO;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
+import com.school.Gson.NewsCountResultGson;
 import com.school.Gson.NewsDetailResultGson;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Gson.RetResultGson;
@@ -64,6 +65,13 @@ public class NewsTestcase {
 	public void updateRowTest()
 	{
 		RetResultGson resultGson = newsService.updateNewsValid(6L, false);
+		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
+	}
+
+	@Test
+	public void getCount()
+	{
+		NewsCountResultGson resultGson = newsService.getNewsCount(NewsTypeEnum.NEWS_JOB, null, 21);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 }

@@ -4,6 +4,7 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.IUserDao;
 import com.school.Gson.RetResultGson;
+import com.school.Gson.UserInfoGson;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
@@ -70,6 +71,28 @@ public class UserService {
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
 			userDao.updateAvatarUrl(userID, avatarUrl);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
+	public RetResultGson updateUserInfo(Long userID, UserInfoGson userInfoGson)
+	{
+		if (userID == null || userInfoGson == null)
+			return null;
+
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			userInfoGson.setID(userID);
+			userDao.updateUserInfo(userInfoGson);
+		}
+		catch (DuplicateKeyException ex)
+		{
+			resultGson.setResult(RetCode.RET_ERROR_USRE_INVALID_NICKNAME, RetMsg.RET_MSG_USRE_INVALID_NICKNAME);
 		}
 		catch (Exception ex)
 		{

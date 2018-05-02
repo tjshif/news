@@ -9,10 +9,7 @@ import com.school.DAO.IUserDao;
 import com.school.Entity.*;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
-import com.school.Gson.NewsDetailResultGson;
-import com.school.Gson.NewsFavoriteResultGson;
-import com.school.Gson.NewsSubjectResultGson;
-import com.school.Gson.RetResultGson;
+import com.school.Gson.*;
 import com.school.Redis.ReadDataFromRedis;
 import com.school.service.common.CommentsServiceUtils;
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -274,6 +271,22 @@ public class NewsService {
 			Integer offset = page * pageSize;
 			List<NewsDTO> newsDTOs = favoriteNewsDao.selectNewsByUserID(userID, offset, pageSize);
 			resultGson.setNewsList(newsDTOs);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
+	public NewsCountResultGson getNewsCount(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location)
+	{
+		NewsCountResultGson resultGson =  new NewsCountResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			Integer count = newsDao.getCount(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
+					location);
+			resultGson.setCount(count);
 		}
 		catch (Exception ex)
 		{

@@ -4,6 +4,7 @@ import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.RetResultGson;
+import com.school.Gson.UserInfoGson;
 import com.school.Utils.GsonUtil;
 import com.school.service.UserService;
 import com.sun.jersey.api.core.InjectParam;
@@ -91,4 +92,21 @@ public class UserResource {
 		return GsonUtil.toJson(resultGson);
 	}
 
+	@POST
+	@Path("/{userID}/updateuserinfo")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String updateUserInfo(@PathParam("userID") Long userID, @FormParam("dto") String dto)
+	{
+		if (userID == null || TextUtils.isEmpty(dto))
+		{
+			logger.error("updateUserInfo params is null or empty");
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		UserInfoGson userInfoGson = GsonUtil.fromJson(dto, UserInfoGson.class);
+		RetResultGson resultGson = userService.updateUserInfo(userID, userInfoGson);
+		return GsonUtil.toJson(resultGson);
+	}
 }

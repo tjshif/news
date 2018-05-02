@@ -3,6 +3,7 @@ package com.school.DAO;
 import com.school.Entity.NewsDTO;
 import org.apache.ibatis.annotations.Param;
 
+import javax.ws.rs.PathParam;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -27,4 +28,7 @@ public interface INewsDao {
 	NewsDTO selectNewsById(Long ID);
 
 	int updateNewsStatus(@Param("ID") Long ID, @Param("isValid") Boolean isValid);
+
+	Integer getCount(@Param("newsType") Integer newsType, @Param("newsSubType") Integer newsSubType,
+					 @Param("locationCode") Integer locationCode);
 }
