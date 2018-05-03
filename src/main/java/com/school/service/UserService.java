@@ -17,11 +17,13 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @Service
 public class UserService {
@@ -108,6 +110,10 @@ public class UserService {
 		catch (DuplicateKeyException ex)
 		{
 			resultGson.setResult(RetCode.RET_ERROR_USRE_INVALID_NICKNAME, RetMsg.RET_MSG_USRE_INVALID_NICKNAME);
+		}
+		catch (UncategorizedSQLException ex)
+		{
+			resultGson.setResult(RetCode.RET_ERROR_USER_INVALID_FORMAT, RetMsg.RET_MSG_USER_INVALID_FORMAT);
 		}
 		catch (Exception ex)
 		{

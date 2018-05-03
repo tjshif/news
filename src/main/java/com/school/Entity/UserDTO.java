@@ -16,7 +16,7 @@ public class UserDTO extends BaseDTO{
 	public UserDTO(String phoneNo, String nickName)
 	{
 		setNickName(nickName);
-		setPhoneNumber(phoneNumber);
+		setPhoneNumber(phoneNo);
 	}
 
 	public String getPhoneNumber() {
