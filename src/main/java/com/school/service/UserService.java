@@ -1,14 +1,18 @@
 package com.school.service;
 
+import com.school.Constants.EnvConst;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.IUserDao;
 import com.school.Entity.UserDTO;
+import com.school.Gson.AvatarResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.UserInfoGson;
 import com.school.Gson.UserInfoResultGson;
 import com.school.service.common.UserCommonServiceUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.util.TextUtils;
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +20,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class UserService {
@@ -129,6 +135,56 @@ public class UserService {
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
+	}
+
+	public AvatarResultGson updateUserAvatarPath(Long userID, String imageFilePath)
+	{
+		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		UserDTO userDTO = userCommonServiceUtil.getUserDTOWithoutCache(userID);
+		if (userDTO == null)
+		{
+			resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
+			return resultGson;
+		}
+
+		String originalImagePath = userDTO.getAvatarUrl();
+		if (!TextUtils.isEmpty(originalImagePath) && originalImagePath.equalsIgnoreCase(imageFilePath))
+		{
+			resultGson.setAvatarPath(imageFilePath);
+			return resultGson;
+		}
+
+		RetResultGson updateResult = updateAvatarUrl(userID, imageFilePath);
+		if (updateResult.getRetCode() == RetCode.RET_CODE_OK)
+		{//remove old file
+			removeFile(originalImagePath);
+			resultGson.setAvatarPath(imageFilePath);
+		}
+		else
+		{
+			resultGson.setResult(updateResult.getRetCode(), updateResult.getMessage());
+		}
+		return resultGson;
+	}
+
+	public void removeFile(String fileName)
+	{
+		if (TextUtils.isEmpty(fileName))
+			return;
+
+		String filePath = EnvConst.ROOT_FOLDER + fileName;
+		File file = new File(filePath);
+		if (file.exists())
+		{
+			try {
+				FileUtils.forceDelete(file);
+			}
+			catch (IOException ex)
+			{
+				logger.error("Fail to delete file: " + filePath + ex.getMessage());
+			}
+		}
+		return;
 	}
 
 }
