@@ -89,8 +89,11 @@ public class CommentsService {
 		retResultGson.setSecondLevelCommentDTO(secondLevelCommentDTO);
 		commentDao.increaseCommentCount(flID);
 
-		UnReadMesssageDTO unReadMesssageDTO = new UnReadMesssageDTO(toUserID);
-		unReadMesssageDao.insert(unReadMesssageDTO);
+		if (fromUserID.intValue() != toUserID.intValue())
+		{
+			UnReadMesssageDTO unReadMesssageDTO = new UnReadMesssageDTO(toUserID);
+			unReadMesssageDao.insert(unReadMesssageDTO);
+		}
 
 		return retResultGson;
 	}
