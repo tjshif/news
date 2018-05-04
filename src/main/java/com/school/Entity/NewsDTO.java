@@ -37,4 +37,8 @@ public class NewsDTO extends BaseDTO {
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
 	}
+
+	public String getSubject() {
+		return subject;
+	}
 }

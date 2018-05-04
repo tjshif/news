@@ -30,9 +30,9 @@ public class CommentsTestcase {
 		news.add("12");
 		news.add("3642");
 
-		List<CommentCountDTO> rest = commentsServiceUtils.selectCommentCounts(news);
+		//List<CommentCountDTO> rest = commentsServiceUtils.selectCommentCounts(news);
 		//RetFLCommentResultGson fr = commentsService.addFLComment(1L, 35L, "test2test3test4test5test6test7test8test9test10");
-		commentsService.addSecComment(1L, 35L, 35L, "reply5");
+		commentsService.addSecComment(1L, 1L, 1L, "reply5");
 		//commentsService.getComments(1L, 1, 10);
 		//commentsService.removeReplyComments(5L);
 		//commentsService.removeComments(1L);

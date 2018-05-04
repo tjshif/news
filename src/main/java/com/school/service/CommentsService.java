@@ -3,12 +3,11 @@ package com.school.service;
 import com.school.AOP.CacheMethodLogo;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
-import com.school.Entity.CommentCountDTO;
-import com.school.Entity.FirstLevelCommentDTO;
-import com.school.Entity.SecondLevelCommentDTO;
-import com.school.Entity.UserDTO;
+import com.school.DAO.IUnReadMesssageDao;
+import com.school.Entity.*;
 import com.school.Gson.*;
 import com.school.Utils.TimeUtils;
+import com.school.service.common.NewsServiceUtils;
 import com.school.service.common.UserCommonServiceUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,12 @@ public class CommentsService {
 	@Resource
 	private ICommentDao commentDao;
 
+	@Resource
+	private IUnReadMesssageDao unReadMesssageDao;
+
+	@Resource
+	private NewsServiceUtils newsServiceUtils;
+
 	@Transactional
 	public RetFLCommentResultGson addFLComment(Long newsID, Long userID, String comment)
 	{
@@ -42,9 +47,15 @@ public class CommentsService {
 			return retResultGson;
 		}
 
-		FirstLevelCommentDTO firstLevelCommentDTO = new FirstLevelCommentDTO(newsID, userID, userDTO.getNickName(),
-				userDTO.getAvatarUrl(), comment);
+		NewsDTO newsDTO = newsServiceUtils.getNews(newsID);
+		if (newsDTO == null)
+		{
+			retResultGson.setResult(RetCode.RET_ERROR_INVALID_NEWSID, RetMsg.RET_MSG_INVALID_NEWSID);
+			return retResultGson;
+		}
 
+		FirstLevelCommentDTO firstLevelCommentDTO = new FirstLevelCommentDTO(newsID, newsDTO.getSubject(), userID, userDTO.getNickName(),
+				userDTO.getAvatarUrl(), comment);
 		try {
 			commentDao.insertFirstLevelComment(firstLevelCommentDTO);
 			firstLevelCommentDTO.setCreateAt(new Timestamp(System.currentTimeMillis()));
@@ -71,12 +82,16 @@ public class CommentsService {
 			return retResultGson;
 		}
 
-		SecondLevelCommentDTO secondLevelCommentDTO = new SecondLevelCommentDTO(flID, fromUserID, fromUserDTO.getNickName(),
-				toUserID, toUserDTO.getNickName(), replyComment);
+		SecondLevelCommentDTO secondLevelCommentDTO = new SecondLevelCommentDTO(flID, fromUserID, fromUserDTO.getNickName(), fromUserDTO.getAvatarUrl(),
+				toUserID, toUserDTO.getNickName(), toUserDTO.getAvatarUrl(), replyComment);
 		commentDao.insertSecondLevelComment(secondLevelCommentDTO);
 		secondLevelCommentDTO.setCreateAt(new Timestamp(System.currentTimeMillis()));
 		retResultGson.setSecondLevelCommentDTO(secondLevelCommentDTO);
 		commentDao.increaseCommentCount(flID);
+
+		UnReadMesssageDTO unReadMesssageDTO = new UnReadMesssageDTO(toUserID);
+		unReadMesssageDao.insert(unReadMesssageDTO);
+
 		return retResultGson;
 	}
 

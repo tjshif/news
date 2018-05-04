@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.IUnReadMesssageDao" >
+    <sql id="Column_List">
+        userID,
+        unReadCount
+    </sql>
+
+    <insert id="insert" parameterType="com.school.Entity.UnReadMesssageDTO"  useGeneratedKeys="true" keyProperty="ID">
+        insert into UnReadMessage (<include refid="Column_List"/>) VALUES
+        (#{userID},
+        #{unReadCount})
+        ON DUPLICATE KEY UPDATE unReadCount = unReadCount + 1;
+    </insert>
+
+    <delete id="clearUnRead">
+        DELETE * from UnReadMessage WHERE userID = #{userID};
+    </delete>
+
+    <select id="selectByUserID" resultType="com.school.Entity.UnReadMesssageDTO">
+        SELECT ID, <include refid="Column_List"/> FROM UnReadMessage where userID = #{userID};
+    </select>
+</mapper>

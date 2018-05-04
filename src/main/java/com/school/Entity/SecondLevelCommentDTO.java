@@ -4,15 +4,19 @@ public class SecondLevelCommentDTO extends BaseDTO {
 	private Long flID;
 	private Long fromUserID;
 	private String fromUserNickName;
+	private String fromAvatarUrl;
+
 	private Long toUserID;
 	private String toUserNickName;
+	private String toAvatarUrl;
 	private String replyComment;
 
 	public SecondLevelCommentDTO()
 	{
 
 	}
-	public SecondLevelCommentDTO(Long flID, Long fromUserID, String fromUserNickName, Long toUserID, String toUserNickName,
+	public SecondLevelCommentDTO(Long flID, Long fromUserID, String fromUserNickName, String fromAvatarUrl,
+								 Long toUserID, String toUserNickName, String toAvatarUrl,
 								 String replyComment)
 	{
 		setFlID(flID);
@@ -21,8 +25,25 @@ public class SecondLevelCommentDTO extends BaseDTO {
 		setToUserID(toUserID);
 		setToUserNickName(toUserNickName);
 		setReplyComment(replyComment);
+		setFromAvatarUrl(fromAvatarUrl);
+		setToAvatarUrl(toAvatarUrl);
 	}
 
+	public String getFromAvatarUrl() {
+		return fromAvatarUrl;
+	}
+
+	public void setFromAvatarUrl(String fromAvatarUrl) {
+		this.fromAvatarUrl = fromAvatarUrl;
+	}
+
+	public String getToAvatarUrl() {
+		return toAvatarUrl;
+	}
+
+	public void setToAvatarUrl(String toAvatarUrl) {
+		this.toAvatarUrl = toAvatarUrl;
+	}
 
 	public Long getFlID() {
 		return flID;

@@ -6,8 +6,10 @@
         flID,
         fromUserID,
         fromUserNickName,
+        fromAvatarUrl,
         toUserID,
         toUserNickName,
+        toAvatarUrl,
         replyComment,
         createAt
     </sql>
@@ -29,8 +31,10 @@
         (#{flID},
         #{fromUserID},
         #{fromUserNickName},
+        #{fromAvatarUrl},
         #{toUserID},
         #{toUserNickName},
+        #{toAvatarUrl},
         #{replyComment},
         now())
     </insert>

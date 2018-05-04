@@ -4,6 +4,7 @@
 <mapper namespace="com.school.DAO.ICommentDao">
     <sql id="FL_List">
         newsID,
+        Subject,
         userID,
         nickName,
         avatarUrl,
@@ -35,6 +36,7 @@
     <insert id="insertFirstLevelComment" parameterType="com.school.Entity.FirstLevelCommentDTO" useGeneratedKeys="true" keyProperty="ID">
         insert into FirstLevelComment (<include refid="FL_List"/>) VALUES
         (#{newsID},
+        #{Subject},
         #{userID},
         #{nickName},
         #{avatarUrl},

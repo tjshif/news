@@ -9,6 +9,7 @@ import com.school.Gson.AvatarResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.UserInfoGson;
 import com.school.Gson.UserInfoResultGson;
+import com.school.Utils.AppProperites;
 import com.school.service.common.UserCommonServiceUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.util.TextUtils;
@@ -31,6 +32,9 @@ public class UserService {
 
 	@Resource
 	private IUserDao userDao;
+
+	@Resource
+	private AppProperites appProperites;
 
 	@Resource
 	private UserCommonServiceUtil userCommonServiceUtil;
@@ -178,7 +182,7 @@ public class UserService {
 		if (TextUtils.isEmpty(fileName))
 			return;
 
-		String filePath = EnvConst.ROOT_FOLDER + fileName;
+		String filePath = appProperites.getRoot_folder() + fileName;
 		File file = new File(filePath);
 		if (file.exists())
 		{

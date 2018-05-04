@@ -4,6 +4,7 @@ import java.util.List;
 
 public class FirstLevelCommentDTO extends BaseDTO {
 	private Long 	newsID;
+	private String Subject;
 	private Long	userID;
 	private String nickName;
 	private String avatarUrl;
@@ -15,14 +16,23 @@ public class FirstLevelCommentDTO extends BaseDTO {
 	{
 
 	}
-	public FirstLevelCommentDTO(Long newsID, Long userID, String nickName, String avatarUrl, String comment)
+	public FirstLevelCommentDTO(Long newsID, String subject, Long userID, String nickName, String avatarUrl, String comment)
 	{
 		setNewsID(newsID);
+		setSubject(subject);
 		setUserID(userID);
 		setNickName(nickName);
 		setAvatarUrl(avatarUrl);
 		setComment(comment);
 		setCount(1);
+	}
+
+	public void setSubject(String subject) {
+		Subject = subject;
+	}
+
+	public String getSubject() {
+		return Subject;
 	}
 
 	public String getAvatarUrl() {

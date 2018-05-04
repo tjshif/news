@@ -4,6 +4,7 @@ import com.school.Constants.EnvConst;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.Gson.AvatarResultGson;
+import com.school.Utils.AppProperites;
 import com.school.Utils.GsonUtil;
 import com.school.service.UserService;
 import com.sun.jersey.api.core.InjectParam;
@@ -31,6 +32,9 @@ public class ImageFileResouce {
 	@InjectParam
 	private UserService userService;
 
+	@InjectParam
+	private AppProperites appProperites;
+
 	@POST
 	@Path("/{userID}/uploadfile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -47,12 +51,12 @@ public class ImageFileResouce {
 		}
 
 		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		String imagePathName = EnvConst.ROOT_FOLDER + EnvConst.AVATAR_IMAGE_PATH + userID.toString() + "/" + disposition.getFileName();
+		String imagePathName = appProperites.getRoot_folder() + appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
 		File file = new File(imagePathName);
 
 		try {
 			FileUtils.copyInputStreamToFile(inputStream, file);
-			String relativePath = EnvConst.AVATAR_IMAGE_PATH + userID.toString() + "/" + disposition.getFileName();
+			String relativePath =  appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
 			resultGson = userService.updateUserAvatarPath(userID, relativePath);
 			if (resultGson.getRetCode()!= RetCode.RET_CODE_OK)
 			{
@@ -61,7 +65,7 @@ public class ImageFileResouce {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return GsonUtil.toJson(resultGson);
@@ -72,7 +76,7 @@ public class ImageFileResouce {
 	@Produces("image/*")
 	public Response getImage(@QueryParam("imagename") String imageName)
 	{
-		String imagePathName = EnvConst.ROOT_FOLDER + imageName;
+		String imagePathName =  appProperites.getRoot_folder() + imageName;
 		File file = new File(imagePathName);
 		if (!file.exists())
 		{

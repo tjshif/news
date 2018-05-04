@@ -15,4 +15,6 @@ public class RetMsg {
 
 	public static final String RET_MSG_USRE_INVALID_NICKNAME = "昵称已经被使用了，请换一个试试";
 	public static final String RET_MSG_USER_INVALID_FORMAT = "输入有误，仅支持中文、字母、数字";
+
+	public static final String RET_MSG_INVALID_NEWSID = "无效的NewsID";
 }
