@@ -47,8 +47,9 @@ public class LoginService {
 	private IVersionDao versionDao;
 
 	@Transactional
-	public UserDTO createUser(String phoneNo)
+	public LoginRegisterGson loginUser(String phoneNo)
 	{
+		LoginRegisterGson logRegGson = new LoginRegisterGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		String nickName = "SD_" + phoneNo;
 		UserDTO userDTO = new UserDTO(phoneNo, nickName);
 		try
@@ -59,13 +60,19 @@ public class LoginService {
 			if (row == 1)
 			{
 				userDTO.setNickName(nickName);
+				logRegGson.setRegister(true);
 			}
 		}
 		catch (DuplicateKeyException ex)
 		{
 			userDTO = userDao.selectByPhoneNo(phoneNo);
+			logRegGson.setRegister(false);
 		}
-		return userDTO;
+
+		logRegGson.setUserId(userDTO.getId());
+		logRegGson.setPhoneNo(userDTO.getPhoneNumber());
+		logRegGson.setNickName(userDTO.getNickName());
+		return logRegGson;
 	}
 
 	public LoginRegisterGson loginRegister(String phoneNumber, String smsCode)
@@ -83,10 +90,7 @@ public class LoginService {
 				logRegGson.setResult(RetCode.RET_CODE_SMSERROR, RetMsg.RET_MSG_SMSERROR);
 			else
 			{
-				UserDTO userDTO = createUser(phoneNumber);
-				logRegGson.setUserId(userDTO.getId());
-				logRegGson.setPhoneNo(userDTO.getPhoneNumber());
-				logRegGson.setNickName(userDTO.getNickName());
+				logRegGson = loginUser(phoneNumber);
 			}
 		}
 		catch (Exception ex)

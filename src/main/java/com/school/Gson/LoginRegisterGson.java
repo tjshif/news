@@ -4,6 +4,7 @@ public class LoginRegisterGson extends RetResultGson {
 	private String	userId;
 	private String nickName;
 	private String phoneNo;
+	private Boolean isRegister;
 
 	public LoginRegisterGson(int retCode, String message)
 	{
@@ -34,5 +35,13 @@ public class LoginRegisterGson extends RetResultGson {
 
 	public String getUserId() {
 		return userId;
+	}
+
+	public void setRegister(Boolean register) {
+		isRegister = register;
+	}
+
+	public Boolean getRegister() {
+		return isRegister;
 	}
 }
