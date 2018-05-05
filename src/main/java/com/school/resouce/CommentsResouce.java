@@ -3,10 +3,7 @@ package com.school.resouce;
 import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
-import com.school.Gson.CommentsResultGson;
-import com.school.Gson.RetFLCommentResultGson;
-import com.school.Gson.RetIDResultGson;
-import com.school.Gson.RetSecCommentResultGson;
+import com.school.Gson.*;
 import com.school.Utils.GsonUtil;
 import com.school.service.CommentsService;
 import com.sun.jersey.api.core.InjectParam;
@@ -95,5 +92,24 @@ public class CommentsResouce {
 		}
 
 		return GsonUtil.toJson(retResultGson);
+	}
+
+	@GET
+	@Path("/mycomments")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String myComments(@FormParam("userID") Long userID,
+							 @QueryParam("page") Integer page,
+							 @QueryParam("pageSize")@DefaultValue("5") Integer pageSize)
+	{
+
+		if (userID == null || page == null)
+		{
+			MyCommentsResultGson resultGson =  new MyCommentsResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		MyCommentsResultGson resultGson = commentsService.selectMyComments(userID, page, pageSize);
+		return GsonUtil.toJson(resultGson);
 	}
 }

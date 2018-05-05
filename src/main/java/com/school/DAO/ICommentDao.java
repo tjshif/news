@@ -31,4 +31,10 @@ public interface ICommentDao {
 	SecondLevelCommentDTO selectSLCommentByID(Long ID);
 
 	List<CommentCountDTO> selectCommentsCount(List<String> newsIDs);
+
+	List<FirstLevelCommentDTO> selectMyComments(@Param("userID") Long userID,
+												@Param("offset") Integer offset,
+												@Param("pageSize") Integer pageSize);
+
+
 }

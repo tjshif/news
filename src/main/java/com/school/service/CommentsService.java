@@ -63,7 +63,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			retResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return retResultGson;
@@ -107,7 +107,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			retResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return retResultGson;
@@ -153,13 +153,13 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			commentsResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return commentsResultGson;
 	}
 
-	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS * 2)
+	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
 	public List<FirstLevelCommentDTO> selectFLComments(Long newsID)
 	{
 		if (newsID == null)
@@ -167,5 +167,21 @@ public class CommentsService {
 		return commentDao.selectFLComments(newsID);
 	}
 
+	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
+	public MyCommentsResultGson selectMyComments(Long userID, Integer page, Integer pageSize)
+	{
+		MyCommentsResultGson resultGson = new MyCommentsResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		Integer offset = page * pageSize;
 
+		try {
+			List<FirstLevelCommentDTO> firstLevelCommentDTOS = commentDao.selectMyComments(userID, offset, pageSize);
+			resultGson.setFirstLevelCommentDTOS(firstLevelCommentDTOS);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
 }

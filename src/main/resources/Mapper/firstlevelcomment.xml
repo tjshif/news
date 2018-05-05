@@ -65,4 +65,8 @@
         </foreach>
         group by newsID order by newsID desc ;
     </select>
+
+    <select id="selectMyComments" resultType="com.school.Entity.FirstLevelCommentDTO">
+        SELECT * from FirstLevelComment where userID = #{userID} order by id desc limit #{offset}, #{pageSize};
+    </select>
 </mapper>
