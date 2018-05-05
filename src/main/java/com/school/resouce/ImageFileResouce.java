@@ -24,6 +24,12 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Set;
+
 @Component
 @Path("/file")
 public class ImageFileResouce {
@@ -53,10 +59,10 @@ public class ImageFileResouce {
 		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		String imagePathName = appProperites.getRoot_folder() + appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
 		File file = new File(imagePathName);
-		file.setReadable(true, false);
-		file.setExecutable(true, false);
 		try {
+			logger.info("file Path:" + file.getAbsolutePath());
 			FileUtils.copyInputStreamToFile(inputStream, file);
+			//changePermission(file);
 			String relativePath =  appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
 			resultGson = userService.updateUserAvatarPath(userID, relativePath);
 			if (resultGson.getRetCode()!= RetCode.RET_CODE_OK)
@@ -72,6 +78,17 @@ public class ImageFileResouce {
 		return GsonUtil.toJson(resultGson);
 	}
 
+	private void changePermission(File dirFile) throws IOException {
+		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+		perms.add(PosixFilePermission.OTHERS_EXECUTE);
+		perms.add(PosixFilePermission.OTHERS_READ);
+		try {
+			java.nio.file.Path path = Paths.get(dirFile.getAbsolutePath());
+			Files.setPosixFilePermissions(path, perms);
+		} catch (Exception ex) {
+			logger.error(ex + "\n" + dirFile.getAbsolutePath());
+		}
+	}
 	@GET
 	@Path("/downloadimage")
 	@Produces("image/*")
