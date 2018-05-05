@@ -60,6 +60,7 @@ public class LoginService {
 			if (row == 1)
 			{
 				userDTO.setNickName(nickName);
+				logRegGson.setAvatarUrl(userDTO.getAvatarUrl());
 				logRegGson.setRegister(true);
 			}
 		}

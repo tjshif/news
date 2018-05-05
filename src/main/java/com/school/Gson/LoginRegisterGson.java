@@ -4,6 +4,7 @@ public class LoginRegisterGson extends RetResultGson {
 	private String	userId;
 	private String nickName;
 	private String phoneNo;
+	private String avatarUrl;
 	private Boolean isRegister;
 
 	public LoginRegisterGson(int retCode, String message)
@@ -43,5 +44,13 @@ public class LoginRegisterGson extends RetResultGson {
 
 	public Boolean getRegister() {
 		return isRegister;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 }
