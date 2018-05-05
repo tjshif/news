@@ -59,8 +59,7 @@ public class LoginService {
 			Integer row = userDao.updateNickName(Long.parseLong(userDTO.getId()), nickName);
 			if (row == 1)
 			{
-				userDTO.setNickName(nickName);
-				logRegGson.setAvatarUrl(userDTO.getAvatarUrl());
+				userDTO = userDao.selectByPhoneNo(phoneNo);
 				logRegGson.setRegister(true);
 			}
 		}
@@ -70,6 +69,7 @@ public class LoginService {
 			logRegGson.setRegister(false);
 		}
 
+		logRegGson.setAvatarUrl(userDTO.getAvatarUrl());
 		logRegGson.setUserId(userDTO.getId());
 		logRegGson.setPhoneNo(userDTO.getPhoneNumber());
 		logRegGson.setNickName(userDTO.getNickName());
