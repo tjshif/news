@@ -53,7 +53,8 @@ public class ImageFileResouce {
 		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		String imagePathName = appProperites.getRoot_folder() + appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
 		File file = new File(imagePathName);
-
+		file.setReadable(true, false);
+		file.setExecutable(true, false);
 		try {
 			FileUtils.copyInputStreamToFile(inputStream, file);
 			String relativePath =  appProperites.getAvatar_image_path() + userID.toString() + "/" + disposition.getFileName();
