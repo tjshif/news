@@ -99,7 +99,7 @@ public class CommentsResouce {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String myComments(@FormParam("userID") Long userID,
+	public String myComments(@QueryParam("userID") Long userID,
 							 @QueryParam("page") Integer page,
 							 @QueryParam("pageSize")@DefaultValue("5") Integer pageSize)
 	{
