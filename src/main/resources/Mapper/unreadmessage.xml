@@ -14,7 +14,7 @@
     </insert>
 
     <delete id="clearUnRead">
-        DELETE * from UnReadMessage WHERE userID = #{userID};
+        DELETE from UnReadMessage WHERE userID = #{userID};
     </delete>
 
     <select id="selectByUserID" resultType="com.school.Entity.UnReadMesssageDTO">

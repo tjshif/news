@@ -4,6 +4,10 @@ public class UnReadMesssageDTO extends BaseDTO{
 	private Long userID;
 	private Integer unReadCount;
 
+	public UnReadMesssageDTO()
+	{
+
+	}
 	public UnReadMesssageDTO(Long userID)
 	{
 		setUserID(userID);
