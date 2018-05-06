@@ -30,10 +30,8 @@ public class CommentsResouce {
 	@LogAnnotation
 	public String getComments(@QueryParam("newsID") Long newsID,
 							  @QueryParam("page") Integer page,
-							  @QueryParam("pageSize")@DefaultValue("5") Integer pageSize)
-	{
-		if (newsID == null || page == null)
-		{
+							  @QueryParam("pageSize") @DefaultValue("5") Integer pageSize) {
+		if (newsID == null || page == null) {
 			CommentsResultGson resultGson = new CommentsResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
@@ -48,11 +46,9 @@ public class CommentsResouce {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
 	public String addComment(@FormParam("newsID") Long newsID,
-							  @FormParam("userID") Long userID,
-							  @FormParam("comment") String comment)
-	{
-		if (newsID == null || userID == null || TextUtils.isEmpty(comment))
-		{
+							 @FormParam("userID") Long userID,
+							 @FormParam("comment") String comment) {
+		if (newsID == null || userID == null || TextUtils.isEmpty(comment)) {
 			RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
@@ -68,10 +64,8 @@ public class CommentsResouce {
 	public String replyComment(@FormParam("flID") Long flID,
 							   @FormParam("fromUserID") Long fromUserID,
 							   @FormParam("toUserID") Long toUserID,
-							   @FormParam("replyComment") String replyComment)
-	{
-		if (flID == null || fromUserID == null || toUserID == null || TextUtils.isEmpty(replyComment))
-		{
+							   @FormParam("replyComment") String replyComment) {
+		if (flID == null || fromUserID == null || toUserID == null || TextUtils.isEmpty(replyComment)) {
 			RetSecCommentResultGson resultGson = new RetSecCommentResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
@@ -79,14 +73,10 @@ public class CommentsResouce {
 
 		try {
 			retResultGson = commentsService.addSecComment(flID, fromUserID, toUserID, replyComment);
-		}
-		catch (DataIntegrityViolationException ex)
-		{
+		} catch (DataIntegrityViolationException ex) {
 			logger.error(ex.getMessage());
 			retResultGson.setResult(RetCode.RET_ERROR_INVALID_REPLYCOMMENT, RetMsg.RET_MSG_INVALID_REPLYCOMMENT);
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			retResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
@@ -101,15 +91,29 @@ public class CommentsResouce {
 	@LogAnnotation
 	public String myComments(@QueryParam("userID") Long userID,
 							 @QueryParam("page") Integer page,
-							 @QueryParam("pageSize")@DefaultValue("5") Integer pageSize)
-	{
+							 @QueryParam("pageSize") @DefaultValue("5") Integer pageSize) {
 
-		if (userID == null || page == null)
-		{
-			MyCommentsResultGson resultGson =  new MyCommentsResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+		if (userID == null || page == null) {
+			MyCommentsResultGson resultGson = new MyCommentsResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
 		MyCommentsResultGson resultGson = commentsService.selectMyComments(userID, page, pageSize);
+		return GsonUtil.toJson(resultGson);
+	}
+
+	@GET
+	@Path("/replymecomments")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String replymeComments(@QueryParam("toUserID") Long toUserID,
+								  @QueryParam("page") Integer page,
+								  @QueryParam("pageSize") @DefaultValue("5") Integer pageSize) {
+		if (toUserID == null || page == null) {
+			ReplymeResultGson resultGson = new ReplymeResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		ReplymeResultGson resultGson = commentsService.selectReplyComments(toUserID, page, pageSize);
 		return GsonUtil.toJson(resultGson);
 	}
 }

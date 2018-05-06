@@ -39,6 +39,15 @@
         now())
     </insert>
 
+    <select id="selectReplyComments" resultType="com.school.Entity.ReplymeCommentDTO">
+        select SL.ID ID, SL.fromUserID fromUserID, SL.fromUserNickName fromUserNickName,
+          SL.fromAvatarUrl fromAvatarUrl, SL.replyComment replyComment,
+          FL.newsID newsID, FL.Subject Subject, FL.count count from SecondLevelComment SL
+        inner join FirstLevelComment FL on SL.flID = FL.ID
+        where SL.toUserID = #{toUserID} and SL.toUserID != SL.fromUserID order by ID desc Limit #{offset}, #{pageSize};
+    </select>
+
+
     <delete id="deleteReplyComment">
         DELETE FROM SecondLevelComment WHERE ID=#{ID};
     </delete>

@@ -3,6 +3,7 @@ package com.school.DAO;
 
 import com.school.Entity.CommentCountDTO;
 import com.school.Entity.FirstLevelCommentDTO;
+import com.school.Entity.ReplymeCommentDTO;
 import com.school.Entity.SecondLevelCommentDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,5 +37,7 @@ public interface ICommentDao {
 												@Param("offset") Integer offset,
 												@Param("pageSize") Integer pageSize);
 
-
+	List<ReplymeCommentDTO> selectReplyComments(@Param("toUserID") Long toUserID,
+												@Param("offset") Integer offset,
+												@Param("pageSize") Integer pageSize);
 }

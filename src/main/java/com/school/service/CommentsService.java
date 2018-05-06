@@ -167,7 +167,7 @@ public class CommentsService {
 		return commentDao.selectFLComments(newsID);
 	}
 
-	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
+	@CacheMethodLogo(resTime = 10)
 	public MyCommentsResultGson selectMyComments(Long userID, Integer page, Integer pageSize)
 	{
 		MyCommentsResultGson resultGson = new MyCommentsResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
@@ -184,4 +184,22 @@ public class CommentsService {
 		}
 		return resultGson;
 	}
+
+	@CacheMethodLogo(resTime = 10)
+	public ReplymeResultGson selectReplyComments(Long toUserID, Integer page, Integer pageSize)
+	{
+		ReplymeResultGson resultGson = new ReplymeResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		Integer offset = page * pageSize;
+		try {
+			List<ReplymeCommentDTO> replymeCommentDTOS = commentDao.selectReplyComments(toUserID, offset, pageSize);
+			resultGson.setReplymeCommentDTOS(replymeCommentDTOS);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 }
