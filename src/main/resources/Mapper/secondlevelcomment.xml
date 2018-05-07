@@ -40,7 +40,7 @@
     </insert>
 
     <select id="selectReplyComments" resultType="com.school.Entity.ReplymeCommentDTO">
-        select SL.ID ID, SL.fromUserID fromUserID, SL.fromUserNickName fromUserNickName,
+        select SL.ID ID, SL.flID flID, SL.fromUserID fromUserID, SL.fromUserNickName fromUserNickName,
           SL.fromAvatarUrl fromAvatarUrl, SL.replyComment replyComment,
           FL.newsID newsID, FL.Subject Subject, FL.count count from SecondLevelComment SL
         inner join FirstLevelComment FL on SL.flID = FL.ID

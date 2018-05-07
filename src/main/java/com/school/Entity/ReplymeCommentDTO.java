@@ -2,6 +2,7 @@ package com.school.Entity;
 
 public class ReplymeCommentDTO {
 	private String ID;
+	private String flID;
 	private Long fromUserID;
 	private String fromUserNickName;
 	private String fromAvatarUrl;
@@ -9,6 +10,14 @@ public class ReplymeCommentDTO {
 	private Long 	newsID;
 	private String Subject;
 	private Integer count;
+
+	public void setFlID(String flID) {
+		this.flID = flID;
+	}
+
+	public String getFlID() {
+		return flID;
+	}
 
 	public void setFromAvatarUrl(String fromAvatarUrl) {
 		this.fromAvatarUrl = fromAvatarUrl;
