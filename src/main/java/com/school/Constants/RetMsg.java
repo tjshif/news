@@ -17,4 +17,6 @@ public class RetMsg {
 	public static final String RET_MSG_USER_INVALID_FORMAT = "输入有误，仅支持中文、字母、数字";
 
 	public static final String RET_MSG_INVALID_NEWSID = "无效的NewsID";
+
+	public static final String RET_MSG_USER_INVALID_INFO = "无效用户名或密码";
 }

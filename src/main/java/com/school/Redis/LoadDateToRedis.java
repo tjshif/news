@@ -149,4 +149,10 @@ public class LoadDateToRedis extends RedisHandler{
 		}
 		storedCacheService.zremrangeByRank(key, 0, removeMaxIdx);
 	}
+
+	public void LoadSession(Long adminID, int seconds, String sessionID)
+	{
+		String key = getSessionKey(adminID);
+		storedCacheService.setex(key, seconds, sessionID);
+	}
 }

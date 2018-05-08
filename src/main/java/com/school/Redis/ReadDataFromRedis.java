@@ -74,4 +74,10 @@ public class ReadDataFromRedis extends RedisHandler {
 		}
 		return newsResultDTOs;
 	}
+
+	public String readSession(Long adminID)
+	{
+		String key = getSessionKey(adminID);
+		return storedCacheService.get(key);
+	}
 }

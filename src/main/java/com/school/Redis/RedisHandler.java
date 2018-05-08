@@ -126,4 +126,8 @@ public class RedisHandler {
 		storedCacheService.zadd(getTrimKey(), newsItem.getLocation(), key);
 	}
 
+	protected String getSessionKey(Long adminID)
+	{
+		return String.format("Session:%s", adminID.toString());
+	}
 }
