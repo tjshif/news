@@ -34,11 +34,9 @@ public class BeAdminServiceUtils {
 		String storedSessionID = readDataFromRedis.readSession(adminID);
 		if (TextUtils.isEmpty(storedSessionID))
 		{
-			BeAdminDTO beAdminDTO = beAdminDao.selectByID(adminID);
-			if (beAdminDTO == null)
+			storedSessionID = beAdminDao.getSessionWithinHalfHour(adminID);
+			if (TextUtils.isEmpty(storedSessionID))
 				return false;
-
-			storedSessionID = beAdminDTO.getSessionID();
 		}
 
 		if (sessionID.equalsIgnoreCase(storedSessionID))

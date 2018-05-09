@@ -19,4 +19,8 @@
     <update id="updateSessionID">
         UPDATE BeAdmin set sessionID = #{sessionID}, UpdateAt=now() where ID = #{ID};
     </update>
+
+    <select id="getSessionWithinHalfHour" resultType="String">
+        select sessionID from BeAdmin where ID = #{ID} and UpdateAt > date_add(now(), interval - 30 minute);
+    </select>
 </mapper>

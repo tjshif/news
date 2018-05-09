@@ -1,6 +1,7 @@
 package com.school.DAO;
 
 import com.school.Entity.NewsDTO;
+import com.school.Gson.NewsGson;
 import org.apache.ibatis.annotations.Param;
 
 import javax.ws.rs.PathParam;
@@ -31,4 +32,6 @@ public interface INewsDao {
 
 	Integer getCount(@Param("newsType") Integer newsType, @Param("newsSubType") Integer newsSubType,
 					 @Param("locationCode") Integer locationCode);
+
+	Integer update(NewsGson newsGson);
 }

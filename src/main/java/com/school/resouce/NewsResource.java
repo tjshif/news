@@ -1,5 +1,6 @@
 package com.school.resouce;
 
+import com.google.gson.JsonSyntaxException;
 import com.school.AOP.LogAnnotation;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
@@ -9,6 +10,7 @@ import com.school.Gson.*;
 import com.school.Utils.GsonUtil;
 import com.school.service.NewsService;
 import com.sun.jersey.api.core.InjectParam;
+import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -194,6 +196,60 @@ public class NewsResource {
 			return GsonUtil.toJson(resultGson);
 		}
 		NewsCountResultGson resultGson = newsService.getNewsCount(newsTypeEnum, newsSubTypeEnum, location);
+		return GsonUtil.toJson(resultGson);
+	}
+
+	@POST
+	@Path("/updatenewssubject")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String updateNewsSubject(@HeaderParam("SessionID") String sessionID, @FormParam("dto") String dto)
+	{
+		if (TextUtils.isEmpty(dto))
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+
+		NewsGson newsGson = null;
+		try {
+			newsGson = GsonUtil.fromJson(dto, NewsGson.class);
+		}
+		catch (JsonSyntaxException ex)
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_ERROR_INVLAID_GSON_STRING, RetMsg.RET_MSG_INVLAID_GSON_STRING);
+			return GsonUtil.toJson(resultGson);
+		}
+
+		RetResultGson resultGson = newsService.updateNewsSubject(sessionID, newsGson);
+		return GsonUtil.toJson(resultGson);
+	}
+
+	@POST
+	@Path("/updatenewsdetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String updateNewsDetail(@HeaderParam("SessionID") String sessionID, @FormParam("dto") String dto)
+	{
+		if (TextUtils.isEmpty(dto))
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+
+		NewsDetailGson newsDetailGson = null;
+		try {
+			newsDetailGson = GsonUtil.fromJson(dto, NewsDetailGson.class);
+		}
+		catch (JsonSyntaxException ex)
+		{
+			RetResultGson resultGson = new RetResultGson(RetCode.RET_ERROR_INVLAID_GSON_STRING, RetMsg.RET_MSG_INVLAID_GSON_STRING);
+			return GsonUtil.toJson(resultGson);
+		}
+
+		RetResultGson resultGson = newsService.updateNewsDetail(sessionID, newsDetailGson);
 		return GsonUtil.toJson(resultGson);
 	}
 }

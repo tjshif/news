@@ -11,6 +11,7 @@ import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.*;
 import com.school.Redis.ReadDataFromRedis;
+import com.school.service.common.BeAdminServiceUtils;
 import com.school.service.common.CommentsServiceUtils;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.log4j.Logger;
@@ -45,6 +46,9 @@ public class NewsService {
 
 	@Resource
 	private CommentsServiceUtils commentsServiceUtils;
+
+	@Resource
+	private BeAdminServiceUtils beAdminServiceUtils;
 
 	public List<NewsDTO> selectNewsByCreateAt(Date date)
 	{
@@ -223,16 +227,8 @@ public class NewsService {
 				resultGson.setResult(RetCode.RET_ERROR_FIND_ROW, RetMsg.RET_MSG_FIND_ROW);
 				return resultGson;
 			}
-			NewsDTO newsDTO = newsDao.selectNewsById(newsID);
-			if (isValid)
-			{
-				readDataFromRedis.LoadNewsToRedis(newsDTO);
-			}
-			else
-			{
-				readDataFromRedis.removeNewsFromRedis(newsDTO);
-			}
 
+			loadOrRemoveNewsInRedis(newsID, isValid);
 		}
 		catch (Exception ex)
 		{
@@ -294,6 +290,67 @@ public class NewsService {
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
+	}
+
+	public RetResultGson updateNewsSubject(String sessionID, NewsGson newsGson)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		if (!beAdminServiceUtils.isLoginIn(newsGson.getID(), sessionID))
+		{
+			resultGson.setResult(RetCode.RET_ERROR_BEADMIN_SESSION_OUTDATE, RetMsg.RET_MSG_BEADMIN_SESSION_OUTDATE);
+			return resultGson;
+		}
+
+		try {
+			Integer nRow = newsDao.update(newsGson);
+			if (nRow != 1) {
+				resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
+				return resultGson;
+			}
+			loadOrRemoveNewsInRedis(newsGson.getID(), true);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
+	public RetResultGson updateNewsDetail(String sessionID, NewsDetailGson newsDetailGson)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		if (!beAdminServiceUtils.isLoginIn(newsDetailGson.getNewsID(), sessionID))
+		{
+			resultGson.setResult(RetCode.RET_ERROR_BEADMIN_SESSION_OUTDATE, RetMsg.RET_MSG_BEADMIN_SESSION_OUTDATE);
+			return resultGson;
+		}
+		try {
+			Integer nRow = newsDetailDao.update(newsDetailGson);
+			if (nRow != 1) {
+				resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
+				return resultGson;
+			}
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
+	private void loadOrRemoveNewsInRedis(Long newsID, Boolean isLoad)
+	{
+		NewsDTO newsDTO = newsDao.selectNewsById(newsID);
+		if (isLoad)
+		{
+			readDataFromRedis.LoadNewsToRedis(newsDTO);
+		}
+		else
+		{
+			readDataFromRedis.removeNewsFromRedis(newsDTO);
+		}
 	}
 
 }

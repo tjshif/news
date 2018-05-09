@@ -7,4 +7,5 @@ public interface IBeAdminDao {
 	BeAdminDTO selectByID(Long ID);
 	BeAdminDTO selectByUserName(String userName);
 	Integer updateSessionID(@Param("ID") Long ID, @Param("sessionID") String sessionID);
+	String getSessionWithinHalfHour(@Param("ID") Long ID);
 }

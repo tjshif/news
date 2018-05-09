@@ -5,4 +5,15 @@
         SELECT newsID, Subject, detailContent, postDate, publisherId publisher_id FROM News N
         INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};
     </select>
+
+    <update id="update" parameterType="com.school.Gson.NewsDetailGson">
+        UPDATE NewsDetail set UpdateAt=now()
+        <if test="detailContent != null">
+            , detailContent = #{detailContent}
+        </if>
+        <if test="updateBy != null">
+            , updateBy = #{updateBy}
+        </if>
+        where newsID = #{newsID};
+    </update>
 </mapper>

@@ -93,4 +93,24 @@
         </if>
         AND isValid = '1';
     </select>
+
+    <update id="update" parameterType="com.school.Gson.NewsGson">
+        UPDATE News set UpdateAt=now()
+        <if test="subject != null">
+            , subject = #{subject}
+        </if>
+        <if test="newsType != null">
+            , newsType = #{newsType}
+        </if>
+        <if test="newsSubType != null">
+            , newsSubType = #{newsSubType}
+        </if>
+        <if test="locationCode != null">
+            , locationCode = #{locationCode}
+        </if>
+        <if test="updateBy != null">
+            , updateBy = #{updateBy}
+        </if>
+        where ID = #{ID};
+    </update>
 </mapper>
