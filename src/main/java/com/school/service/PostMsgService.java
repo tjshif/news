@@ -3,20 +3,26 @@ package com.school.service;
 import com.google.gson.JsonSyntaxException;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.DAO.IPostmsgDao;
 import com.school.Entity.PostmsgDTO;
 import com.school.Gson.PostMsgGson;
 import com.school.Gson.RetResultGson;
 import com.school.Utils.GsonUtil;
+import com.school.Utils.IdWorkerUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class PostMsgService {
 	private Logger logger = Logger.getLogger(PostMsgService.class.getName());
 
-	public RetResultGson postMsg(String msgdto, List<String> msgImageFiles)
+	@Resource
+	IPostmsgDao postmsgDao;
+
+	public RetResultGson postMsg(Long userID, String msgdto, List<String> msgImageFiles)
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
@@ -26,11 +32,14 @@ public class PostMsgService {
 			postmsgDTO.setLocationCode(postMsgGson.getLocationCode());
 			postmsgDTO.setNewsType(postMsgGson.getNewsType());
 			postmsgDTO.setNewsSubType(postMsgGson.getNewsSubType());
+			postmsgDTO.setId(IdWorkerUtils.getGlobalID().toString());
+			postmsgDTO.setPublisherId(userID);
 			if(msgImageFiles != null && msgImageFiles.size() > 0)
 			{
 				String filePath = String.join(",", msgImageFiles);
 				postmsgDTO.setImagePaths(filePath);
 			}
+			postmsgDao.insert(postmsgDTO);
 		}
 		catch (JsonSyntaxException ex)
 		{

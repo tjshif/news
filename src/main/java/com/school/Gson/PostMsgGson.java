@@ -21,4 +21,20 @@ public class PostMsgGson {
 	public Integer getNewsSubType() {
 		return NewsSubType;
 	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setLocationCode(Integer locationCode) {
+		LocationCode = locationCode;
+	}
+
+	public void setNewsSubType(Integer newsSubType) {
+		NewsSubType = newsSubType;
+	}
+
+	public void setNewsType(Integer newsType) {
+		NewsType = newsType;
+	}
 }

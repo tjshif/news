@@ -8,9 +8,9 @@ public class PostmsgDTO extends BaseDTO{
 	private Integer NewsType;
 	private Integer NewsSubType;
 	private Integer LocationCode;
-	private Timestamp postDate;	//post的时间
+	private Timestamp PostDate;	//post的时间
 	private Boolean isHot;
-	private Boolean isValid;
+	private Boolean isValid = true;
 	private Long publisherId;
 
 	public void setNewsType(Integer newsType) {
@@ -38,7 +38,7 @@ public class PostmsgDTO extends BaseDTO{
 	}
 
 	public void setPostDate(Timestamp postDate) {
-		this.postDate = postDate;
+		this.PostDate = postDate;
 	}
 
 	public void setContent(String content) {
@@ -46,7 +46,7 @@ public class PostmsgDTO extends BaseDTO{
 	}
 
 	public Timestamp getPostDate() {
-		return postDate;
+		return PostDate;
 	}
 
 	public String getContent() {
@@ -84,4 +84,5 @@ public class PostmsgDTO extends BaseDTO{
 	public void setValid(Boolean valid) {
 		isValid = valid;
 	}
+
 }
