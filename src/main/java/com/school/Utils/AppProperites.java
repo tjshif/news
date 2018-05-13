@@ -8,6 +8,9 @@ public class AppProperites {
 	@Value("${AVATAR_IMAGE_PATH}")
 	private String avatar_image_path;
 
+	@Value("${MSG_IMAGE_PATH}")
+	private String msg_image_path;
+
 	@Value("${ROOT_FOLDER}")
 	private String root_folder;
 
@@ -17,5 +20,9 @@ public class AppProperites {
 
 	public String getRoot_folder() {
 		return root_folder;
+	}
+
+	public String getMsg_image_path() {
+		return msg_image_path;
 	}
 }
