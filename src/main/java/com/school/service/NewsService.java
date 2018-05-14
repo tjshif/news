@@ -345,7 +345,7 @@ public class NewsService {
 		NewsDTO newsDTO = newsDao.selectNewsById(newsID);
 		if (isLoad)
 		{
-			readDataFromRedis.LoadNewsToRedis(newsDTO);
+			readDataFromRedis.loadNewsToRedis(newsDTO);
 		}
 		else
 		{

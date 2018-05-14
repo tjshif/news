@@ -107,5 +107,4 @@
         <!-- pool配置 -->
         <constructor-arg index="2" ref="jedisPoolConfig" />
     </bean>
-
 </beans>

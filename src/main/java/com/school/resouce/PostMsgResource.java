@@ -75,7 +75,7 @@ public class PostMsgResource {
 				logger.error(ex);
 			}
 		}
-		RetResultGson resultGson = postMsgService.postMsg(userID, dto, msgImageFiles);
+		RetResultGson resultGson = postMsgService.postMsgToRedis(userID, dto, msgImageFiles);
 		if (resultGson.getRetCode() != RetCode.RET_CODE_OK)
 		{
 			for (String imagePath : msgImageFiles)

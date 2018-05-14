@@ -72,7 +72,7 @@ public class LoadDateToRedis extends RedisHandler{
 
 				for (NewsDTO item : items)
 				{
-					LoadNewsToRedis(item);
+					loadNewsToRedis(item);
 				}
 			}
 			else
