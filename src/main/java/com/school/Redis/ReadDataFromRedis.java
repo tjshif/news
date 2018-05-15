@@ -17,7 +17,7 @@ import java.util.Set;
 public class ReadDataFromRedis extends RedisHandler {
 	private Logger logger = Logger.getLogger(ReadDataFromRedis.class.getName());
 
-	public List<NewsDTO> getNewsSubjectListByPage(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Integer page,
+	public <T> List<T> getNewsMsgListByPage(Class<T> clzResult, NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Integer page,
 												  Integer pageSize)
 	{
 		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
@@ -26,12 +26,12 @@ public class ReadDataFromRedis extends RedisHandler {
 
 		Integer offset = page * pageSize;
 
-		return getSubjectListByOffset(key, Integer.MAX_VALUE, 0, offset , pageSize);
+		return getSubjectListByOffset(clzResult, key, Long.MAX_VALUE, 0, offset , pageSize);
 	}
 
 	//null表示需要从db读取，
 	//不包括startfrom
-	public List<NewsDTO> getNewsSubjectListLessThanId(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
+	public <T> List<T> getNewsSubjectListLessThanId(Class<T> clzResult, NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
 													  Integer count)
 	{
 		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
@@ -47,10 +47,10 @@ public class ReadDataFromRedis extends RedisHandler {
 		{
 			max = startFrom - 1;
 		}
-		return getSubjectListByOffset(key, max, 0, 0, count);
+		return getSubjectListByOffset(clzResult, key, max, 0, 0, count);
 	}
 
-	private List<NewsDTO> getSubjectListByOffset(String key, double max, double min, int offset, int count)
+	private <T> List<T> getSubjectListByOffset(Class<T> clzResult, String key, double max, double min, int offset, int count)
 	{
 		if (TextUtils.isEmpty(key))
 			return null;
@@ -59,7 +59,7 @@ public class ReadDataFromRedis extends RedisHandler {
 		if (resultIdxList == null || resultIdxList.size() != count)
 			return null;
 
-		List<NewsDTO> newsResultDTOs = new ArrayList<>();
+		List<T> newsResultDTOs = new ArrayList<>();
 		for (String idx : resultIdxList)
 		{
 			key = getNewsItemKey(idx);
@@ -67,7 +67,7 @@ public class ReadDataFromRedis extends RedisHandler {
 			if (TextUtils.isEmpty(value))
 				return null;
 
-			NewsDTO newsDTO = GsonUtil.fromJson(value, NewsDTO.class);
+			T newsDTO = GsonUtil.fromJson(value, clzResult);
 			if (newsDTO == null)
 				return null;
 			newsResultDTOs.add(newsDTO);

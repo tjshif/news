@@ -45,7 +45,7 @@ public class NewsResource {
 		catch (Exception ex)
 		{
 			logger.error(String.format("invalid type: newsType:%d; newsSubTypeNem:%d", newsType, subNewsType));
-			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_ERROR_INVALID_INPUT, RetMsg.RET_MSG_INVALID_INPUT);
 			return GsonUtil.toJson(resultGson);
 		}
 		NewsSubjectResultGson retResult = newsService.getNewsSubjectList(newsTypeEnum, newsSubTypeNem, location, startFrom, count);
@@ -72,12 +72,13 @@ public class NewsResource {
 		catch (Exception ex)
 		{
 			logger.error(String.format("invalid type: newsType:%d; newsSubTypeNem:%d", newsType, subNewsType));
-			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_ERROR_INVALID_INPUT, RetMsg.RET_MSG_INVALID_INPUT);
 			return GsonUtil.toJson(resultGson);
 		}
-		NewsSubjectResultGson retResult = newsService.getNewsSubjectListByPage(newsTypeEnum, newsSubTypeNem, location, page, pageSize);
+		NewsSubjectResultGson retResult = newsService.getMsgsByPage(newsTypeEnum, newsSubTypeNem, location, page, pageSize);
 		return GsonUtil.toJson(retResult);
 	}
+
 	@GET
 	@Path("/getnewsdetail")
 	@Produces(MediaType.APPLICATION_JSON)

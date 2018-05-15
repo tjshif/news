@@ -31,6 +31,6 @@ public class PostMsgTestcase {
 		imagePath.add("b.jpg");
 		Long id1 = IdWorkerUtils.getGlobalID();
 		Long id2 = IdWorkerUtils.getGlobalID();
-		postMsgService.postMsg(35L, GsonUtil.toJson(postMsgGson), imagePath);
+		postMsgService.postMsgToRedis(35L, GsonUtil.toJson(postMsgGson), imagePath);
 	}
 }

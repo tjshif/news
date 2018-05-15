@@ -32,4 +32,22 @@
         #{publisherId});
     </insert>
 
+    <select id="selectPostmsgByPage" resultType="com.school.Entity.PostmsgDTO" >
+        SELECT NN.ID ID, content, newsType, newsSubType, imagePaths, postDate, locationCode,
+        isHot, NN.postDate CreateAt, publisherId, NickName publishSource
+        FROM Postmsg NN
+        inner join User UR on NN.publisherId = UR.ID
+        WHERE NewsType = #{newsType}
+        <if test="newsSubType != null">
+            and newsSubType = #{newsSubType}
+        </if>
+        <if test="locationCode != null and locationCode != 0">
+            and locationCode = #{locationCode}
+        </if>
+        AND isValid = '1'
+        order by NN.ID desc Limit #{offset}, #{pageSize}
+    </select>
+
+
+
 </mapper>

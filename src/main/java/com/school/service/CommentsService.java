@@ -54,7 +54,7 @@ public class CommentsService {
 			return retResultGson;
 		}
 
-		FirstLevelCommentDTO firstLevelCommentDTO = new FirstLevelCommentDTO(newsID, newsDTO.getSubject(), userID, userDTO.getNickName(),
+		FirstLevelCommentDTO firstLevelCommentDTO = new FirstLevelCommentDTO(newsID, newsDTO.getContent(), userID, userDTO.getNickName(),
 				userDTO.getAvatarUrl(), comment);
 		try {
 			commentDao.insertFirstLevelComment(firstLevelCommentDTO);

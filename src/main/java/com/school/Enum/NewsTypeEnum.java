@@ -2,7 +2,9 @@ package com.school.Enum;
 
 public enum NewsTypeEnum {
 	NEWS_JOB(2),
-	NEWS_FRIENDS(3);
+	NEWS_FRIENDS(3),
+	NEWS_MSG(4),
+	NEWS_HELPME(5);
 
 	private Integer newsType;
 

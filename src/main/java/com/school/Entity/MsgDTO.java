@@ -11,6 +11,7 @@ public class MsgDTO extends BaseDTO {
 	private Boolean 	isHot;
 	private Boolean 	isValid = true;
 	private Long 		publisherId;
+	private String     publishSource;
 
 	public Integer getNewsType() {
 		return newsType;
@@ -68,4 +69,11 @@ public class MsgDTO extends BaseDTO {
 		this.publisherId = publisherId;
 	}
 
+	public void setPublishSource(String publishSource) {
+		this.publishSource = publishSource;
+	}
+
+	public String getPublishSource() {
+		return publishSource;
+	}
 }

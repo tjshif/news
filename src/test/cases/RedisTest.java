@@ -39,7 +39,7 @@ public class RedisTest {
 	public void testReadByPage()
 	{
 		NewsSubjectResultGson resultGson1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), null, 4);
-		NewsSubjectResultGson resultGson2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 0, 4);
+		NewsSubjectResultGson resultGson2 = newsService.getMsgsByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 0, 4);
 		Assert.assertTrue(true);
 	}
 }

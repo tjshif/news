@@ -6,6 +6,7 @@ import com.school.Entity.NewsDTO;
 import com.school.Entity.UserDTO;
 import com.school.Enum.LocationEnum;
 import com.school.Utils.GsonUtil;
+import com.school.service.common.UserCommonServiceUtil;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class RedisHandler {
 
 	@Resource
 	protected StoredCacheService storedCacheService;
+
+	@Resource
+	private UserCommonServiceUtil userCommonServiceUtil;
 
 	protected String getNewsTypeLocationKey(Integer newsType, Integer location)
 	{
@@ -40,11 +44,6 @@ public class RedisHandler {
 	protected String getNewsItemKey(String id)
 	{
 		return "News:" + id;
-	}
-
-	protected String getMsgKey(String id)
-	{
-		return "Postmsg:" + id;
 	}
 
 	protected String getNewsTypeKey(Integer newsType)
@@ -80,15 +79,16 @@ public class RedisHandler {
 	{
 		if (newsItem == null)
 			return;
-		String key = getNewsTypeKey(newsItem.getNewsType());
+
+		String key = getNewsItemKey(newsItem.getId());
+		storedCacheService.del(key);
+
+		key = getNewsTypeKey(newsItem.getNewsType());
 		if (!TextUtils.isEmpty(key))
 			storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
 
 		key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
 		storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
-
-		key = getNewsItemKey(newsItem.getId());
-		storedCacheService.del(key);
 
 		key = getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
 		if (TextUtils.isEmpty(key))
@@ -101,7 +101,7 @@ public class RedisHandler {
 		if (msgItem == null)
 			return;
 		//remove msgitem
-		String key = getMsgKey(msgItem.getId());
+		String key = getNewsItemKey(msgItem.getId());
 		storedCacheService.del(key);
 
 		//remove msg in specific location
@@ -119,8 +119,17 @@ public class RedisHandler {
 	{
 		if (msgItem == null)
 			return;
+
 		//cache msgitem
-		storedCacheService.set(getMsgKey(msgItem.getId()), GsonUtil.toJson(msgItem));
+		if (msgItem.getPublisherId() != null)
+		{
+			UserDTO userDTO = userCommonServiceUtil.getUserDTO(msgItem.getPublisherId());
+			if (userDTO != null)
+			{
+				msgItem.setPublishSource(userDTO.getNickName());
+			}
+		}
+		storedCacheService.set(getNewsItemKey(msgItem.getId()), GsonUtil.toJson(msgItem));
 
 		/*//cache msg in all location
 		storedCacheService.zadd(getNewsTypeKey(msgItem.getNewsType()), Long.parseLong(msgItem.getId()), msgItem.getId());
@@ -143,20 +152,23 @@ public class RedisHandler {
 	{
 		if (newsItem == null)
 			return;
+
+		//cache newsItem in all location
 		storedCacheService.zadd(getNewsTypeKey(newsItem.getNewsType()), Long.parseLong(newsItem.getId()), newsItem.getId());
 		storedCacheService.zadd(getTrimKey(), LocationEnum.ALL.getZipCode(), getNewsTypeKey(newsItem.getNewsType()));
 
 		if (newsItem.getPublisherId() != null)
 		{
-			UserDTO userDTO = userDao.selectByID(newsItem.getPublisherId());
+			UserDTO userDTO = userCommonServiceUtil.getUserDTO(newsItem.getPublisherId());
 			if (userDTO != null)
 			{
 				newsItem.setPublishSource(userDTO.getNickName());
 			}
 		}
-
+		//cache newsItem
 		storedCacheService.set(getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
 
+		//cache msg in specific location
 		String key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
 		if (TextUtils.isEmpty(key))
 		{

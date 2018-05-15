@@ -69,7 +69,9 @@ public class PostMsgResource {
 			try {
 				logger.info("file Path:" + file.getAbsolutePath());
 				FileUtils.copyInputStreamToFile(is, file);
-				msgImageFiles.add(detail.getFileName());
+
+				String relativePath = filePathUtils.getMsgImageRelativePath(userID, detail.getFileName());
+				msgImageFiles.add(relativePath);
 			}
 			catch (IOException ex) {
 				logger.error(ex);
