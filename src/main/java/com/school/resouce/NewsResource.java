@@ -44,7 +44,7 @@ public class NewsResource {
 		}
 		catch (Exception ex)
 		{
-			logger.error(String.format("invalid type: newsType:%d; newsSubTypeNem:%d", newsType, subNewsType));
+			logger.error(String.format("invalid type: newsType:%d; newsSubTypeEnem:%d", newsType, subNewsType));
 			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_ERROR_INVALID_INPUT, RetMsg.RET_MSG_INVALID_INPUT);
 			return GsonUtil.toJson(resultGson);
 		}
@@ -71,11 +71,11 @@ public class NewsResource {
 		}
 		catch (Exception ex)
 		{
-			logger.error(String.format("invalid type: newsType:%d; newsSubTypeNem:%d", newsType, subNewsType));
+			logger.error(String.format("invalid type: newsType:%d; newsSubTypeEnem:%d", newsType, subNewsType));
 			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_ERROR_INVALID_INPUT, RetMsg.RET_MSG_INVALID_INPUT);
 			return GsonUtil.toJson(resultGson);
 		}
-		NewsSubjectResultGson retResult = newsService.getMsgsByPage(newsTypeEnum, newsSubTypeNem, location, page, pageSize);
+		NewsSubjectResultGson retResult = newsService.getNewsSubjectListByPage(newsTypeEnum, newsSubTypeNem, location, page, pageSize);
 		return GsonUtil.toJson(retResult);
 	}
 

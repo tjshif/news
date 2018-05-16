@@ -1,10 +1,17 @@
 package com.school.Gson;
 
+import org.apache.http.util.TextUtils;
+
+import java.sql.Timestamp;
+
 public class PostMsgGson {
-	String content;
-	Integer NewsType;
-	Integer NewsSubType;
-	Integer LocationCode;
+	private String content;
+	private Integer NewsType;
+	private Integer NewsSubType;
+	private Integer LocationCode;
+	private Timestamp	postDate;
+	private String		detailContent;
+	private String		sourceArticleUrl;
 
 	public String getContent() {
 		return content;
@@ -36,5 +43,36 @@ public class PostMsgGson {
 
 	public void setNewsType(Integer newsType) {
 		NewsType = newsType;
+	}
+
+	public Timestamp getPostDate() {
+		return postDate;
+	}
+
+	public void setPostDate(Timestamp postDate) {
+		this.postDate = postDate;
+	}
+
+	public String getDetailContent() {
+		return detailContent;
+	}
+
+	public void setDetailContent(String detailContent) {
+		this.detailContent = detailContent;
+	}
+
+	public String getSourceArticleUrl() {
+		return sourceArticleUrl;
+	}
+
+	public void setSourceArticleUrl(String sourceArticleUrl) {
+		this.sourceArticleUrl = sourceArticleUrl;
+	}
+	public Boolean getHasDetail()
+	{
+		if (TextUtils.isEmpty(detailContent))
+			return false;
+		else
+			return true;
 	}
 }

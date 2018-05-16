@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)     //表示继承了SpringJUnit4ClassRunner类
-@ContextConfiguration(locations = {"classpath:applicationContex.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContex.xml", "classpath:amqContext.xml"})
 public class NewsTestcase {
 	@Resource
 	private NewsService newsService;
@@ -31,7 +31,7 @@ public class NewsTestcase {
 	{
 		NewsSubjectResultGson r1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 25, null, 20);
 
-		NewsSubjectResultGson r2 = newsService.getMsgsByPage(NewsTypeEnum.NEWS_JOB, null,25, 0, 20);
+		NewsSubjectResultGson r2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null,25, 0, 20);
 
 		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);

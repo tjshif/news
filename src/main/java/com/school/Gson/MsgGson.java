@@ -6,22 +6,24 @@ import java.util.List;
 public class MsgGson {
 	private String		ID;
 	private String 	content;
+	private List<String> 	imagePaths;
 	private Integer	newsType;
 	private Integer	newsSubType;
 	private Integer    locationCode;	//地点，可以更加学校所在地填写
-	private String     publishSource;
-
 	private Timestamp 	postDate;	//post的时间
 	private Boolean 	isHot;
 	private Boolean 	isValid;
 	private Long 		publisherId;
+	private Boolean	hasDetail;//是否有详细内容
 
 	private Timestamp  updateAt;
 	private String		updateBy;
 	private Timestamp	createAt;
 	private String		createBy;
 
-	private List<String> 	imagePaths;
+	private String     publishSource;
+
+	private Integer	commentCount;
 
 	public void setContent(String content) {
 		this.content = content;
@@ -141,5 +143,21 @@ public class MsgGson {
 
 	public String getPublishSource() {
 		return publishSource;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	public Boolean getHasDetail() {
+		return hasDetail;
+	}
+
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setHasDetail(Boolean hasDetail) {
+		this.hasDetail = hasDetail;
 	}
 }

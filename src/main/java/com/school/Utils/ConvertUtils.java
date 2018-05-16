@@ -1,54 +1,56 @@
 package com.school.Utils;
 
-import com.school.Entity.MsgDTO;
 import com.school.Entity.NewsDTO;
-import com.school.Entity.PostmsgDTO;
 import com.school.Gson.MsgGson;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.http.util.TextUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ConvertUtils {
 
+	public static List<MsgGson> convertToMsgGsonList(List<NewsDTO> newsDTOS)
+	{
+		List<MsgGson> msgGsons = new ArrayList<>();
+		for (NewsDTO newsDTO : newsDTOS)
+		{
+			msgGsons.add(ConvertUtils.convertToMsgGson(newsDTO));
+		}
+		return msgGsons;
+	}
+
 	public static MsgGson convertToMsgGson(NewsDTO newsDTO)
 	{
 		MsgGson msgGson = convertToCommonMsgGson(newsDTO);
 		msgGson.setContent(newsDTO.getContent());
-		return msgGson;
-	}
 
-	public static MsgGson convertToMsgGson(PostmsgDTO postmsgDTO)
-	{
-		MsgGson msgGson = convertToCommonMsgGson(postmsgDTO);
-		msgGson.setContent(postmsgDTO.getContent());
 		//imagepath
-		if (!TextUtils.isEmpty(postmsgDTO.getImagePaths()))
+		if (!TextUtils.isEmpty(newsDTO.getImagePaths()))
 		{
-			String[] imagePaths = postmsgDTO.getImagePaths().split(",");
+			String[] imagePaths = newsDTO.getImagePaths().split(",");
 			List<String> paths = Arrays.asList(imagePaths);
 			msgGson.setImagePaths(paths);
 		}
 		return msgGson;
 	}
 
-	private static MsgGson convertToCommonMsgGson(MsgDTO msgDTO)
+	private static MsgGson convertToCommonMsgGson(NewsDTO newsDTO)
 	{
 		MsgGson msgGson = new MsgGson();
-		msgGson.setID(msgDTO.getId());
-		msgGson.setNewsType(msgDTO.getNewsType());
-		msgGson.setNewsSubType(msgDTO.getNewsSubType());
-		msgGson.setLocationCode(msgDTO.getLocationCode());
-		msgGson.setPostDate(msgDTO.getPostDate());
-		msgGson.setHot(msgDTO.getHot());
-		msgGson.setCreateAt(msgDTO.getCreateAt());
-		msgGson.setCreateBy(msgDTO.getCreateBy());
-		msgGson.setUpdateAt(msgDTO.getUpdateAt());
-		msgGson.setUpdateBy(msgDTO.getUpdateBy());
-		msgGson.setPublisherId(msgDTO.getPublisherId());
-		msgGson.setPublishSource(msgDTO.getPublishSource());
+		msgGson.setID(newsDTO.getId());
+		msgGson.setNewsType(newsDTO.getNewsType());
+		msgGson.setNewsSubType(newsDTO.getNewsSubType());
+		msgGson.setLocationCode(newsDTO.getLocationCode());
+		msgGson.setPostDate(newsDTO.getPostDate());
+		msgGson.setHot(newsDTO.getHot());
+		msgGson.setCreateAt(newsDTO.getCreateAt());
+		msgGson.setCreateBy(newsDTO.getCreateBy());
+		msgGson.setUpdateAt(newsDTO.getUpdateAt());
+		msgGson.setUpdateBy(newsDTO.getUpdateBy());
+		msgGson.setPublisherId(newsDTO.getPublisherId());
+		msgGson.setPublishSource(newsDTO.getPublishSource());
 		return msgGson;
 	}
 }

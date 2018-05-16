@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)     //表示继承了SpringJUnit4ClassRunner类
-@ContextConfiguration(locations = {"classpath:applicationContex.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContex.xml", "classpath:amqContext.xml"})
 public class CommentsTestcase {
 	@Resource
 	private CommentsService commentsService;

@@ -14,6 +14,9 @@ public class AppProperites {
 	@Value("${ROOT_FOLDER}")
 	private String root_folder;
 
+	@Value("${PAGE_SIZE}")
+	private Integer page_size;
+
 	public String getAvatar_image_path() {
 		return avatar_image_path;
 	}
@@ -24,5 +27,9 @@ public class AppProperites {
 
 	public String getMsg_image_path() {
 		return msg_image_path;
+	}
+
+	public Integer getPage_size() {
+		return page_size;
 	}
 }

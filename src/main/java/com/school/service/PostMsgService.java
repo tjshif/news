@@ -3,11 +3,13 @@ package com.school.service;
 import com.google.gson.JsonSyntaxException;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
-import com.school.Entity.PostmsgDTO;
+import com.school.Entity.MsgAggregate;
+import com.school.Entity.NewsDTO;
+import com.school.Entity.NewsDetailDTO;
 import com.school.Gson.PostMsgGson;
 import com.school.Gson.RetResultGson;
 import com.school.PushService.PushPostMsgToDBService;
-import com.school.Redis.LoadDateToRedis;
+import com.school.Redis.LoadDataToRedis;
 import com.school.Utils.GsonUtil;
 import com.school.Utils.IdWorkerUtils;
 import org.apache.log4j.Logger;
@@ -22,7 +24,7 @@ public class PostMsgService {
 	private Logger logger = Logger.getLogger(PostMsgService.class.getName());
 
 	@Resource
-	LoadDateToRedis loadDataToRedis;
+	LoadDataToRedis loadDataToRedis;
 
 	@Resource
 	PushPostMsgToDBService pushPostMsgToDBService;
@@ -34,23 +36,38 @@ public class PostMsgService {
 			PostMsgGson postMsgGson = GsonUtil.fromJson(msgdto, PostMsgGson.class);
 
 			//load data to redis
-			PostmsgDTO postmsgDTO = new PostmsgDTO();
-			postmsgDTO.setContent(postMsgGson.getContent());
-			postmsgDTO.setLocationCode(postMsgGson.getLocationCode());
-			postmsgDTO.setNewsType(postMsgGson.getNewsType());
-			postmsgDTO.setNewsSubType(postMsgGson.getNewsSubType());
-			postmsgDTO.setId(IdWorkerUtils.getGlobalID().toString());
-			postmsgDTO.setPublisherId(userID);
-			postmsgDTO.setPostDate(new Timestamp(System.currentTimeMillis()));
+			NewsDTO newsDTO = new NewsDTO();
+			newsDTO.setContent(postMsgGson.getContent());
+			newsDTO.setLocationCode(postMsgGson.getLocationCode());
+			newsDTO.setNewsType(postMsgGson.getNewsType());
+			newsDTO.setNewsSubType(postMsgGson.getNewsSubType());
+			newsDTO.setId(IdWorkerUtils.getGlobalID().toString());
+			newsDTO.setPublisherId(userID);
+			if (postMsgGson.getPostDate() != null)
+				newsDTO.setPostDate(postMsgGson.getPostDate());
+			else
+				newsDTO.setPostDate(new Timestamp(System.currentTimeMillis()));
+			newsDTO.setHasDetail(postMsgGson.getHasDetail());
 			if(msgImageFiles != null && msgImageFiles.size() > 0)
 			{
 				String filePath = String.join(",", msgImageFiles);
-				postmsgDTO.setImagePaths(filePath);
+				newsDTO.setImagePaths(filePath);
 			}
-			loadDataToRedis.loadPostMsgToRedis(postmsgDTO);
+			loadDataToRedis.loadNewsToRedis(newsDTO);
+
+			MsgAggregate msgAggregate = new MsgAggregate();
+			msgAggregate.setNewsDTO(newsDTO);
+			if (postMsgGson.getHasDetail())
+			{//NewsDetail
+				NewsDetailDTO newsDetailDTO = new NewsDetailDTO();
+				newsDetailDTO.setDetailContent(postMsgGson.getDetailContent());
+				newsDetailDTO.setNewsID(newsDTO.getId());
+				newsDetailDTO.setSourceArticleUrl(postMsgGson.getSourceArticleUrl());
+				msgAggregate.setNewsDetailDTO(newsDetailDTO);
+			}
 
 			//Post msg to activemq to store data to db.
-			pushPostMsgToDBService.push(postmsgDTO);
+			pushPostMsgToDBService.push(msgAggregate);
 		}
 		catch (JsonSyntaxException ex)
 		{

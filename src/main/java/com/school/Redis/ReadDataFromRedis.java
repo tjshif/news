@@ -17,7 +17,7 @@ import java.util.Set;
 public class ReadDataFromRedis extends RedisHandler {
 	private Logger logger = Logger.getLogger(ReadDataFromRedis.class.getName());
 
-	public <T> List<T> getNewsMsgListByPage(Class<T> clzResult, NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Integer page,
+	public List<NewsDTO> getNewsMsgListByPage(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Integer page,
 												  Integer pageSize)
 	{
 		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
@@ -26,12 +26,12 @@ public class ReadDataFromRedis extends RedisHandler {
 
 		Integer offset = page * pageSize;
 
-		return getSubjectListByOffset(clzResult, key, Long.MAX_VALUE, 0, offset , pageSize);
+		return getSubjectListByOffset(key, Long.MAX_VALUE, 0, offset , pageSize);
 	}
 
 	//null表示需要从db读取，
 	//不包括startfrom
-	public <T> List<T> getNewsSubjectListLessThanId(Class<T> clzResult, NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
+	public List<NewsDTO> getNewsSubjectListLessThanId(NewsTypeEnum newsType, NewsSubTypeEnum subNewsType, Integer location, Long startFrom,
 													  Integer count)
 	{
 		String key = getNewsTypeLocationKey(newsType.getNewsTypeCode(), location);
@@ -41,25 +41,27 @@ public class ReadDataFromRedis extends RedisHandler {
 		double max = 0;
 		if (startFrom == null || startFrom == -1)
 		{
-			max = Integer.MAX_VALUE;
+			max = Long.MAX_VALUE;
 		}
 		else
 		{
 			max = startFrom - 1;
 		}
-		return getSubjectListByOffset(clzResult, key, max, 0, 0, count);
+		return getSubjectListByOffset(key, max, 0, 0, count);
 	}
 
-	private <T> List<T> getSubjectListByOffset(Class<T> clzResult, String key, double max, double min, int offset, int count)
+	private List<NewsDTO> getSubjectListByOffset(String key, double max, double min, int offset, int count)
 	{
 		if (TextUtils.isEmpty(key))
 			return null;
 
 		Set<String> resultIdxList = storedCacheService.zrevrangeByScore(key, max, min, offset, count);
-		if (resultIdxList == null || resultIdxList.size() != count)
+		if (resultIdxList == null || resultIdxList.size() != count) {
+			logger.error("can't find in redis: key:" + key + "; max:" + max + "; min: " + min + "; offset:" + offset
+			+ "; count: " + count);
 			return null;
-
-		List<T> newsResultDTOs = new ArrayList<>();
+		}
+		List<NewsDTO> newsResultDTOs = new ArrayList<>();
 		for (String idx : resultIdxList)
 		{
 			key = getNewsItemKey(idx);
@@ -67,7 +69,7 @@ public class ReadDataFromRedis extends RedisHandler {
 			if (TextUtils.isEmpty(value))
 				return null;
 
-			T newsDTO = GsonUtil.fromJson(value, clzResult);
+			NewsDTO newsDTO = GsonUtil.fromJson(value, NewsDTO.class);
 			if (newsDTO == null)
 				return null;
 			newsResultDTOs.add(newsDTO);

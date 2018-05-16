@@ -9,6 +9,7 @@ import com.school.Entity.SpiderEnumDTO;
 import com.school.Entity.UserDTO;
 import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
+import com.school.Utils.AppProperites;
 import com.school.Utils.GsonUtil;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
@@ -23,40 +24,38 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class LoadDateToRedis extends RedisHandler{
-	private Logger logger = Logger.getLogger(LoadDateToRedis.class.getName());
+public class LoadDataToRedis extends RedisHandler{
+	private Logger logger = Logger.getLogger(LoadDataToRedis.class.getName());
 
 	private static final String LoadDateToRedisLock = "LoadDateToRedisLock";
 
 	private static final String RemoveDateFromRedisLock = "RemoveDateFromRedisLock";
 
-	private static final String NewsTypeEnumKey = "NEWS_TYPE_ENUM";
-
 	@Resource
 	private INewsDao newsDao;
 
 	@Resource
-	private ISpiderEnumDao spiderEnumDao;
-
-	@Resource
 	private DistributedLock distributedLock;
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Resource
+	private AppProperites appProperites;
+
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void LoadDataToRedis()
 	{
 		Date date = new Date();
 		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dateStr = sim.format(date);
 		logger.info("sheduler job: " + dateStr);
-		List<SpiderEnumDTO> spiderEnumDTOS = spiderEnumDao.selectEnumValuesByType(NewsTypeEnumKey);
-		for (SpiderEnumDTO spiderEnumDTO : spiderEnumDTOS)
+
+		NewsTypeEnum[] enums = NewsTypeEnum.values();
+		for (int ii = 0; ii < enums.length; ++ii)
 		{
-			if (spiderEnumDTO.getEnumValue() != null)
-				LoadDataToRedisByDate(spiderEnumDTO.getEnumValue(), EnvConst.PAGE_SIZE);
+			loadTopCountDataToRedisByDate(enums[ii].getNewsTypeCode(), appProperites.getPage_size());
 		}
 	}
 
-	public void LoadDataToRedisByDate(Integer newsType, Integer count)
+	public void loadTopCountDataToRedisByDate(Integer newsType, Integer count)
 	{
 		//用分布式锁，timout是1个小时。
 		Boolean ownTheLock = false;
@@ -67,9 +66,8 @@ public class LoadDateToRedis extends RedisHandler{
 				ownTheLock = true;
 				if (count < 1)
 					return;
-				Long storedNewsIdx = getStoredIndex(newsType);
-				List<NewsDTO> items = newsDao.selectNewsGreaterThanId(newsType, null, null, storedNewsIdx, count);
 
+				List<NewsDTO> items = newsDao.selectNewsLessThanId(newsType, null, null, null, count);
 				for (NewsDTO item : items)
 				{
 					loadNewsToRedis(item);

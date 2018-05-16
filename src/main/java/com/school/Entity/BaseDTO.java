@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class BaseDTO {
 	private String		ID;
 	private Timestamp  updateAt;
-	private String		updateBy = "sys";
+	private String		updateBy;
 	private Timestamp	createAt;
 	private String		createBy = "sys";
 

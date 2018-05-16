@@ -3,15 +3,37 @@
 <mapper namespace="com.school.DAO.INewsDao" >
     <sql id="Column_List">
 	  subject,
+	  imagePaths,
 	  newsType,
       newsSubType,
 	  postDate,
 	  locationCode,
 	  isHot,
-	  CreateAt,
-	  CreateBy,
-      publisherId
+	  createAt,
+	  createBy,
+      publisherId,
+      isValid,
+      hasDetail
     </sql>
+
+    <insert id="insert" parameterType="com.school.Entity.NewsDTO">
+        insert into News (ID, <include refid="Column_List"/>) values
+        (
+        #{ID},
+        #{subject},
+        #{imagePaths},
+        #{newsType},
+        #{newsSubType},
+        #{postDate},
+        #{locationCode},
+        #{isHot},
+        now(),
+        #{createBy},
+        #{publisherId},
+        #{isValid},
+        #{hasDetail}
+        );
+    </insert>
 
     <select id="selectNewsByCreateAt" resultType="com.school.Entity.NewsDTO" >
         SELECT ID, <include refid="Column_List"/>

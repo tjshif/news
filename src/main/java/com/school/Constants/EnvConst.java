@@ -5,6 +5,4 @@ public class EnvConst {
 	public static final Integer NEWS_REDIS_COUNT_ALL_LOCATION = 5000;
 	public static final Integer NEWS_REDIS_COUNT_ONE_LOCATION = 1000;
 
-	public static final Integer PAGE_SIZE = 100;
-
 }

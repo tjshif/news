@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.school.DAO.INewsDetailDao" >
+    <sql id="Column_List">
+        newsID,
+        sourceArticleUrl,
+        detailContent,
+        updateAt,
+        updateBy
+    </sql>
+
+    <insert id="insert" parameterType="com.school.Entity.NewsDetailDTO" useGeneratedKeys="true" keyProperty="ID">
+        insert into NewsDetail (<include refid="Column_List"/>) values
+        (
+        #{newsID},
+        #{sourceArticleUrl},
+        #{detailContent},
+        #{updateAt},
+        #{updateBy}
+        );
+    </insert>
+
     <select id="selectNewsDetail" resultType="com.school.Entity.NewsDetailDTO">
         SELECT newsID, Subject, detailContent, postDate, publisherId publisher_id FROM News N
         INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};

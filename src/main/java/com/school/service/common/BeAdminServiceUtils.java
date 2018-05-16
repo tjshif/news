@@ -3,7 +3,7 @@ package com.school.service.common;
 import com.mysql.cj.jdbc.util.TimeUtil;
 import com.school.DAO.IBeAdminDao;
 import com.school.Entity.BeAdminDTO;
-import com.school.Redis.LoadDateToRedis;
+import com.school.Redis.LoadDataToRedis;
 import com.school.Redis.ReadDataFromRedis;
 import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
@@ -18,7 +18,7 @@ public class BeAdminServiceUtils {
 	private Logger logger = Logger.getLogger(BeAdminServiceUtils.class.getName());
 
 	@Resource
-	LoadDateToRedis loadDateToRedis;
+	LoadDataToRedis loadDateToRedis;
 
 	@Resource
 	ReadDataFromRedis readDataFromRedis;

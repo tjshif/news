@@ -2,8 +2,9 @@ package com.school.Entity;
 
 import java.sql.Timestamp;
 
-public class NewsDetailDTO {
-	private Long newsID;
+public class NewsDetailDTO extends BaseDTO{
+	private String newsID;
+	private String sourceArticleUrl;
 	private String Subject;
 	private String detailContent;
 	private Boolean favorite;
@@ -12,7 +13,7 @@ public class NewsDetailDTO {
 	private String    publisher_avatar_url;
 	private String    publisher_name;
 
-	public Long getNewsID() {
+	public String getNewsID() {
 		return newsID;
 	}
 
@@ -66,5 +67,21 @@ public class NewsDetailDTO {
 
 	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
+	}
+
+	public void setSourceArticleUrl(String sourceArticleUrl) {
+		this.sourceArticleUrl = sourceArticleUrl;
+	}
+
+	public String getSourceArticleUrl() {
+		return sourceArticleUrl;
+	}
+
+	public void setNewsID(String newsID) {
+		this.newsID = newsID;
+	}
+
+	public Boolean getFavorite() {
+		return favorite;
 	}
 }

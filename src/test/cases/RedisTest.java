@@ -3,7 +3,7 @@ package cases;
 import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsSubjectResultGson;
-import com.school.Redis.LoadDateToRedis;
+import com.school.Redis.LoadDataToRedis;
 import com.school.service.NewsService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,10 +14,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 
 @RunWith(SpringJUnit4ClassRunner.class)     //表示继承了SpringJUnit4ClassRunner类
-@ContextConfiguration(locations = {"classpath:applicationContex.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContex.xml", "classpath:amqContext.xml"})
 public class RedisTest {
 	@Resource
-	private LoadDateToRedis loadDateToRedis;
+	private LoadDataToRedis loadDataToRedis;
 
 	@Resource
 	private NewsService newsService;
@@ -25,8 +25,8 @@ public class RedisTest {
 	@Test
 	public void testRedis()
 	{
-		loadDateToRedis.LoadDataToRedisByDate(2, 100);
-		loadDateToRedis.removeDataFromRedis();
+		loadDataToRedis.LoadDataToRedis();
+		loadDataToRedis.removeDataFromRedis();
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class RedisTest {
 	public void testReadByPage()
 	{
 		NewsSubjectResultGson resultGson1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), null, 4);
-		NewsSubjectResultGson resultGson2 = newsService.getMsgsByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 0, 4);
+		NewsSubjectResultGson resultGson2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 0, 4);
 		Assert.assertTrue(true);
 	}
 }

@@ -34,4 +34,5 @@ public interface INewsDao {
 					 @Param("locationCode") Integer locationCode);
 
 	Integer update(NewsGson newsGson);
+	Integer insert(NewsDTO newsDTO);
 }

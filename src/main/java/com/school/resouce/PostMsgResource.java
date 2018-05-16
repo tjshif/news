@@ -38,7 +38,7 @@ public class PostMsgResource {
 	PostMsgService postMsgService;
 
 	@POST
-	@Path("/{userID}/uploadcontentimages")
+	@Path("/{userID}/postmessage")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String uploadContentImages(@PathParam("userID") Long userID,
@@ -54,29 +54,33 @@ public class PostMsgResource {
 		List<FormDataBodyPart> formDataBodyParts = form.getFields("file");
 
 		List<String> msgImageFiles = new ArrayList<>();
-		for (FormDataBodyPart formDataBodyPart : formDataBodyParts)
+		if (formDataBodyParts != null)
 		{
-			if (formDataBodyPart == null)
-				continue;
+			for (FormDataBodyPart formDataBodyPart : formDataBodyParts)
+			{
+				if (formDataBodyPart == null)
+					continue;
 
-			InputStream is = formDataBodyPart.getValueAs(InputStream.class);
-			FormDataContentDisposition detail = formDataBodyPart.getFormDataContentDisposition();
-			if (is == null || detail == null)
-				continue;
+				InputStream is = formDataBodyPart.getValueAs(InputStream.class);
+				FormDataContentDisposition detail = formDataBodyPart.getFormDataContentDisposition();
+				if (is == null || detail == null)
+					continue;
 
-			String fullPath = filePathUtils.getMsgImageFullPath(userID, detail.getFileName());
-			File file = new File(fullPath);
-			try {
-				logger.info("file Path:" + file.getAbsolutePath());
-				FileUtils.copyInputStreamToFile(is, file);
+				String fullPath = filePathUtils.getMsgImageFullPath(userID, detail.getFileName());
+				File file = new File(fullPath);
+				try {
+					logger.info("file Path:" + file.getAbsolutePath());
+					FileUtils.copyInputStreamToFile(is, file);
 
-				String relativePath = filePathUtils.getMsgImageRelativePath(userID, detail.getFileName());
-				msgImageFiles.add(relativePath);
-			}
-			catch (IOException ex) {
-				logger.error(ex);
+					String relativePath = filePathUtils.getMsgImageRelativePath(userID, detail.getFileName());
+					msgImageFiles.add(relativePath);
+				}
+				catch (IOException ex) {
+					logger.error(ex);
+				}
 			}
 		}
+
 		RetResultGson resultGson = postMsgService.postMsgToRedis(userID, dto, msgImageFiles);
 		if (resultGson.getRetCode() != RetCode.RET_CODE_OK)
 		{
