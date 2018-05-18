@@ -25,6 +25,10 @@
         INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};
     </select>
 
+    <select id="selectNewsDetailIDByUrl" resultType="Long">
+        SELECT ID from NewsDetail WHERE sourceArticleUrl = #{sourceArticleUrl};
+    </select>
+
     <update id="update" parameterType="com.school.Gson.NewsDetailGson">
         UPDATE NewsDetail set UpdateAt=now()
         <if test="detailContent != null">

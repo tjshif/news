@@ -5,10 +5,7 @@ import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.IUserDao;
 import com.school.Entity.UserDTO;
-import com.school.Gson.AvatarResultGson;
-import com.school.Gson.RetResultGson;
-import com.school.Gson.UserInfoGson;
-import com.school.Gson.UserInfoResultGson;
+import com.school.Gson.*;
 import com.school.Utils.AppProperites;
 import com.school.service.common.UserCommonServiceUtil;
 import org.apache.commons.io.FileUtils;
@@ -195,6 +192,22 @@ public class UserService {
 			}
 		}
 		return;
+	}
+
+	public RetIDResultGson getUserIDInfo(String nickName)
+	{
+		RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			UserDTO userDTO = userCommonServiceUtil.getUserDTO(nickName);
+			if (userDTO != null)
+				resultGson.setID(Long.parseLong(userDTO.getId()));
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
 	}
 
 }

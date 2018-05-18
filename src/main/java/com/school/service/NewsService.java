@@ -113,6 +113,21 @@ public class NewsService {
 		}
 	}
 
+	public RetIDResultGson getNewsDetailID(String linkUrl)
+	{
+		RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			Long id = newsDetailDao.selectNewsDetailIDByUrl(linkUrl);
+			resultGson.setID(id);
+		}
+		catch (Exception ex)
+		{
+			logger.error(ex.getMessage());
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID)
 	{
 		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);

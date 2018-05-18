@@ -3,6 +3,7 @@ package com.school.resouce;
 import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
+import com.school.Gson.RetIDResultGson;
 import com.school.Gson.RetResultGson;
 import com.school.Gson.UserInfoGson;
 import com.school.Gson.UserInfoResultGson;
@@ -128,4 +129,20 @@ public class UserResource {
 		return GsonUtil.toJson(resultGson);
 	}
 
+	@GET
+	@Path("/getuserid")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getUserID(@QueryParam("nickname")String nickName)
+	{
+		if (TextUtils.isEmpty(nickName))
+		{
+			logger.error("getUserID params is null or empty");
+			RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		RetIDResultGson resultGson = userService.getUserIDInfo(nickName);
+		return GsonUtil.toJson(resultGson);
+	}
 }

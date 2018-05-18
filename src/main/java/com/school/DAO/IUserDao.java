@@ -6,8 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 public interface IUserDao {
 	Integer insert(UserDTO userDTO);
-	UserDTO selectByPhoneNo(String username);
+	UserDTO selectByPhoneNo(String phoneNo);
 	UserDTO selectByID(Long id);
+	UserDTO selectByNickName(String nickName);
 
 	Integer updateNickName(@Param("ID") Long ID, @Param("nickName") String nickName);
 	Integer updateSex(@Param("ID") Long ID, @Param("sex") Boolean sex);

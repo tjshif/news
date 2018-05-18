@@ -51,34 +51,32 @@ public class PostMsgResource {
 			return GsonUtil.toJson(resultGson);
 		}
 
-		List<FormDataBodyPart> formDataBodyParts = form.getFields("file");
-
+		int nCount = 0;
+		String fileKey = "file" + nCount;
 		List<String> msgImageFiles = new ArrayList<>();
-		if (formDataBodyParts != null)
+
+		while (form.getField(fileKey) != null)
 		{
-			for (FormDataBodyPart formDataBodyPart : formDataBodyParts)
-			{
-				if (formDataBodyPart == null)
-					continue;
+			FormDataBodyPart formDataBodyPart = form.getField(fileKey);
+			InputStream is = formDataBodyPart.getValueAs(InputStream.class);
+			FormDataContentDisposition detail = formDataBodyPart.getFormDataContentDisposition();
+			if (is == null || detail == null)
+				continue;
 
-				InputStream is = formDataBodyPart.getValueAs(InputStream.class);
-				FormDataContentDisposition detail = formDataBodyPart.getFormDataContentDisposition();
-				if (is == null || detail == null)
-					continue;
+			String fullPath = filePathUtils.getMsgImageFullPath(userID, detail.getFileName());
+			File file = new File(fullPath);
+			try {
+				logger.info("file Path:" + file.getAbsolutePath());
+				FileUtils.copyInputStreamToFile(is, file);
 
-				String fullPath = filePathUtils.getMsgImageFullPath(userID, detail.getFileName());
-				File file = new File(fullPath);
-				try {
-					logger.info("file Path:" + file.getAbsolutePath());
-					FileUtils.copyInputStreamToFile(is, file);
-
-					String relativePath = filePathUtils.getMsgImageRelativePath(userID, detail.getFileName());
-					msgImageFiles.add(relativePath);
-				}
-				catch (IOException ex) {
-					logger.error(ex);
-				}
+				String relativePath = filePathUtils.getMsgImageRelativePath(userID, detail.getFileName());
+				msgImageFiles.add(relativePath);
 			}
+			catch (IOException ex) {
+				logger.error(ex);
+			}
+			++nCount;
+			fileKey = "file" + nCount;
 		}
 
 		RetResultGson resultGson = postMsgService.postMsgToRedis(userID, dto, msgImageFiles);

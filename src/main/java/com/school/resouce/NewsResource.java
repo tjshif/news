@@ -90,6 +90,22 @@ public class NewsResource {
 		return GsonUtil.toJson(resultGson);
 	}
 
+	@GET
+	@Path("/hasnewsdetail")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String hasNewsDetail(@QueryParam("linkurl") String linkurl)
+	{
+		if (TextUtils.isEmpty(linkurl))
+		{
+			NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		RetIDResultGson resultGson = newsService.getNewsDetailID(linkurl);
+		return GsonUtil.toJson(resultGson);
+	}
+
 	@POST
 	@Path("/addorremovefavoritenews")
 	@Produces(MediaType.APPLICATION_JSON)
