@@ -33,8 +33,8 @@
         'sys')
     </insert>
 
-    <select id="selectByPhoneNo" parameterType="java.lang.String" resultType="com.school.Entity.UserDTO">
-        select <include refid="Full_Column"/> from User where PhoneNumber = #{phoneNo}
+    <select id="selectByPhoneNo" resultType="com.school.Entity.UserDTO">
+        select <include refid="Full_Column"/> from User where phoneNumber = #{phoneNo}
     </select>
 
     <select id="selectByID"  resultType="com.school.Entity.UserDTO">

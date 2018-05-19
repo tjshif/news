@@ -95,7 +95,7 @@ public class LoginService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			logRegGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return logRegGson;

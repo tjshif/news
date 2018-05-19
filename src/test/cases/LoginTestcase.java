@@ -35,7 +35,7 @@ public class LoginTestcase {
 	public void testInvalidSmsLogin()
 	{
 		String phoneNumber = "13918802002";
-		String smsCode = "2422";
+		String smsCode = "1396";
 		LoginRegisterGson loginRegisterGson = loginService.loginRegister(phoneNumber, smsCode);
 		Assert.assertTrue(loginRegisterGson != null);
 		Assert.assertTrue(loginRegisterGson.getRetCode() == RetCode.RET_CODE_SMSERROR);
