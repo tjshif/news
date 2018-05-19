@@ -47,6 +47,7 @@ public class PostMsgService {
 				newsDTO.setPostDate(postMsgGson.getPostDate());
 			else
 				newsDTO.setPostDate(new Timestamp(System.currentTimeMillis()));
+			newsDTO.setCreateAt(new Timestamp(System.currentTimeMillis()));
 			newsDTO.setHasDetail(postMsgGson.getHasDetail());
 			if(msgImageFiles != null && msgImageFiles.size() > 0)
 			{

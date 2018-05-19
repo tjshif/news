@@ -27,7 +27,7 @@
         #{postDate},
         #{locationCode},
         #{isHot},
-        now(),
+        #{createAt},
         #{createBy},
         #{publisherId},
         #{isValid},
