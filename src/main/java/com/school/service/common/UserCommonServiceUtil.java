@@ -30,7 +30,7 @@ public class UserCommonServiceUtil {
 	{
 		if (userID == null)
 			return null;
-		return userDao.selectByID(userID);
+		return userDao.selectByID(userID.toString());
 	}
 
 	public UserDTO getUserDTOWithoutCache(String nickName)

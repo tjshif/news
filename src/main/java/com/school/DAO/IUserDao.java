@@ -7,12 +7,12 @@ import org.apache.ibatis.annotations.Param;
 public interface IUserDao {
 	Integer insert(UserDTO userDTO);
 	UserDTO selectByPhoneNo(String phoneNo);
-	UserDTO selectByID(Long id);
+	UserDTO selectByID(String ID);
 	UserDTO selectByNickName(String nickName);
 
-	Integer updateNickName(@Param("ID") Long ID, @Param("nickName") String nickName);
-	Integer updateSex(@Param("ID") Long ID, @Param("sex") Boolean sex);
-	Integer updateCollege(@Param("ID") Long ID, @Param("college") String college);
-	Integer updateAvatarUrl(@Param("ID") Long ID, @Param("avatarUrl") String avatarUrl);
+	Integer updateNickName(@Param("ID") String ID, @Param("nickName") String nickName);
+	Integer updateSex(@Param("ID") String ID, @Param("sex") Boolean sex);
+	Integer updateCollege(@Param("ID") String ID, @Param("college") String college);
+	Integer updateAvatarUrl(@Param("ID") String ID, @Param("avatarUrl") String avatarUrl);
 	Integer updateUserInfo(UserInfoGson userInfoGson);
 }

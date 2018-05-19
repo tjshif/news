@@ -1,10 +1,9 @@
 package cases;
 
 import com.school.Constants.RetCode;
-import com.school.Gson.LoginRegisterGson;
-import com.school.Gson.RetResultGson;
-import com.school.Gson.VersionResultGson;
+import com.school.Gson.*;
 import com.school.service.LoginService;
+import com.school.service.UserService;
 import junit.runner.Version;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,6 +19,9 @@ import java.util.Date;
 public class LoginTestcase {
 	@Resource
 	private LoginService loginService;
+
+	@Resource
+	private UserService userService;
 
 	@Test
 	public void testLogin()
@@ -55,5 +57,13 @@ public class LoginTestcase {
 	{
 		VersionResultGson versionResultGson = loginService.getVersionInfo(1L);
 		Assert.assertTrue(versionResultGson != null);
+	}
+
+	@Test
+	public void getUserInfo()
+	{
+		RetIDResultGson r = userService.getUserIDInfo("ukjqtt");
+		UserInfoResultGson resultGson = userService.getUserInfo(1L);
+		 resultGson = userService.getUserInfo(105L);
 	}
 }

@@ -55,7 +55,7 @@ public class LoginService {
 		{
 			userDao.insert(userDTO);
 			nickName = randString(10) + userDTO.getId();
-			Integer row = userDao.updateNickName(Long.parseLong(userDTO.getId()), nickName);
+			Integer row = userDao.updateNickName(userDTO.getId(), nickName);
 			if (row == 1)
 			{
 				userDTO = userDao.selectByPhoneNo(phoneNo);

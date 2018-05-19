@@ -40,7 +40,7 @@ public class UserService {
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			userDao.updateNickName(userID, nickName);
+			userDao.updateNickName(userID.toString(), nickName);
 		}
 		catch (DuplicateKeyException ex)
 		{
@@ -59,7 +59,7 @@ public class UserService {
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try
 		{
-			userDao.updateSex(userID, sex);
+			userDao.updateSex(userID.toString(), sex);
 		}
 		catch (Exception ex)
 		{
@@ -73,7 +73,7 @@ public class UserService {
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			userDao.updateCollege(userID, college);
+			userDao.updateCollege(userID.toString(), college);
 		}
 		catch (Exception ex)
 		{
@@ -87,7 +87,7 @@ public class UserService {
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			userDao.updateAvatarUrl(userID, avatarUrl);
+			userDao.updateAvatarUrl(userID.toString(), avatarUrl);
 		}
 		catch (Exception ex)
 		{

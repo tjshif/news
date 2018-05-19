@@ -148,7 +148,7 @@ public class NewsService {
 					newsDetailDTO.setFavorite(true);
 			}
 
-			UserDTO userDTO = userDao.selectByID(newsDetailDTO.getPublisher_id());
+			UserDTO userDTO = userDao.selectByID(newsDetailDTO.getPublisher_id().toString());
 			if (userDTO != null)
 			{
 				newsDetailDTO.setPublisher_avatar_url(userDTO.getAvatarUrl());
