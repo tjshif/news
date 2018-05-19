@@ -84,6 +84,13 @@
       <artifactId>spring-jdbc</artifactId>
       <version>${spring.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jms -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -233,12 +240,13 @@
       <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-all -->
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
     <dependency>
       <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-all</artifactId>
-      <version>5.15.3</version>
+      <artifactId>activemq-core</artifactId>
+      <version>5.7.0</version>
     </dependency>
+
 
   </dependencies>
   <build>
