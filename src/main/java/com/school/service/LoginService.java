@@ -152,6 +152,7 @@ public class LoginService {
 			}
 			smsMessageDTO.setCode(String.format("%04d", code));
 			smsMessageDTO.setPhoneNumber(phoneNumber);
+			smsMessageDao.insert(smsMessageDTO);
 
 			SendSmsResponse sendSmsResponse = SendSmsUtil.sendSms(phoneNumber, smsMessageDTO.getCode());
 			if (sendSmsResponse.getCode() == null || !sendSmsResponse.getCode().equals("OK"))
@@ -160,7 +161,6 @@ public class LoginService {
 				retResult.setResult(RetCode.RET_CODE_SMSERROR, RetMsg.RET_MSG_SMSERROR);
 				return retResult;
 			}
-			smsMessageDao.insert(smsMessageDTO);
 		}
 		catch (Exception ex)
 		{

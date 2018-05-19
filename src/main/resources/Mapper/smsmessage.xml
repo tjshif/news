@@ -24,7 +24,7 @@
         now(),
         #{createBy},
         now(),
-        #{updateBy})
+        'sys')
         ON DUPLICATE KEY UPDATE code = #{code}, UpdateAt=now(), count=#{count}
     </insert>
 
