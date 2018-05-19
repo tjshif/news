@@ -257,6 +257,7 @@ public class NewsService {
 			Integer offset = page * pageSize;
 			List<NewsDTO> newsDTOs = favoriteNewsDao.selectNewsByUserID(userID, offset, pageSize);
 			List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOs);
+			appendCommentCount(msgGsons);
 			resultGson.setMsgGsonList(msgGsons);
 		}
 		catch (Exception ex)
