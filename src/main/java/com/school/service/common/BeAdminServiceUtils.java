@@ -1,17 +1,14 @@
 package com.school.service.common;
 
-import com.mysql.cj.jdbc.util.TimeUtil;
 import com.school.DAO.IBeAdminDao;
-import com.school.Entity.BeAdminDTO;
 import com.school.Redis.LoadDataToRedis;
 import com.school.Redis.ReadDataFromRedis;
 import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
-import org.springframework.stereotype.Component;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.UUID;
 
 @Component
 public class BeAdminServiceUtils {

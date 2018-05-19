@@ -26,7 +26,7 @@
     <context:property-placeholder location="file:${catalina.home}/config/spider_jdbc.properties,
     file:${catalina.home}/config/news-env.properties"/>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="com.school.Utils.XBasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jd.driver}" />
         <property name="url" value="${jd.url}" />
         <property name="username" value="${jd.username}" />

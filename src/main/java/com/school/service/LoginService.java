@@ -1,7 +1,6 @@
 package com.school.service;
 
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.mysql.cj.jdbc.util.TimeUtil;
 import com.school.AOP.CacheMethodLogo;
 import com.school.AOP.LogAnnotation;
 import com.school.Constants.RetCode;

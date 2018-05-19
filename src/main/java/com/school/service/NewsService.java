@@ -2,17 +2,18 @@ package com.school.service;
 
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
-import com.school.DAO.*;
+import com.school.DAO.IFavoriteNewsDao;
+import com.school.DAO.INewsDao;
+import com.school.DAO.INewsDetailDao;
+import com.school.DAO.IUserDao;
 import com.school.Entity.*;
 import com.school.Enum.NewsSubTypeEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.*;
 import com.school.Redis.ReadDataFromRedis;
 import com.school.Utils.ConvertUtils;
-import com.school.Utils.FilePathUtils;
 import com.school.service.common.BeAdminServiceUtils;
 import com.school.service.common.CommentsServiceUtils;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 

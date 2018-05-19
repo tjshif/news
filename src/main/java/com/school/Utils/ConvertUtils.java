@@ -2,7 +2,6 @@ package com.school.Utils;
 
 import com.school.Entity.NewsDTO;
 import com.school.Gson.MsgGson;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.http.util.TextUtils;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@
         <property name="brokerURL" value="${activemq_url}"/>
     </bean>
 
-    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"  destroy-method="stop" lazy-init="true">
         <property name="connectionFactory" ref="targetConnectionFactory"/>
         <property name="maxConnections" value="30"/>
     </bean>
