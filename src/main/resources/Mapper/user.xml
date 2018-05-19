@@ -30,7 +30,7 @@
         now(),
         #{createBy},
         now(),
-        #{updateBy})
+        'sys')
     </insert>
 
     <select id="selectByPhoneNo" parameterType="java.lang.String" resultType="com.school.Entity.UserDTO">
