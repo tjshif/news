@@ -24,6 +24,7 @@ public class MsgGson {
 	private String		publishAvatar;
 
 	private Integer	commentCount;
+	private Boolean	hasDetail; // 是否有详细内容
 
 	public void setContent(String content) {
 		this.content = content;
@@ -159,5 +160,13 @@ public class MsgGson {
 
 	public void setPublishAvatar(String publishAvatar) {
 		this.publishAvatar = publishAvatar;
+	}
+
+	public void setHasDetail(Boolean hasDetail) {
+		this.hasDetail = hasDetail;
+	}
+
+	public Boolean getHasDetail() {
+		return hasDetail;
 	}
 }

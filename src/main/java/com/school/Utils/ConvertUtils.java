@@ -49,6 +49,7 @@ public class ConvertUtils {
 		msgGson.setUpdateAt(newsDTO.getUpdateAt());
 		msgGson.setUpdateBy(newsDTO.getUpdateBy());
 		msgGson.setPublisherId(newsDTO.getPublisherId());
+		msgGson.setHasDetail(newsDTO.getHasDetail());
 		return msgGson;
 	}
 }
