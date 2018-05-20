@@ -2,12 +2,15 @@ package com.school.service.common;
 
 import com.school.AOP.CacheMethodLogo;
 import com.school.DAO.IUserDao;
+import com.school.Entity.CommentCountDTO;
 import com.school.Entity.UserDTO;
 import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class UserCommonServiceUtil {
@@ -38,5 +41,12 @@ public class UserCommonServiceUtil {
 		if (TextUtils.isEmpty(nickName))
 			return null;
 		return userDao.selectByNickName(nickName);
+	}
+
+	public List<UserDTO> selectUsers(Set<String> publisherIDs)
+	{
+		if (publisherIDs == null || publisherIDs.size() == 0)
+			return null;
+		return userDao.selectUsers(publisherIDs);
 	}
 }

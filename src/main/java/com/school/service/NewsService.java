@@ -14,15 +14,14 @@ import com.school.Redis.ReadDataFromRedis;
 import com.school.Utils.ConvertUtils;
 import com.school.service.common.BeAdminServiceUtils;
 import com.school.service.common.CommentsServiceUtils;
+import com.school.service.common.UserCommonServiceUtil;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class NewsService {
@@ -47,22 +46,33 @@ public class NewsService {
 	private CommentsServiceUtils commentsServiceUtils;
 
 	@Resource
+	private UserCommonServiceUtil userCommonServiceUtil;
+
+	@Resource
 	private BeAdminServiceUtils beAdminServiceUtils;
 
 	public NewsSubjectResultGson getNewsSubjectListByPage(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location,
 														  Integer page, Integer pageSize)
 	{
 		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsMsgListByPage(newsType, newsSubType, location, page, pageSize);
-		if (newsDTOList == null)
-		{
-			Long offset = (long)page * pageSize;
-			newsDTOList = newsDao.selectNewsByPage(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
-					location, offset, pageSize);
+		try {
+			List<NewsDTO> newsDTOList = readDataFromRedis.getNewsMsgListByPage(newsType, newsSubType, location, page, pageSize);
+			if (newsDTOList == null)
+			{
+				Long offset = (long)page * pageSize;
+				newsDTOList = newsDao.selectNewsByPage(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
+						location, offset, pageSize);
+			}
+			List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOList);
+			appendCommentCount(msgGsons);
+			appendPublishInfo(msgGsons);
+			resultGson.setMsgGsonList(msgGsons);
 		}
-		List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOList);
-		appendCommentCount(msgGsons);
-		resultGson.setMsgGsonList(msgGsons);
+		catch (Exception ex)
+		{
+			logger.error(ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
 		return resultGson;
 	}
 
@@ -71,17 +81,55 @@ public class NewsService {
 	{
 		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 
-		List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListLessThanId(newsType, newsSubType, location, startFrom, count);
+		try {
+			List<NewsDTO> newsDTOList = readDataFromRedis.getNewsSubjectListLessThanId(newsType, newsSubType, location, startFrom, count);
 
-		if (newsDTOList == null)//表示redis里面没有取到数据
-		{//data from db
-			newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
-					location, startFrom, count);
+			if (newsDTOList == null)//表示redis里面没有取到数据
+			{//data from db
+				newsDTOList = newsDao.selectNewsLessThanId(newsType.getNewsTypeCode(), newsSubType != null ? newsSubType.getNewsSubTypeCode() : null,
+						location, startFrom, count);
+			}
+			List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOList);
+			appendCommentCount(msgGsons);
+			appendPublishInfo(msgGsons);
+			resultGson.setMsgGsonList(msgGsons);
 		}
-		List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOList);
-		appendCommentCount(msgGsons);
-		resultGson.setMsgGsonList(msgGsons);
+		catch (Exception ex)
+		{
+			logger.error(ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
 		return resultGson;
+	}
+
+	private void appendPublishInfo(List<MsgGson> msgGsonList)
+	{
+		Set<String> publishIDs = new HashSet<>();
+		for (MsgGson msgGson : msgGsonList)
+		{
+			if (msgGson == null)
+				continue;
+			publishIDs.add(msgGson.getPublisherId().toString());
+		}
+
+		if (publishIDs.size() > 0)
+		{
+			List<UserDTO> userDTOS = userCommonServiceUtil.selectUsers(publishIDs);
+			if (userDTOS == null)
+				return;
+			for (MsgGson msgGson : msgGsonList)
+			{
+				for (UserDTO userDTO : userDTOS)
+				{
+					if (msgGson.getPublisherId().toString().equalsIgnoreCase(userDTO.getId()))
+					{
+						msgGson.setPublishSource(userDTO.getNickName());
+						msgGson.setPublishAvatar(userDTO.getAvatarUrl());
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	private void appendCommentCount(List<MsgGson> msgGsonsList)
@@ -97,7 +145,8 @@ public class NewsService {
 		if (msgIDs.size() > 0)
 		{
 			List<CommentCountDTO> commentCountDTOS = commentsServiceUtils.selectCommentCounts(msgIDs);
-
+			if (commentCountDTOS == null)
+				return;
 			for (MsgGson msgGson : msgGsonsList)
 			{
 				Iterator<CommentCountDTO> it = commentCountDTOS.iterator();
@@ -122,7 +171,7 @@ public class NewsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex.getMessage());
+			logger.error(ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
@@ -257,6 +306,7 @@ public class NewsService {
 			Integer offset = page * pageSize;
 			List<NewsDTO> newsDTOs = favoriteNewsDao.selectNewsByUserID(userID, offset, pageSize);
 			List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOs);
+			appendPublishInfo(msgGsons);
 			appendCommentCount(msgGsons);
 			resultGson.setMsgGsonList(msgGsons);
 		}

@@ -75,14 +75,14 @@ public class RedisHandler {
 		if (newsItem == null)
 			return;
 
-		if (newsItem.getPublisherId() != null)
+		/*if (newsItem.getPublisherId() != null)
 		{
 			UserDTO userDTO = userCommonServiceUtil.getUserDTO(newsItem.getPublisherId());
 			if (userDTO != null)
 			{
 				newsItem.setPublishSource(userDTO.getNickName());
 			}
-		}
+		}*/
 
 		//cache newsItem
 		storedCacheService.set(getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));

@@ -75,4 +75,12 @@
         where ID = #{ID};
     </update>
 
+    <select id="selectUsers" resultType="com.school.Entity.UserDTO" parameterType="java.util.Set">
+        select <include refid="Full_Column"/> from User
+        where ID in
+        <foreach item="item" index="index" collection="set" open="(" separator="," close=")">
+            #{item}
+        </foreach>;
+    </select>
+
 </mapper>

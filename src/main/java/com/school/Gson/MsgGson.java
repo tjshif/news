@@ -14,7 +14,6 @@ public class MsgGson {
 	private Boolean 	isHot;
 	private Boolean 	isValid;
 	private Long 		publisherId;
-	private Boolean	hasDetail;//是否有详细内容
 
 	private Timestamp  updateAt;
 	private String		updateBy;
@@ -22,6 +21,7 @@ public class MsgGson {
 	private String		createBy;
 
 	private String     publishSource;
+	private String		publishAvatar;
 
 	private Integer	commentCount;
 
@@ -149,15 +149,15 @@ public class MsgGson {
 		this.commentCount = commentCount;
 	}
 
-	public Boolean getHasDetail() {
-		return hasDetail;
-	}
-
 	public Integer getCommentCount() {
 		return commentCount;
 	}
 
-	public void setHasDetail(Boolean hasDetail) {
-		this.hasDetail = hasDetail;
+	public String getPublishAvatar() {
+		return publishAvatar;
+	}
+
+	public void setPublishAvatar(String publishAvatar) {
+		this.publishAvatar = publishAvatar;
 	}
 }

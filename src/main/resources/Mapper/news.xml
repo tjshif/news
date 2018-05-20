@@ -67,10 +67,8 @@
     </select>
 
     <select id="selectNewsLessThanId" resultType="com.school.Entity.NewsDTO" >
-        SELECT NN.ID ID, subject, newsType, newsSubType, postDate, locationCode,
-        isHot, NN.CreateAt CreateAt, NN.CreateBy CreateBy, publisherId, NickName publishSource
-        FROM News NN
-        inner join User UR on NN.publisherId = UR.ID
+        SELECT ID, <include refid="Column_List"/>
+        FROM News
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
             and newsSubType = #{newsSubType}
@@ -79,16 +77,14 @@
             and locationCode = #{locationCode}
         </if>
         <if test="ID != null">
-            and NN.ID &lt; #{ID}
+            and ID &lt; #{ID}
         </if>
-        AND isValid = '1'  order by NN.ID desc Limit 0, #{count}
+        AND isValid = '1'  order by ID desc Limit 0, #{count}
     </select>
 
     <select id="selectNewsByPage" resultType="com.school.Entity.NewsDTO" >
-        SELECT NN.ID ID, subject, newsType, newsSubType, postDate, locationCode,
-        isHot, NN.CreateAt CreateAt, NN.CreateBy CreateBy, publisherId, NickName publishSource
-        FROM News NN
-        inner join User UR on NN.publisherId = UR.ID
+        SELECT ID, <include refid="Column_List"/>
+        FROM News
         WHERE NewsType = #{newsType}
         <if test="newsSubType != null">
             and newsSubType = #{newsSubType}
@@ -97,7 +93,7 @@
             and locationCode = #{locationCode}
         </if>
         AND isValid = '1'
-        order by NN.ID desc Limit #{offset}, #{pageSize}
+        order by ID desc Limit #{offset}, #{pageSize}
     </select>
 
     <update id="updateNewsStatus">
