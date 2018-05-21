@@ -34,7 +34,7 @@ public class ConsumePostMsgToDBListener implements MessageListener{
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			if (msgAggregate != null && msgAggregate.getNewsDTO() != null)
 				redisHandler.removeNewsFromRedis(msgAggregate.getNewsDTO());
 		}

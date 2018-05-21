@@ -73,7 +73,7 @@ public class PostMsgResource {
 				msgImageFiles.add(relativePath);
 			}
 			catch (IOException ex) {
-				logger.error(ex);
+				logger.error("",ex);
 			}
 			++nCount;
 			fileKey = "file" + nCount;
@@ -90,7 +90,7 @@ public class PostMsgResource {
 					FileUtils.forceDelete(file);
 				} catch (IOException ex) {
 					ex.printStackTrace();
-					logger.error(ex);
+					logger.error("",ex);
 				}
 			}
 		}

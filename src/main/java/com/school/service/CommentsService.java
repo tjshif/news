@@ -63,7 +63,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			retResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return retResultGson;
@@ -107,7 +107,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			retResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return retResultGson;
@@ -153,7 +153,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			commentsResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return commentsResultGson;
@@ -179,7 +179,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
@@ -196,7 +196,7 @@ public class CommentsService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;

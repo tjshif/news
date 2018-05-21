@@ -40,7 +40,7 @@ public class BeAdminService {
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;

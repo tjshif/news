@@ -72,13 +72,13 @@ public class PostMsgService {
 		}
 		catch (JsonSyntaxException ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			resultGson.setResult(RetCode.RET_ERROR_INVLAID_GSON_STRING, RetMsg.RET_MSG_INVLAID_GSON_STRING);
 			return resultGson;
 		}
 		catch (Exception ex)
 		{
-			logger.error(ex);
+			logger.error("",ex);
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
 		return resultGson;
