@@ -40,7 +40,7 @@ public class NewsTestcase {
 	@Test
 	public void getFavList()
 	{
-		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(1L, 0, 2);
+		NewsSubjectResultGson resultGson = newsService.getFavoriteNews(242L, 0, 2);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 
