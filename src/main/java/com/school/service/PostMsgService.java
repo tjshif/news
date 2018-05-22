@@ -12,6 +12,7 @@ import com.school.PushService.PushPostMsgToDBService;
 import com.school.Redis.LoadDataToRedis;
 import com.school.Utils.GsonUtil;
 import com.school.Utils.IdWorkerUtils;
+import com.school.Utils.MessageUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class PostMsgService {
 	LoadDataToRedis loadDataToRedis;
 
 	@Resource
-	PushPostMsgToDBService pushPostMsgToDBService;
+	MessageUtils messageUtils;
 
 	public RetResultGson postMsgToRedis(Long userID, String msgdto, List<String> msgImageFiles)
 	{
@@ -68,7 +69,7 @@ public class PostMsgService {
 			}
 
 			//Post msg to activemq to store data to db.
-			pushPostMsgToDBService.push(msgAggregate);
+			messageUtils.pushPostMsg(msgAggregate);
 		}
 		catch (JsonSyntaxException ex)
 		{

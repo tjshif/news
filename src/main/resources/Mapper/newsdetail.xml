@@ -15,8 +15,8 @@
         #{newsID},
         #{sourceArticleUrl},
         #{detailContent},
-        #{updateAt},
-        #{updateBy}
+        now(),
+        'sys'
         );
     </insert>
 

@@ -84,9 +84,10 @@ public class NewsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String getNewsDetail(@QueryParam("newsid") Long newsID, @QueryParam("userid")Long userID)
+	public String getNewsDetail(@QueryParam("newsid") Long newsID, @QueryParam("userid")Long userID,
+								@QueryParam("hasDetail")@DefaultValue("true") Boolean hasDetail)
 	{
-		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID, userID);
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(newsID, userID, hasDetail);
 		return GsonUtil.toJson(resultGson);
 	}
 

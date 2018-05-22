@@ -21,7 +21,7 @@ public class ConsumePostMsgToDBListener implements MessageListener{
 	@Resource
 	RedisHandler redisHandler;
 
-	private Logger logger = Logger.getLogger(ConsumePostMsgToDBListener.class.getName());
+	private Logger logger = Logger.getLogger(getClass());
 	@Override
 	public void onMessage(Message message) {
 		TextMessage txtMsg = (TextMessage)message;

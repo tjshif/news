@@ -29,11 +29,13 @@ public class NewsTestcase {
 	@Test
 	public void getNewsDetailTest()
 	{
+
 		NewsSubjectResultGson r1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 25, null, 20);
 
 		NewsSubjectResultGson r2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null,25, 0, 20);
 
-		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null);
+
+		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null, false);
 		Assert.assertTrue(resultGson.getRetCode() == RetCode.RET_CODE_OK);
 	}
 

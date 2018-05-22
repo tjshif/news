@@ -12,6 +12,7 @@ import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.*;
 import com.school.Redis.ReadDataFromRedis;
 import com.school.Utils.ConvertUtils;
+import com.school.Utils.MessageUtils;
 import com.school.service.common.BeAdminServiceUtils;
 import com.school.service.common.CommentsServiceUtils;
 import com.school.service.common.UserCommonServiceUtil;
@@ -19,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.css.Counter;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -50,6 +52,9 @@ public class NewsService {
 
 	@Resource
 	private BeAdminServiceUtils beAdminServiceUtils;
+
+	@Resource
+	private MessageUtils messageUtils;
 
 	public NewsSubjectResultGson getNewsSubjectListByPage(NewsTypeEnum newsType, NewsSubTypeEnum newsSubType, Integer location,
 														  Integer page, Integer pageSize)
@@ -177,17 +182,33 @@ public class NewsService {
 		return resultGson;
 	}
 
-	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID)
+	//hasDetail为false，只返回favorite和数量统计
+	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID, Boolean hasDetail)
 	{
 		NewsDetailResultGson newsDetailResultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
-			if (newsDetailDTO == null) {
-				newsDetailDTO = new NewsDetailDTO();
-				newsDetailDTO.setDetailContent("<b>你来晚了，改主题已经被删除了！</b>");
-				newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
-				return newsDetailResultGson;
+			NewsDetailDTO newsDetailDTO = null;
+			if (hasDetail)
+			{
+				newsDetailDTO = newsDetailDao.selectNewsDetail(newsID);
+				if (newsDetailDTO == null) {
+					newsDetailDTO = new NewsDetailDTO();
+					newsDetailDTO.setDetailContent("<b>你来晚了，改主题已经被删除了！</b>");
+					newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
+					return newsDetailResultGson;
+				}
+
+				UserDTO userDTO = userDao.selectByID(newsDetailDTO.getPublisher_id().toString());
+				if (userDTO != null)
+				{
+					newsDetailDTO.setPublisher_avatar_url(userDTO.getAvatarUrl());
+					newsDetailDTO.setPublisher_name(userDTO.getNickName());
+					newsDetailDTO.setPublisher_id(newsDetailDTO.getPublisher_id());
+				}
 			}
+			else
+				newsDetailDTO = new NewsDetailDTO();
+
 			newsDetailDTO.setFavorite(false);
 			if (userID != null)
 			{
@@ -196,15 +217,10 @@ public class NewsService {
 				if (favoriteNewsDTO != null)
 					newsDetailDTO.setFavorite(true);
 			}
-
-			UserDTO userDTO = userDao.selectByID(newsDetailDTO.getPublisher_id().toString());
-			if (userDTO != null)
-			{
-				newsDetailDTO.setPublisher_avatar_url(userDTO.getAvatarUrl());
-				newsDetailDTO.setPublisher_name(userDTO.getNickName());
-				newsDetailDTO.setPublisher_id(newsDetailDTO.getPublisher_id());
-			}
 			newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
+
+			CounterMsgGson counterMsgGson = new CounterMsgGson(newsID.toString());
+			messageUtils.pushCounterMsg(counterMsgGson);
 		}
 		catch (Exception ex)
 		{
