@@ -13,6 +13,7 @@ import com.school.Redis.LoadDataToRedis;
 import com.school.Utils.GsonUtil;
 import com.school.Utils.IdWorkerUtils;
 import com.school.Utils.MessageUtils;
+import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +43,14 @@ public class PostMsgService {
 			newsDTO.setLocationCode(postMsgGson.getLocationCode());
 			newsDTO.setNewsType(postMsgGson.getNewsType());
 			newsDTO.setNewsSubType(postMsgGson.getNewsSubType());
-			newsDTO.setId(IdWorkerUtils.getGlobalID().toString());
+			if (!TextUtils.isEmpty(postMsgGson.getID()))
+				newsDTO.setId(postMsgGson.getID());
+			else
+				newsDTO.setId(IdWorkerUtils.getGlobalID().toString());
+
 			newsDTO.setPublisherId(userID);
+			newsDTO.setUpdateBy("postMsgToRedis");
+			newsDTO.setSource(postMsgGson.getSource());
 			if (postMsgGson.getPostDate() != null)
 				newsDTO.setPostDate(postMsgGson.getPostDate());
 			else
@@ -65,6 +72,7 @@ public class PostMsgService {
 				newsDetailDTO.setDetailContent(postMsgGson.getDetailContent());
 				newsDetailDTO.setNewsID(newsDTO.getId());
 				newsDetailDTO.setSourceArticleUrl(postMsgGson.getSourceArticleUrl());
+				newsDetailDTO.setUpdateBy("postMsgToRedis");
 				msgAggregate.setNewsDetailDTO(newsDetailDTO);
 			}
 

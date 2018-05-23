@@ -9,5 +9,5 @@ public interface INewsDetailDao {
 	NewsDetailDTO selectNewsDetail(Long newsID);
 	Integer update(NewsDetailGson newsDetailGson);
 
-	Long selectNewsDetailIDByUrl(String sourceArticleUrl);
+	NewsDetailDTO selectNewsDetailByUrl(String sourceArticleUrl);
 }

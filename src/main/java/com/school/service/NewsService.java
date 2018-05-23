@@ -167,12 +167,12 @@ public class NewsService {
 		}
 	}
 
-	public RetIDResultGson getNewsDetailID(String linkUrl)
+	public NewsDetailResultGson getNewsDetailByUrl(String linkUrl)
 	{
-		RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		NewsDetailResultGson resultGson = new NewsDetailResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			Long id = newsDetailDao.selectNewsDetailIDByUrl(linkUrl);
-			resultGson.setID(id);
+			NewsDetailDTO newsDetailDTO = newsDetailDao.selectNewsDetailByUrl(linkUrl);
+			resultGson.setNewsDetailDTO(newsDetailDTO);
 		}
 		catch (Exception ex)
 		{

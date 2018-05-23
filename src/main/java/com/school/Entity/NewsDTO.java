@@ -13,6 +13,7 @@ public class NewsDTO extends BaseDTO {
 	private Boolean 	isValid = true;
 	private Boolean	hasDetail; // 是否有详细内容
 	private Long 		publisherId;
+	private String 	source;
 
 	public String getContent() {
 		return subject;
@@ -92,5 +93,13 @@ public class NewsDTO extends BaseDTO {
 
 	public void setPublisherId(Long publisherId) {
 		this.publisherId = publisherId;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 }

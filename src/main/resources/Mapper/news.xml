@@ -13,7 +13,8 @@
 	  createBy,
       publisherId,
       isValid,
-      hasDetail
+      hasDetail,
+      source
     </sql>
 
     <insert id="insert" parameterType="com.school.Entity.NewsDTO">
@@ -31,8 +32,10 @@
         #{createBy},
         #{publisherId},
         #{isValid},
-        #{hasDetail}
-        );
+        #{hasDetail},
+        #{source}
+        )
+        ON DUPLICATE KEY UPDATE subject = #{subject}, updateAt=now(), updateBy=#{updateBy};
     </insert>
 
     <select id="selectNewsByCreateAt" resultType="com.school.Entity.NewsDTO" >

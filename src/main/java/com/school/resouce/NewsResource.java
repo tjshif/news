@@ -92,18 +92,18 @@ public class NewsResource {
 	}
 
 	@GET
-	@Path("/hasnewsdetail")
+	@Path("/getnewsdetailbyurl")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String hasNewsDetail(@QueryParam("linkurl") String linkurl)
+	public String getNewsDetailByUrl(@QueryParam("linkurl") String linkurl)
 	{
 		if (TextUtils.isEmpty(linkurl))
 		{
-			NewsFavoriteResultGson resultGson = new NewsFavoriteResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			NewsDetailResultGson resultGson = new NewsDetailResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
 		}
-		RetIDResultGson resultGson = newsService.getNewsDetailID(linkurl);
+		NewsDetailResultGson resultGson = newsService.getNewsDetailByUrl(linkurl);
 		return GsonUtil.toJson(resultGson);
 	}
 

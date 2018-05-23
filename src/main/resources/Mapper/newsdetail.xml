@@ -17,7 +17,8 @@
         #{detailContent},
         now(),
         'sys'
-        );
+        )
+        ON DUPLICATE KEY UPDATE detailContent = #{detailContent}, updateAt=now(), updateBy=#{updateBy};
     </insert>
 
     <select id="selectNewsDetail" resultType="com.school.Entity.NewsDetailDTO">
@@ -25,8 +26,8 @@
         INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};
     </select>
 
-    <select id="selectNewsDetailIDByUrl" resultType="Long">
-        SELECT ID from NewsDetail WHERE sourceArticleUrl = #{sourceArticleUrl};
+    <select id="selectNewsDetailByUrl" resultType="com.school.Entity.NewsDetailDTO">
+        SELECT * from NewsDetail WHERE sourceArticleUrl = #{sourceArticleUrl};
     </select>
 
     <update id="update" parameterType="com.school.Gson.NewsDetailGson">

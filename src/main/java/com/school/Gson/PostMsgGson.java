@@ -5,6 +5,7 @@ import org.apache.http.util.TextUtils;
 import java.sql.Timestamp;
 
 public class PostMsgGson {
+	private String ID;
 	private String content;
 	private Integer NewsType;
 	private Integer NewsSubType;
@@ -12,6 +13,7 @@ public class PostMsgGson {
 	private Timestamp	postDate;
 	private String		detailContent;
 	private String		sourceArticleUrl;
+	private String 	source;
 
 	public String getContent() {
 		return content;
@@ -74,5 +76,21 @@ public class PostMsgGson {
 			return false;
 		else
 			return true;
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String ID) {
+		this.ID = ID;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSource() {
+		return source;
 	}
 }
