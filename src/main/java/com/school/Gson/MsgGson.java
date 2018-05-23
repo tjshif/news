@@ -25,6 +25,7 @@ public class MsgGson {
 
 	private Integer	commentCount;
 	private Boolean	hasDetail; // 是否有详细内容
+	private String     source;
 
 	public void setContent(String content) {
 		this.content = content;
@@ -168,5 +169,13 @@ public class MsgGson {
 
 	public Boolean getHasDetail() {
 		return hasDetail;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSource() {
+		return source;
 	}
 }
