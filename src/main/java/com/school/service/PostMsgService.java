@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.soap.Text;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class PostMsgService {
 
 			MsgAggregate msgAggregate = new MsgAggregate();
 			msgAggregate.setNewsDTO(newsDTO);
-			if (postMsgGson.getHasDetail())
+			if (postMsgGson.getHasDetail() || !TextUtils.isEmpty(postMsgGson.getSourceArticleUrl()))
 			{//NewsDetail
 				NewsDetailDTO newsDetailDTO = new NewsDetailDTO();
 				newsDetailDTO.setDetailContent(postMsgGson.getDetailContent());
