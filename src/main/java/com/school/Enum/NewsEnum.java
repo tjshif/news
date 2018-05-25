@@ -1,17 +1,23 @@
 package com.school.Enum;
 
 public enum NewsEnum {
-	NEWS_JOB(2),
-	NEWS_FRIENDS(3);
+	NEWS_JOB(2, "工作"),
+	NEWS_FRIENDS(3, "鹊桥");
 
 	private Integer newsType;
+	private String channelName;
 
-	private NewsEnum(int type) {
+	NewsEnum(int type, String name) {
 		this.newsType = type;
+		this.channelName = name;
 	}
 
 	public Integer getNewsType() {
 		return this.newsType;
+	}
+
+	public String getChannelName() {
+		return channelName;
 	}
 
 	/*方法Value2CityTest是为了typeHandler后加的*/

@@ -2,16 +2,9 @@ package com.school.Redis;
 
 import com.school.Constants.EnvConst;
 import com.school.DAO.INewsDao;
-import com.school.DAO.ISpiderEnumDao;
-import com.school.DAO.IUserDao;
 import com.school.Entity.NewsDTO;
-import com.school.Entity.SpiderEnumDTO;
-import com.school.Entity.UserDTO;
-import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Utils.AppProperites;
-import com.school.Utils.GsonUtil;
-import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -99,15 +92,7 @@ public class LoadDataToRedis extends RedisHandler{
 				Set<Tuple> trimKeys = storedCacheService.zrangeWithScores(getTrimKey(), 0, -1);
 				for (Tuple trimKey : trimKeys)
 				{
-					Integer location = (int)trimKey.getScore();
-					if (location.intValue() == LocationEnum.ALL.getZipCode())
-					{
-						trimSortedListAndNewsItem(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ALL_LOCATION);
-					}
-					else
-					{
-						trimSortedList(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ONE_LOCATION);
-					}
+					trimSortedList(trimKey.getElement(), EnvConst.NEWS_REDIS_COUNT_ONE_LOCATION);
 				}
 			}
 		}

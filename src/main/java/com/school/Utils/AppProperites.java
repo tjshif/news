@@ -17,6 +17,9 @@ public class AppProperites {
 	@Value("${PAGE_SIZE}")
 	private Integer page_size;
 
+	@Value("${CHANNEL_VERSION}")
+	private Integer channel_version;
+
 	public String getAvatar_image_path() {
 		return avatar_image_path;
 	}
@@ -31,5 +34,9 @@ public class AppProperites {
 
 	public Integer getPage_size() {
 		return page_size;
+	}
+
+	public Integer getChannel_version() {
+		return channel_version;
 	}
 }

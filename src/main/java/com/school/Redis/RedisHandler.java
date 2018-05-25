@@ -2,8 +2,6 @@ package com.school.Redis;
 
 import com.school.DAO.IUserDao;
 import com.school.Entity.NewsDTO;
-import com.school.Entity.UserDTO;
-import com.school.Enum.LocationEnum;
 import com.school.Utils.GsonUtil;
 import com.school.service.common.UserCommonServiceUtil;
 import org.apache.http.util.TextUtils;
@@ -11,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Set;
 
 @Component
 public class RedisHandler {

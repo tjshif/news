@@ -1,6 +1,5 @@
 package cases;
 
-import com.school.Enum.LocationEnum;
 import com.school.Enum.NewsTypeEnum;
 import com.school.Gson.NewsSubjectResultGson;
 import com.school.Redis.LoadDataToRedis;
@@ -32,14 +31,14 @@ public class RedisTest {
 	@Test
 	public void testReadFromRedis()
 	{
-		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), null, 30);
+		newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 27, null, 30);
 	}
 
 	@Test
 	public void testReadByPage()
 	{
-		NewsSubjectResultGson resultGson1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), null, 4);
-		NewsSubjectResultGson resultGson2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null, LocationEnum.NANJING.getZipCode(), 0, 4);
+		NewsSubjectResultGson resultGson1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 27, null, 4);
+		NewsSubjectResultGson resultGson2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null, 27, 0, 4);
 		Assert.assertTrue(true);
 	}
 }
