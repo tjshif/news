@@ -2,7 +2,9 @@ package com.school.Enum;
 
 public enum NewsEnum {
 	NEWS_JOB(2, "工作"),
-	NEWS_FRIENDS(3, "鹊桥");
+	NEWS_FRIENDS(3, "鹊桥"),
+	NEWS_TALING(4, "校园闲谈"),
+	NEWS_HELP(5, "同城互助");
 
 	private Integer newsType;
 	private String channelName;
