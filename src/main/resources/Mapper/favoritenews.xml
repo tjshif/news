@@ -31,6 +31,6 @@
     <select id="selectNewsByUserID" resultType="com.school.Entity.NewsDTO">
         SELECT NS.* FROM FavoriteNews FN
         inner join News NS on FN.newsID = NS.ID
-        where FN.userID = #{userID} order by FN.ID desc Limit #{offset}, #{pageSize};
+        where FN.userID = #{userID} and NS.isValid = 1 order by FN.ID desc Limit #{offset}, #{pageSize};
     </select>
 </mapper>
