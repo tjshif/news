@@ -57,7 +57,7 @@ public class ReadDataFromRedis extends RedisHandler {
 
 		Set<String> resultIdxList = storedCacheService.zrevrangeByScore(key, max, min, offset, count);
 		if (resultIdxList == null || resultIdxList.size() != count) {
-			logger.error("can't find in redis: key:" + key + "; max:" + max + "; min: " + min + "; offset:" + offset
+			logger.warn("can't find in redis: key:" + key + "; max:" + max + "; min: " + min + "; offset:" + offset
 			+ "; count: " + count);
 			return null;
 		}

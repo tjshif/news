@@ -12,8 +12,6 @@ import javax.annotation.Resource;
 
 @Component
 public class RedisHandler {
-	private Logger logger = Logger.getLogger(RedisHandler.class.getName());
-
 	@Resource
 	private IUserDao userDao;
 
