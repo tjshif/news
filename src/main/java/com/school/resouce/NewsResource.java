@@ -233,9 +233,10 @@ public class NewsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String updateNewsSubject(@HeaderParam("SessionID") String sessionID, @FormParam("dto") String dto)
+	public String updateNewsSubject(@HeaderParam("SessionID") String sessionID, @HeaderParam("beadminID") Long beadminID,
+									@FormParam("dto") String dto)
 	{
-		if (TextUtils.isEmpty(dto))
+		if (TextUtils.isEmpty(dto) || beadminID == null || TextUtils.isEmpty(sessionID))
 		{
 			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
@@ -251,7 +252,7 @@ public class NewsResource {
 			return GsonUtil.toJson(resultGson);
 		}
 
-		RetResultGson resultGson = newsService.updateNewsSubject(sessionID, newsGson);
+		RetResultGson resultGson = newsService.updateNewsSubject(sessionID, beadminID, newsGson);
 		return GsonUtil.toJson(resultGson);
 	}
 
@@ -260,9 +261,10 @@ public class NewsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@LogAnnotation
-	public String updateNewsDetail(@HeaderParam("SessionID") String sessionID, @FormParam("dto") String dto)
+	public String updateNewsDetail(@HeaderParam("SessionID") String sessionID, @HeaderParam("beadminID") Long beadminID,
+								   @FormParam("dto") String dto)
 	{
-		if (TextUtils.isEmpty(dto))
+		if (TextUtils.isEmpty(dto) || beadminID == null || TextUtils.isEmpty(sessionID))
 		{
 			RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
 			return GsonUtil.toJson(resultGson);
@@ -278,7 +280,7 @@ public class NewsResource {
 			return GsonUtil.toJson(resultGson);
 		}
 
-		RetResultGson resultGson = newsService.updateNewsDetail(sessionID, newsDetailGson);
+		RetResultGson resultGson = newsService.updateNewsDetail(sessionID, beadminID, newsDetailGson);
 		return GsonUtil.toJson(resultGson);
 	}
 }

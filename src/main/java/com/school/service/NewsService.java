@@ -395,10 +395,10 @@ public class NewsService {
 		return resultGson;
 	}
 
-	public RetResultGson updateNewsSubject(String sessionID, NewsGson newsGson)
+	public RetResultGson updateNewsSubject(String sessionID, Long beAdminID, NewsGson newsGson)
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		if (!beAdminServiceUtils.isLoginIn(newsGson.getID(), sessionID))
+		if (!beAdminServiceUtils.isLoginIn(beAdminID, sessionID))
 		{
 			resultGson.setResult(RetCode.RET_ERROR_BEADMIN_SESSION_OUTDATE, RetMsg.RET_MSG_BEADMIN_SESSION_OUTDATE);
 			return resultGson;
@@ -407,7 +407,7 @@ public class NewsService {
 		try {
 			Integer nRow = newsDao.update(newsGson);
 			if (nRow != 1) {
-				resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
+				resultGson.setResult(RetCode.RET_ERROR_INVALID_NEWSID, RetMsg.RET_MSG_INVALID_NEWSID);
 				return resultGson;
 			}
 			loadOrRemoveNewsInRedis(newsGson.getID(), true);
@@ -420,10 +420,10 @@ public class NewsService {
 		return resultGson;
 	}
 
-	public RetResultGson updateNewsDetail(String sessionID, NewsDetailGson newsDetailGson)
+	public RetResultGson updateNewsDetail(String sessionID, Long beadminID, NewsDetailGson newsDetailGson)
 	{
 		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		if (!beAdminServiceUtils.isLoginIn(newsDetailGson.getNewsID(), sessionID))
+		if (!beAdminServiceUtils.isLoginIn(beadminID, sessionID))
 		{
 			resultGson.setResult(RetCode.RET_ERROR_BEADMIN_SESSION_OUTDATE, RetMsg.RET_MSG_BEADMIN_SESSION_OUTDATE);
 			return resultGson;
@@ -431,7 +431,7 @@ public class NewsService {
 		try {
 			Integer nRow = newsDetailDao.update(newsDetailGson);
 			if (nRow != 1) {
-				resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
+				resultGson.setResult(RetCode.RET_ERROR_INVALID_NEWSID, RetMsg.RET_MSG_INVALID_NEWSID);
 				return resultGson;
 			}
 		}
