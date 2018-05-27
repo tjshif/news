@@ -26,6 +26,8 @@ public class MsgGson {
 	private Integer	commentCount;
 	private Boolean	hasDetail; // 是否有详细内容
 	private String     source;
+	private String 	detailContent;
+	private Boolean 	favorite;
 
 	public void setContent(String content) {
 		this.content = content;
@@ -177,5 +179,21 @@ public class MsgGson {
 
 	public String getSource() {
 		return source;
+	}
+
+	public Boolean getFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(Boolean favorite) {
+		this.favorite = favorite;
+	}
+
+	public void setDetailContent(String detailContent) {
+		this.detailContent = detailContent;
+	}
+
+	public String getDetailContent() {
+		return detailContent;
 	}
 }

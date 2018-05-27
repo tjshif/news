@@ -47,7 +47,7 @@ public class CommentsService {
 			return retResultGson;
 		}
 
-		NewsDTO newsDTO = newsServiceUtils.getNews(newsID);
+		NewsDTO newsDTO = newsServiceUtils.getNewsByID(newsID);
 		if (newsDTO == null)
 		{
 			retResultGson.setResult(RetCode.RET_ERROR_INVALID_NEWSID, RetMsg.RET_MSG_INVALID_NEWSID);

@@ -15,7 +15,9 @@ import com.school.Utils.ConvertUtils;
 import com.school.Utils.MessageUtils;
 import com.school.service.common.BeAdminServiceUtils;
 import com.school.service.common.CommentsServiceUtils;
+import com.school.service.common.NewsServiceUtils;
 import com.school.service.common.UserCommonServiceUtil;
+import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.css.Counter;
 
 import javax.annotation.Resource;
+import javax.ws.rs.QueryParam;
 import java.util.*;
 
 @Service
@@ -34,9 +37,6 @@ public class NewsService {
 
 	@Resource
 	private INewsDao newsDao;
-
-	@Resource
-	private IFavoriteNewsDao favoriteNewsDao;
 
 	@Resource
 	private INewsDetailDao newsDetailDao;
@@ -52,6 +52,12 @@ public class NewsService {
 
 	@Resource
 	private BeAdminServiceUtils beAdminServiceUtils;
+
+	@Resource
+	private NewsServiceUtils newsServiceUtils;
+
+	@Resource
+	private IFavoriteNewsDao favoriteNewsDao;
 
 	@Resource
 	private MessageUtils messageUtils;
@@ -182,6 +188,50 @@ public class NewsService {
 		return resultGson;
 	}
 
+	public NewsSubjectResultGson getNewsByID(Long newsID, Long userID)
+	{
+		NewsSubjectResultGson newsSubjectResultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			NewsDTO newsDTO = newsServiceUtils.getNewsByID(newsID);
+			if (newsDTO == null)
+			{
+				newsSubjectResultGson.setResult(RetCode.RET_ERROR_FIND_ROW, RetMsg.RET_MSG_FIND_ROW);
+				return newsSubjectResultGson;
+			}
+			MsgGson msgGson = ConvertUtils.convertToMsgGson(newsDTO);
+			if (newsDTO.getHasDetail())
+			{
+				NewsDetailDTO newsDetailDTO = newsServiceUtils.getNewsDetailByNewsID(newsID);
+				if (newsDetailDTO == null)
+				{
+					newsSubjectResultGson.setResult(RetCode.RET_ERROR_FIND_ROW, RetMsg.RET_MSG_FIND_ROW);
+					return newsSubjectResultGson;
+				}
+				msgGson.setDetailContent(newsDetailDTO.getDetailContent());
+			}
+			if (TextUtils.isEmpty(msgGson.getPublishSource()))
+			{
+				UserDTO userDTO = userDao.selectByID(msgGson.getPublisherId().toString());
+				if (userDTO != null)
+				{
+					msgGson.setPublishSource(userDTO.getNickName());
+					msgGson.setPublishAvatar(userDTO.getAvatarUrl());
+				}
+			}
+			Boolean bIsFav = newsServiceUtils.isFavoriteNews(userID, newsID);
+			msgGson.setFavorite(bIsFav);
+			List<MsgGson> msgGsons = new ArrayList<>();
+			msgGsons.add(msgGson);
+			newsSubjectResultGson.setMsgGsonList(msgGsons);
+		}
+		catch (Exception ex)
+		{
+			logger.error("",ex);
+			newsSubjectResultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return newsSubjectResultGson;
+	}
+
 	//hasDetail为false，只返回favorite和数量统计
 	public NewsDetailResultGson getNewsDetail(Long newsID, Long userID, Boolean hasDetail)
 	{
@@ -206,17 +256,12 @@ public class NewsService {
 					newsDetailDTO.setPublisher_id(newsDetailDTO.getPublisher_id());
 				}
 			}
-			else
+			else {
 				newsDetailDTO = new NewsDetailDTO();
-
-			newsDetailDTO.setFavorite(false);
-			if (userID != null)
-			{
-				FavoriteNewsDTO favoriteNewsDTO = new FavoriteNewsDTO(userID, newsID);
-				favoriteNewsDTO = favoriteNewsDao.selectByUK(favoriteNewsDTO);
-				if (favoriteNewsDTO != null)
-					newsDetailDTO.setFavorite(true);
 			}
+
+			Boolean bIsFav = newsServiceUtils.isFavoriteNews(userID, newsID);
+			newsDetailDTO.setFavorite(bIsFav);
 			newsDetailResultGson.setNewsDetailDTO(newsDetailDTO);
 
 			CounterMsgGson counterMsgGson = new CounterMsgGson(newsID.toString());

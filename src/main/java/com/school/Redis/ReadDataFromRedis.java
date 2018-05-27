@@ -50,7 +50,21 @@ public class ReadDataFromRedis extends RedisHandler {
 		return getSubjectListByOffset(key, max, 0, 0, count);
 	}
 
-	private List<NewsDTO> getSubjectListByOffset(String key, double max, double min, int offset, int count)
+	public NewsDTO getNewsDTO(Long newsID)
+	{
+		String itemKey = getNewsItemKey(newsID.toString());
+		if (TextUtils.isEmpty(itemKey))
+			return null;
+
+		String value = storedCacheService.get(itemKey);
+		if (TextUtils.isEmpty(value))
+			return null;
+
+		NewsDTO newsDTO = GsonUtil.fromJson(value, NewsDTO.class);
+		return newsDTO;
+	}
+
+	public List<NewsDTO> getSubjectListByOffset(String key, double max, double min, int offset, int count)
 	{
 		if (TextUtils.isEmpty(key))
 			return null;

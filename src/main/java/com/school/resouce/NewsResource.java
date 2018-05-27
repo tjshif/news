@@ -92,6 +92,17 @@ public class NewsResource {
 	}
 
 	@GET
+	@Path("/getnewsbyid")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getNewsByID(@QueryParam("newsid") Long newsID, @QueryParam("userid")Long userID)
+	{
+		NewsSubjectResultGson resultGson = newsService.getNewsByID(newsID, userID);
+		return GsonUtil.toJson(resultGson);
+	}
+
+	@GET
 	@Path("/getnewsdetailbyurl")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
