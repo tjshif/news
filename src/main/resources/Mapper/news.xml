@@ -99,6 +99,13 @@
         order by ID desc Limit #{offset}, #{pageSize}
     </select>
 
+    <select id="selectPostNewsByPage" resultType="com.school.Entity.NewsDTO" >
+        SELECT ID, <include refid="Column_List"/>
+        FROM News
+        WHERE isValid = '1'and publisherId = #{publisherId}
+        order by ID desc Limit #{offset}, #{pageSize}
+    </select>
+
     <update id="updateNewsStatus">
         update News set isValid = #{isValid} where ID = #{ID}
     </update>

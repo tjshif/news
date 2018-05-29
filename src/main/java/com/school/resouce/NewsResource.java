@@ -34,7 +34,7 @@ public class NewsResource {
 									 @QueryParam("subnewstype") Integer subNewsType,
 									 @QueryParam("location")Integer location,
 									 @QueryParam("startfrom")Long startFrom, //不包括startfrom
-									 @DefaultValue("20")@QueryParam("count")Integer count)
+									 @DefaultValue("10")@QueryParam("count")Integer count)
 	{
 		NewsTypeEnum newsTypeEnum = null;
 		NewsSubTypeEnum newsSubTypeNem = null;
@@ -61,7 +61,7 @@ public class NewsResource {
 											 @QueryParam("subnewstype") Integer subNewsType,
 											 @QueryParam("location")Integer location,
 											 @QueryParam("page")Integer page, //不包括startfrom
-											 @DefaultValue("20")@QueryParam("pageSize")Integer pageSize)
+											 @DefaultValue("10")@QueryParam("pageSize")Integer pageSize)
 	{
 		NewsTypeEnum newsTypeEnum = null;
 		NewsSubTypeEnum newsSubTypeNem = null;
@@ -159,7 +159,7 @@ public class NewsResource {
 	@LogAnnotation
 	public String getFavoriteNews(@QueryParam("userid") Long userID,
 												 @DefaultValue("0")@QueryParam("page") Integer page,
-												 @DefaultValue("20")@QueryParam("pageSize") Integer pageSize)
+												 @DefaultValue("10")@QueryParam("pageSize") Integer pageSize)
 	{
 		if (userID == null)
 		{
@@ -281,6 +281,23 @@ public class NewsResource {
 		}
 
 		RetResultGson resultGson = newsService.updateNewsDetail(sessionID, beadminID, newsDetailGson);
+		return GsonUtil.toJson(resultGson);
+	}
+
+	@GET
+	@Path("/getpostnews")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@LogAnnotation
+	public String getPostNews(@QueryParam("userid") Long userID, @QueryParam("page") Integer page,
+							  @DefaultValue("10")@QueryParam("pageSize") Integer pageSize)
+	{
+		if (userID == null || page == null)
+		{
+			NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_REQUIREEMPTY, RetMsg.RET_MSG_REQUIREEMPTY);
+			return GsonUtil.toJson(resultGson);
+		}
+		NewsSubjectResultGson resultGson = newsService.getPostNews(userID, page, pageSize);
 		return GsonUtil.toJson(resultGson);
 	}
 }

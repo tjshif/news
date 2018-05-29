@@ -113,6 +113,25 @@ public class NewsService {
 		return resultGson;
 	}
 
+	public NewsSubjectResultGson getPostNews(Long userID, Integer page, Integer pageSize)
+	{
+		NewsSubjectResultGson resultGson = new NewsSubjectResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try {
+			Long offset = (long) page * pageSize;
+			List<NewsDTO> newsDTOList = newsDao.selectPostNewsByPage(userID.toString(), offset, pageSize);
+			List<MsgGson> msgGsons = ConvertUtils.convertToMsgGsonList(newsDTOList);
+			appendCommentCount(msgGsons);
+			appendPublishInfo(msgGsons);
+			resultGson.setMsgGsonList(msgGsons);
+		}
+		catch (Exception ex)
+		{
+			logger.error("",ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
+	}
+
 	private void appendPublishInfo(List<MsgGson> msgGsonList)
 	{
 		Set<String> publishIDs = new HashSet<>();
