@@ -44,4 +44,9 @@ public class BaseDTO {
 	public void setUpdateAt(Timestamp updateAt) {
 		this.updateAt = updateAt;
 	}
+
+	public String getKey(String id)
+	{
+		return "";
+	}
 }

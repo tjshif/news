@@ -1,14 +1,17 @@
 package com.school.service.common;
 
+import com.mysql.cj.jdbc.util.TimeUtil;
 import com.school.AOP.CacheMethodLogo;
 import com.school.DAO.IUserDao;
 import com.school.Entity.CommentCountDTO;
 import com.school.Entity.UserDTO;
+import com.school.Redis.RedisHandler;
 import com.school.Utils.TimeUtils;
 import org.apache.http.util.TextUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +19,9 @@ import java.util.Set;
 public class UserCommonServiceUtil {
 	@Resource
 	private IUserDao userDao;
+
+	@Resource
+	private RedisHandler redisHandler;
 
 	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
 	public UserDTO getUserDTO(Long userID)
@@ -43,10 +49,24 @@ public class UserCommonServiceUtil {
 		return userDao.selectByNickName(nickName);
 	}
 
-	public List<UserDTO> selectUsers(Set<String> publisherIDs)
+	public Set<UserDTO> selectUsers(Set<String> publisherIDs)
 	{
 		if (publisherIDs == null || publisherIDs.size() == 0)
 			return null;
-		return userDao.selectUsers(publisherIDs);
+
+		Set<String> notExistPublishers = new HashSet<>();
+		Set<UserDTO> userDTOS = redisHandler.readItemsFromRedisByIDs(publisherIDs, UserDTO.class, notExistPublishers);
+		if (notExistPublishers.size() > 0)
+		{
+			List<UserDTO> loadUsersFromDB = userDao.selectUsers(notExistPublishers);
+			if (loadUsersFromDB.size() > 0)
+			{
+				redisHandler.loadItemsToRedis(loadUsersFromDB, TimeUtils.ONE_DAY_SECONDS);
+				userDTOS.addAll(loadUsersFromDB);
+			}
+		}
+		return userDTOS;
 	}
+
+
 }

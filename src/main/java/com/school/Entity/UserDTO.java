@@ -66,4 +66,10 @@ public class UserDTO extends BaseDTO{
 	public Boolean getVerified() {
 		return isVerified;
 	}
+
+	@Override
+	public String getKey(String id)
+	{
+		return String.format("User:%s", id);
+	}
 }

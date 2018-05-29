@@ -144,7 +144,7 @@ public class NewsService {
 
 		if (publishIDs.size() > 0)
 		{
-			List<UserDTO> userDTOS = userCommonServiceUtil.selectUsers(publishIDs);
+			Set<UserDTO> userDTOS = userCommonServiceUtil.selectUsers(publishIDs);
 			if (userDTOS == null)
 				return;
 			for (MsgGson msgGson : msgGsonList)
