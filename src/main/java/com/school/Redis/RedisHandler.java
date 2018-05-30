@@ -26,25 +26,6 @@ public class RedisHandler {
 	@Resource
 	private UserCommonServiceUtil userCommonServiceUtil;
 
-	protected String getNewsTypeLocationKey(Integer newsType, Integer location)
-	{
-		if (location == null || newsType == null)
-			return "";
-		return String.format("type:%d;location:%d", newsType, location);
-	}
-
-	protected String getNewsTypeSubTypeLocationKey(Integer newsType, Integer subNewsType, Integer location)
-	{
-		if (newsType == null || location == null || subNewsType == null)
-			return "";
-		return String.format("type:%d;subtype:%d;loation:%d", newsType, subNewsType, location);
-	}
-
-	protected String getNewsItemKey(String id)
-	{
-		return "News:" + id;
-	}
-
 	protected String getTrimKey()
 	{
 		return "TRIMKEYS";
@@ -56,15 +37,15 @@ public class RedisHandler {
 			return;
 
 		//remove msgitem
-		String key = getNewsItemKey(newsItem.getId());
+		String key = NewsDTO.getNewsItemKey(newsItem.getId());
 		storedCacheService.del(key);
 
 		//remove msg in special location
-		key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
+		key = NewsDTO.getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
 		storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
 
 		//remove id for record(type:subtype:location)
-		key = getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
+		key = NewsDTO.getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
 		if (TextUtils.isEmpty(key))
 			return;
 		storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
@@ -75,25 +56,16 @@ public class RedisHandler {
 		if (newsItem == null)
 			return;
 
-		/*if (newsItem.getPublisherId() != null)
-		{
-			UserDTO userDTO = userCommonServiceUtil.getUserDTO(newsItem.getPublisherId());
-			if (userDTO != null)
-			{
-				newsItem.setPublishSource(userDTO.getNickName());
-			}
-		}*/
-
 		//cache newsItem
-		storedCacheService.set(getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
+		storedCacheService.set(NewsDTO.getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
 
 		//cache msg in specific location(type:location)
-		String key = getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
+		String key = NewsDTO.getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
 		storedCacheService.zadd(key, Long.parseLong(newsItem.getId()), newsItem.getId());
 		storedCacheService.zadd(getTrimKey(), newsItem.getLocationCode(), key);
 
 		//store id for record(type:subtype:location)
-		key = getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
+		key = NewsDTO.getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
 		if (TextUtils.isEmpty(key))
 			return;
 		storedCacheService.zadd(key, Long.parseLong(newsItem.getId()), newsItem.getId());

@@ -102,4 +102,29 @@ public class NewsDTO extends BaseDTO {
 	public void setSource(String source) {
 		this.source = source;
 	}
+
+	@Override
+	public String getKey(String id)
+	{
+		return getNewsItemKey(id);
+	}
+
+	public static String getNewsItemKey(String id)
+	{
+		return "News:" + id;
+	}
+
+	public static String getNewsTypeLocationKey(Integer newsType, Integer location)
+	{
+		if (location == null || newsType == null)
+			return "";
+		return String.format("type:%d;location:%d", newsType, location);
+	}
+
+	public static String getNewsTypeSubTypeLocationKey(Integer newsType, Integer subNewsType, Integer location)
+	{
+		if (newsType == null || location == null || subNewsType == null)
+			return "";
+		return String.format("type:%d;subtype:%d;loation:%d", newsType, subNewsType, location);
+	}
 }

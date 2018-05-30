@@ -116,23 +116,6 @@ public class LoadDataToRedis extends RedisHandler{
 		storedCacheService.zremrangeByRank(key, 0, removeMaxId);
 	}
 
-	private void trimSortedListAndNewsItem(String key, Integer limitSize)
-	{
-		Long nCount = storedCacheService.zcard(key);
-		if (nCount <= limitSize)
-			return;
-
-		//返回超过的Item，然后把news表中的redis删除。
-		Long removeMaxIdx = nCount - limitSize - 1;
-		Set<String> candidateRemoves = storedCacheService.zrange(key, 0, removeMaxIdx);
-		for (String candidate : candidateRemoves)
-		{
-			String removeItemKey = getNewsItemKey(candidate);
-			storedCacheService.del(removeItemKey);
-		}
-		storedCacheService.zremrangeByRank(key, 0, removeMaxIdx);
-	}
-
 	public void LoadSession(Long adminID, int seconds, String sessionID)
 	{
 		String key = getSessionKey(adminID);
