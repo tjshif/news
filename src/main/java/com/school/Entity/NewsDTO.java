@@ -14,6 +14,7 @@ public class NewsDTO extends BaseDTO {
 	private Boolean	hasDetail; // 是否有详细内容
 	private Long 		publisherId;
 	private String 	source;
+	private String 	tag;
 
 	public String getContent() {
 		return subject;
@@ -126,5 +127,12 @@ public class NewsDTO extends BaseDTO {
 		if (newsType == null || location == null || subNewsType == null)
 			return "";
 		return String.format("type:%d;subtype:%d;loation:%d", newsType, subNewsType, location);
+	}
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }

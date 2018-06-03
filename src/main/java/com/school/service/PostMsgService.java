@@ -52,6 +52,7 @@ public class PostMsgService {
 			newsDTO.setPublisherId(userID);
 			newsDTO.setUpdateBy("postMsgToRedis");
 			newsDTO.setSource(postMsgGson.getSource());
+			newsDTO.setTag(postMsgGson.getTag());
 			if (postMsgGson.getPostDate() != null)
 				newsDTO.setPostDate(postMsgGson.getPostDate());
 			else

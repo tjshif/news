@@ -14,7 +14,8 @@
       publisherId,
       isValid,
       hasDetail,
-      source
+      source,
+      tag
     </sql>
 
     <insert id="insert" parameterType="com.school.Entity.NewsDTO">
@@ -33,7 +34,8 @@
         #{publisherId},
         #{isValid},
         #{hasDetail},
-        #{source}
+        #{source},
+        #{tag}
         )
         ON DUPLICATE KEY UPDATE subject = #{subject}, updateAt=now(), updateBy=#{updateBy};
     </insert>
