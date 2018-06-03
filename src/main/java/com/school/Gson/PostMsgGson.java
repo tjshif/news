@@ -14,6 +14,7 @@ public class PostMsgGson {
 	private String		detailContent;
 	private String		sourceArticleUrl;
 	private String 	source;
+	private String 	tag;
 
 	public String getContent() {
 		return content;
@@ -92,5 +93,13 @@ public class PostMsgGson {
 
 	public String getSource() {
 		return source;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }

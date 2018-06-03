@@ -28,6 +28,7 @@ public class MsgGson {
 	private String     source;
 	private String 	detailContent;
 	private Boolean 	favorite;
+	private String  	tag;
 
 	public void setContent(String content) {
 		this.content = content;
@@ -195,5 +196,13 @@ public class MsgGson {
 
 	public String getDetailContent() {
 		return detailContent;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getTag() {
+		return tag;
 	}
 }
