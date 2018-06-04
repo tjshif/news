@@ -20,6 +20,9 @@ public class AppProperites {
 	@Value("${CHANNEL_VERSION}")
 	private Integer channel_version;
 
+	@Value("${AD_PERCENT}")
+	private Integer ad_percent;
+
 	public String getAvatar_image_path() {
 		return avatar_image_path;
 	}
@@ -38,5 +41,11 @@ public class AppProperites {
 
 	public Integer getChannel_version() {
 		return channel_version;
+	}
+
+	public Integer getAd_percent() {
+		if (ad_percent == null)
+			return 100;
+		return ad_percent;
 	}
 }

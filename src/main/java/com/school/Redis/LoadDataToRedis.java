@@ -30,9 +30,6 @@ public class LoadDataToRedis extends RedisHandler{
 	@Resource
 	private DistributedLock distributedLock;
 
-	@Resource
-	private AppProperites appProperites;
-
 	@Scheduled(cron = "0 0/30 * * * ?")
 	public void LoadDataToRedis()
 	{
@@ -44,11 +41,11 @@ public class LoadDataToRedis extends RedisHandler{
 		NewsTypeEnum[] enums = NewsTypeEnum.values();
 		for (int ii = 0; ii < enums.length; ++ii)
 		{
-			loadTopCountDataToRedisByDate(enums[ii].getNewsTypeCode(), appProperites.getPage_size());
+			loadTopCountDataToRedis(enums[ii].getNewsTypeCode(), appProperites.getPage_size());
 		}
 	}
 
-	public void loadTopCountDataToRedisByDate(Integer newsType, Integer count)
+	public void loadTopCountDataToRedis(Integer newsType, Integer count)
 	{
 		//用分布式锁，timout是1个小时。
 		Boolean ownTheLock = false;

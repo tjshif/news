@@ -30,9 +30,9 @@ public class NewsTestcase {
 	public void getNewsDetailTest()
 	{
 
-		NewsSubjectResultGson r1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 25, null, 20);
+		NewsSubjectResultGson r1 = newsService.getNewsSubjectList(NewsTypeEnum.NEWS_JOB, null, 21, Long.MAX_VALUE, 3);
 
-		NewsSubjectResultGson r2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null,25, 0, 20);
+		NewsSubjectResultGson r2 = newsService.getNewsSubjectListByPage(NewsTypeEnum.NEWS_JOB, null,21, 0, 3);
 
 
 		NewsDetailResultGson resultGson = newsService.getNewsDetail(1L, null, false);

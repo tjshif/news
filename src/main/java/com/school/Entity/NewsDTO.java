@@ -1,5 +1,8 @@
 package com.school.Entity;
 
+import com.school.Enum.TagEnum;
+import org.apache.http.util.TextUtils;
+
 import java.sql.Timestamp;
 
 public class NewsDTO extends BaseDTO {
@@ -128,6 +131,25 @@ public class NewsDTO extends BaseDTO {
 			return "";
 		return String.format("type:%d;subtype:%d;loation:%d", newsType, subNewsType, location);
 	}
+
+	public static String getNewsTypeTagKey(Integer newsType, String tag)
+	{
+		if (newsType == null || TextUtils.isEmpty(tag))
+			return "";
+		Integer tagValue = TagEnum.nameToTagValue(tag);
+		return String.format("type:%d;tag:%d", newsType, tagValue);
+	}
+
+	public Boolean isStoreRedisWithTag()
+	{
+		if (TextUtils.isEmpty(tag))
+			return false;
+
+		if (tag.equalsIgnoreCase(TagEnum.AD_TAG.getTagName()) || tag.equalsIgnoreCase(TagEnum.TOP_TAG.getTagName()))
+			return true;
+		return false;
+	}
+
 	public String getTag() {
 		return tag;
 	}

@@ -3,8 +3,10 @@ package com.school.Redis;
 import com.school.DAO.IUserDao;
 import com.school.Entity.BaseDTO;
 import com.school.Entity.NewsDTO;
+import com.school.Utils.AppProperites;
 import com.school.Utils.GsonUtil;
 import com.school.service.common.UserCommonServiceUtil;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.http.util.TextUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,9 @@ public class RedisHandler {
 
 	@Resource
 	private UserCommonServiceUtil userCommonServiceUtil;
+
+	@Resource
+	protected AppProperites appProperites;
 
 	protected String getTrimKey()
 	{
@@ -52,6 +57,30 @@ public class RedisHandler {
 	}
 
 	public void loadNewsToRedis(NewsDTO newsItem)
+	{
+		if (newsItem == null)
+			return;
+
+		if (newsItem.isStoreRedisWithTag())
+			loadNewsToRedisWithTagInfo(newsItem);
+		else
+			loadNewsToRedisWithoutTagInfo(newsItem);
+	}
+
+	private void loadNewsToRedisWithTagInfo(NewsDTO newsItem)
+	{
+		if (newsItem == null)
+			return;
+
+		//cache newsItem
+		storedCacheService.set(NewsDTO.getNewsItemKey(newsItem.getId()), GsonUtil.toJson(newsItem));
+
+		//add to sorted list (type:type1;tag:tag1)
+		String key = NewsDTO.getNewsTypeTagKey(newsItem.getNewsType(), newsItem.getTag());
+		storedCacheService.zadd(key, Long.parseLong(newsItem.getId()), newsItem.getId());
+	}
+
+	private void loadNewsToRedisWithoutTagInfo(NewsDTO newsItem)
 	{
 		if (newsItem == null)
 			return;
