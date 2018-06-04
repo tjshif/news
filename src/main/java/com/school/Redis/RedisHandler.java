@@ -45,16 +45,17 @@ public class RedisHandler {
 		String key = NewsDTO.getNewsItemKey(newsItem.getId());
 		storedCacheService.del(key);
 
-		//remove msg in special location
-		key = NewsDTO.getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
-		storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
-
 		if (newsItem.isStoreRedisWithTag())
 		{
 			//remove type:tag
 			key = NewsDTO.getNewsTypeTagKey(newsItem.getNewsType(), newsItem.getTag());
 			storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
+			return;
 		}
+
+		//remove msg in special location
+		key = NewsDTO.getNewsTypeLocationKey(newsItem.getNewsType(), newsItem.getLocationCode());
+		storedCacheService.zremrangeByScore(key, newsItem.getId(), newsItem.getId());
 
 		//remove id for record(type:subtype:location)
 		key = NewsDTO.getNewsTypeSubTypeLocationKey(newsItem.getNewsType(), newsItem.getNewsSubType(), newsItem.getLocationCode());
