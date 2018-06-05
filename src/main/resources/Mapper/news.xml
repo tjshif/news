@@ -55,6 +55,11 @@
         FROM News where ID = #{ID}
     </select>
 
+    <select id="selectNewsByTag" resultType="com.school.Entity.NewsDTO">
+        SELECT ID, <include refid="Column_List"/>
+        FROM News where tag = #{tag} and isValid = '1' ORDER by ID desc;
+    </select>
+
     <select id="selectNewsGreaterThanId" resultType="com.school.Entity.NewsDTO" >
         SELECT ID, <include refid="Column_List"/>
         FROM News

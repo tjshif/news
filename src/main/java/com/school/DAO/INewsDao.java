@@ -29,6 +29,8 @@ public interface INewsDao {
 	List<NewsDTO> selectPostNewsByPage(@Param("publisherId") String publisherId, @Param("offset") Long offset,
 								   @Param("pageSize")Integer pageSize);
 
+	List<NewsDTO> selectNewsByTag(String tag);
+
 	NewsDTO selectNewsById(Long ID);
 
 	int updateNewsStatus(@Param("ID") Long ID, @Param("isValid") Boolean isValid);

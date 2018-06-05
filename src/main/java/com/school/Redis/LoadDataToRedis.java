@@ -1,9 +1,12 @@
 package com.school.Redis;
 
 import com.school.Constants.EnvConst;
+import com.school.Constants.RetCode;
+import com.school.Constants.RetMsg;
 import com.school.DAO.INewsDao;
 import com.school.Entity.NewsDTO;
 import com.school.Enum.NewsTypeEnum;
+import com.school.Gson.RetResultGson;
 import com.school.Utils.AppProperites;
 import org.apache.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -43,6 +46,26 @@ public class LoadDataToRedis extends RedisHandler{
 		{
 			loadTopCountDataToRedis(enums[ii].getNewsTypeCode(), appProperites.getPage_size());
 		}
+	}
+
+	public RetResultGson loadDataToRedis(String tag)
+	{
+		RetResultGson resultGson = new RetResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
+		try
+		{
+			List<NewsDTO> newsDTOList = newsDao.selectNewsByTag(tag);
+
+			for (NewsDTO newsDTO : newsDTOList)
+			{
+				loadNewsToRedis(newsDTO);
+			}
+		}
+		catch (Exception ex)
+		{
+			logger.error("",ex);
+			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
+		}
+		return resultGson;
 	}
 
 	public void loadTopCountDataToRedis(Integer newsType, Integer count)
