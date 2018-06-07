@@ -40,7 +40,7 @@ public class CommentsService {
 	public RetFLCommentResultGson addFLComment(Long newsID, Long userID, String comment)
 	{
 		RetFLCommentResultGson retResultGson = new RetFLCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO userDTO = userCommonServiceUtil.getUserDTO(userID);
+		UserDTO userDTO = userCommonServiceUtil.getUserDTOCacheByID(userID);
 		if (userDTO == null)
 		{
 			retResultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
@@ -73,8 +73,8 @@ public class CommentsService {
 	public RetSecCommentResultGson addSecComment(Long flID, Long fromUserID, Long toUserID, String replyComment)
 	{
 		RetSecCommentResultGson retResultGson = new RetSecCommentResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO fromUserDTO = userCommonServiceUtil.getUserDTO(fromUserID);
-		UserDTO toUserDTO = userCommonServiceUtil.getUserDTO(toUserID);
+		UserDTO fromUserDTO = userCommonServiceUtil.getUserDTOCacheByID(fromUserID);
+		UserDTO toUserDTO = userCommonServiceUtil.getUserDTOCacheByID(toUserID);
 		if (fromUserDTO == null || toUserDTO == null)
 		{
 			logger.error("fromUserID: " + fromUserID + " toUserID: " + toUserID);

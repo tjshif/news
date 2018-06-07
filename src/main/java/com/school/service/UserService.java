@@ -107,7 +107,6 @@ public class UserService {
 			userInfoGson.setID(userID);
 			userDao.updateUserInfo(userInfoGson);
 			resultGson = getUserInfo(userID);
-			userCommonServiceUtil.loadUserToRedis(userID.toString());
 		}
 		catch (DuplicateKeyException ex)
 		{
@@ -122,6 +121,7 @@ public class UserService {
 			logger.error(ex.getMessage());
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
+		userCommonServiceUtil.loadUserToRedis(userID);
 		return resultGson;
 	}
 
@@ -129,7 +129,7 @@ public class UserService {
 	{
 		UserInfoResultGson resultGson = new UserInfoResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			UserDTO userDTO = userCommonServiceUtil.getUserDTOWithoutCache(userID);
+			UserDTO userDTO = userCommonServiceUtil.getUserDTOByID(userID);
 			resultGson.setAvatarUrl(userDTO.getAvatarUrl());
 			resultGson.setPhoneNumber(userDTO.getPhoneNumber());
 			resultGson.setCollege(userDTO.getCollege());
@@ -148,7 +148,7 @@ public class UserService {
 	public AvatarResultGson updateUserAvatarPath(Long userID, String imageFilePath)
 	{
 		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO userDTO = userCommonServiceUtil.getUserDTOWithoutCache(userID);
+		UserDTO userDTO = userCommonServiceUtil.getUserDTOByID(userID);
 		if (userDTO == null)
 		{
 			resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
@@ -172,7 +172,7 @@ public class UserService {
 		{
 			resultGson.setResult(updateResult.getRetCode(), updateResult.getMessage());
 		}
-		userCommonServiceUtil.loadUserToRedis(userID.toString());
+		userCommonServiceUtil.loadUserToRedis(userID);
 		return resultGson;
 	}
 
@@ -200,7 +200,7 @@ public class UserService {
 	{
 		RetIDResultGson resultGson = new RetIDResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			UserDTO userDTO = userCommonServiceUtil.getUserDTO(nickName);
+			UserDTO userDTO = userCommonServiceUtil.getUserDTOByNickName(nickName);
 			if (userDTO != null)
 				resultGson.setID(Long.parseLong(userDTO.getId()));
 		}
