@@ -107,6 +107,7 @@ public class UserService {
 			userInfoGson.setID(userID);
 			userDao.updateUserInfo(userInfoGson);
 			resultGson = getUserInfo(userID);
+			userCommonServiceUtil.loadUserToRedis(userID.toString());
 		}
 		catch (DuplicateKeyException ex)
 		{
@@ -171,6 +172,7 @@ public class UserService {
 		{
 			resultGson.setResult(updateResult.getRetCode(), updateResult.getMessage());
 		}
+		userCommonServiceUtil.loadUserToRedis(userID.toString());
 		return resultGson;
 	}
 

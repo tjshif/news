@@ -68,5 +68,12 @@ public class UserCommonServiceUtil {
 		return userDTOS;
 	}
 
+	public void loadUserToRedis(String userID)
+	{
+		UserDTO userDTO = getUserDTOWithoutCache(userID);
+		if (userDTO == null)
+			return;
+		redisHandler.loadItemToRedis(userDTO, TimeUtils.ONE_DAY_SECONDS);
+	}
 
 }
