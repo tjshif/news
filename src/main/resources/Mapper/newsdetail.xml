@@ -23,11 +23,12 @@
 
     <select id="selectNewsDetail" resultType="com.school.Entity.NewsDetailDTO">
         SELECT newsID, Subject, detailContent, postDate, publisherId publisher_id FROM News N
-        INNER JOIN NewsDetail ND  ON N.ID = ND.newsID where ND.newsID = #{newsID};
+        INNER JOIN NewsDetail ND ON N.ID = ND.newsID where ND.newsID = #{newsID};
     </select>
 
     <select id="selectNewsDetailByUrl" resultType="com.school.Entity.NewsDetailDTO">
-        SELECT * from NewsDetail WHERE sourceArticleUrl = #{sourceArticleUrl};
+        SELECT newsID, Subject, detailContent, postDate FROM News N
+        inner join NewsDetail ND on N.ID = ND.newsID where ND.sourceArticleUrl = #{sourceArticleUrl};
     </select>
 
     <update id="update" parameterType="com.school.Gson.NewsDetailGson">
