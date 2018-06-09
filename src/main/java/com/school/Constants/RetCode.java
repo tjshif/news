@@ -26,6 +26,6 @@ public class RetCode {
 	public static final int RET_ERROR_USER_INVALID_INFO = 0x5001;//无效用户名或密码
 	public static final int RET_ERROR_BEADMIN_SESSION_OUTDATE = 0x5002;//session过期，请重新登录
 
-
+	public static final int RET_ERROR_SAME_USER = 0x6001;//该操作不能是同一个人
 
 }

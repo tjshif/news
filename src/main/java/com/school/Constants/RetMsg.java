@@ -22,4 +22,6 @@ public class RetMsg {
 	public static final String RET_MSG_USER_INVALID_INFO = "无效用户名或密码";
 	public static final String RET_MSG_BEADMIN_SESSION_OUTDATE = "登录已经过期，请重新登录";
 	public static final String RET_MSG_INVLAID_GSON_STRING = "输入参数包含错误的Gson";
+
+	public static final String RET_MSG_SAME_USER = "该操作不能是同一个人";
 }

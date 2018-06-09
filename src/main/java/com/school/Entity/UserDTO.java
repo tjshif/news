@@ -1,5 +1,7 @@
 package com.school.Entity;
 
+import org.apache.http.util.TextUtils;
+
 public class UserDTO extends BaseDTO{
 	private String phoneNumber;
 	private String nickName;
@@ -69,6 +71,11 @@ public class UserDTO extends BaseDTO{
 
 	@Override
 	public String getKey(String id)
+	{
+		return getItemKey(id);
+	}
+
+	public static String getItemKey(String id)
 	{
 		return String.format("User:%s", id);
 	}

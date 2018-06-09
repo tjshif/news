@@ -26,7 +26,7 @@ public class UserCommonServiceUtil {
 	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
 	public UserDTO getUserDTOCacheByID(Long userID)
 	{
-		return getUserDTOByID(userID);
+		return getUserDTOByIDInDB(userID.toString());
 	}
 
 	@CacheMethodLogo(resTime = TimeUtils.ONE_MINUTE_SECONDS)
@@ -35,7 +35,7 @@ public class UserCommonServiceUtil {
 		return getUserDTOByNickName(nickName);
 	}
 
-	public UserDTO getUserDTOByID(Long userID)
+	public UserDTO getUserDTOByIDInDB(String userID)
 	{
 		if (userID == null)
 			return null;
@@ -68,12 +68,25 @@ public class UserCommonServiceUtil {
 		return userDTOS;
 	}
 
-	public void loadUserToRedis(Long userID)
+	public UserDTO selectUser(String userID)
 	{
-		UserDTO userDTO = getUserDTOByID(userID);
+		if (TextUtils.isEmpty(userID))
+			return null;
+
+		UserDTO userDTO = redisHandler.readItemFromRedis(UserDTO.getItemKey(userID), UserDTO.class);
+		if (userDTO != null)
+			return userDTO;
+		userDTO = loadUserToRedis(userID);
+		return userDTO;
+	}
+
+	public UserDTO loadUserToRedis(String userID)
+	{
+		UserDTO userDTO = getUserDTOByIDInDB(userID);
 		if (userDTO == null)
-			return;
+			return null;
 		redisHandler.loadItemToRedis(userDTO, TimeUtils.ONE_DAY_SECONDS);
+		return userDTO;
 	}
 
 }

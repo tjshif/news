@@ -12,7 +12,7 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 @Component("consumeCounterMsgToDBListener")
-public class consumeCounterMsgToDBListener implements MessageListener {
+public class ConsumeCounterMsgToDBListener implements MessageListener {
 	private Logger logger = Logger.getLogger(getClass());
 	@Resource
 	private NewsServiceUtils newsServiceUtils;

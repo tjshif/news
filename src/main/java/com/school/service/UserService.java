@@ -121,7 +121,7 @@ public class UserService {
 			logger.error(ex.getMessage());
 			resultGson.setResult(RetCode.RET_CODE_SYSTEMERROR, RetMsg.RET_MSG_SYSTEMERROR);
 		}
-		userCommonServiceUtil.loadUserToRedis(userID);
+		userCommonServiceUtil.loadUserToRedis(userID.toString());
 		return resultGson;
 	}
 
@@ -129,7 +129,7 @@ public class UserService {
 	{
 		UserInfoResultGson resultGson = new UserInfoResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
 		try {
-			UserDTO userDTO = userCommonServiceUtil.getUserDTOByID(userID);
+			UserDTO userDTO = userCommonServiceUtil.selectUser(userID.toString());
 			resultGson.setAvatarUrl(userDTO.getAvatarUrl());
 			resultGson.setPhoneNumber(userDTO.getPhoneNumber());
 			resultGson.setCollege(userDTO.getCollege());
@@ -148,7 +148,7 @@ public class UserService {
 	public AvatarResultGson updateUserAvatarPath(Long userID, String imageFilePath)
 	{
 		AvatarResultGson resultGson = new AvatarResultGson(RetCode.RET_CODE_OK, RetMsg.RET_MSG_OK);
-		UserDTO userDTO = userCommonServiceUtil.getUserDTOByID(userID);
+		UserDTO userDTO = userCommonServiceUtil.selectUser(userID.toString());
 		if (userDTO == null)
 		{
 			resultGson.setResult(RetCode.RET_ERROR_INVALID_USERID, RetMsg.RET_MSG_INVALID_USERID);
@@ -172,7 +172,7 @@ public class UserService {
 		{
 			resultGson.setResult(updateResult.getRetCode(), updateResult.getMessage());
 		}
-		userCommonServiceUtil.loadUserToRedis(userID);
+		userCommonServiceUtil.loadUserToRedis(userID.toString());
 		return resultGson;
 	}
 

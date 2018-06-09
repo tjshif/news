@@ -57,5 +57,17 @@
         <property name="messageListener" ref="consumeCounterMsgToDBListener"/>
     </bean>
 
-
+    <!--load to redis by id message queue-->
+    <bean id="queueLoadToRedisMsgDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg>
+            <value>loadToRedisMsg.storetoredis.queue</value>
+        </constructor-arg>
+    </bean>
+    <!-- 监听方式，这种方式更实用，可以一直监听消息 -->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="targetConnectionFactory"/>
+        <!-- 注册activemq名称 -->
+        <property name="destination" ref="queueLoadToRedisMsgDestination"/>
+        <property name="messageListener" ref="consumeLoadToRedisMsgToDBListener"/>
+    </bean>
 </beans>

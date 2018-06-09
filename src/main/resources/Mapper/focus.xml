@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.school.DAO.IFocusDao" >
+    <sql id="Column_List">
+        fromUserID,
+        toUserID,
+        bothStatus,
+        isCached,
+        updateAt
+    </sql>
+
+    <select id="selectFocusByUserID" resultType="com.school.Entity.FocusDTO">
+        SELECT ID, <include refid="Column_List" />
+        FROM Focus where fromUserID = #{fromUserID} ORDER BY ID DESC Limit #{offset}, #{pageSize};
+    </select>
+
+    <select id="selectFocus" resultType="com.school.Entity.FocusDTO">
+        SELECT ID, <include refid="Column_List" />
+        FROM Focus where fromUserID = #{fromUserID} and toUserID = #{toUserID};
+    </select>
+
+    <insert id="insert" parameterType="com.school.Entity.FocusDTO" useGeneratedKeys="true" keyProperty="ID">
+        INSERT INTO Focus (<include refid="Column_List"/>) VALUES
+        (
+        #{fromUserID},
+        #{toUserID},
+        #{bothStatus},
+        #{isCached},
+        now()
+        )
+        ON DUPLICATE KEY UPDATE bothStatus = #{bothStatus}, updateAt = now();
+    </insert>
+
+    <update id="update" parameterType="com.school.Entity.FocusDTO">
+        UPDATE Focus set updateAt = now()
+        <if test="bothStatus != null">
+            , bothStatus = #{bothStatus}
+        </if>
+        <if test="isCached != null">
+            , isCached = #{isCached}
+        </if>
+        where ID = #{ID};
+    </update>
+</mapper>

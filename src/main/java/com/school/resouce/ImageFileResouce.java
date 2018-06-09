@@ -1,5 +1,6 @@
 package com.school.resouce;
 
+import com.school.AOP.LogAnnotation;
 import com.school.Constants.EnvConst;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
@@ -45,6 +46,7 @@ public class ImageFileResouce {
 	@Path("/{userID}/uploadfile")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
+	@LogAnnotation
 	public String uploadFile(@PathParam("userID") Long userID,
 							 @FormDataParam("file")InputStream inputStream,
 							 @FormDataParam("file") FormDataContentDisposition disposition)
