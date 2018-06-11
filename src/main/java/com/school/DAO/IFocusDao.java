@@ -12,6 +12,8 @@ public interface IFocusDao {
 
 	FocusDTO selectFocus(@Param("fromUserID") String fromUserID, @Param("toUserID") String toUserID);
 
+	FocusDTO selectByID(String ID);
+
 	Integer insert(FocusDTO focusDTO);
 
 	Integer update(FocusDTO focusDTO);

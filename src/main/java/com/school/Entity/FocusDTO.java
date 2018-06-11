@@ -50,4 +50,15 @@ public class FocusDTO extends BaseDTO{
 	public Boolean getCached() {
 		return isCached;
 	}
+
+	@Override
+	public String getKey(String id)
+	{
+		return getItemKey(id);
+	}
+
+	public static String getItemKey(String id)
+	{
+		return String.format("Focus:%s", id);
+	}
 }

@@ -1,11 +1,13 @@
 package com.school.service;
 
+import com.school.Constants.MsgType;
 import com.school.Constants.RetCode;
 import com.school.Constants.RetMsg;
 import com.school.DAO.IFocusDao;
 import com.school.Entity.FocusDTO;
 import com.school.Entity.UserDTO;
 import com.school.Gson.RetResultGson;
+import com.school.Msg.LoadToRedisMsg;
 import com.school.PushService.PushLoadToRedisMsgService;
 import com.school.service.common.UserCommonServiceUtil;
 import org.apache.http.util.TextUtils;
@@ -48,7 +50,7 @@ public class FocusService {
 		List<String> ids = setFocus(fromUserDto, toUserDto);
 		for (String id : ids)
 		{
-			pushLoadToRedisMsgService.push(id);
+			pushLoadMsg(id);
 		}
 		return resultGson;
 	}
@@ -78,5 +80,14 @@ public class FocusService {
 		}
 		updateIDs.add(fromToUserFocusDto.getId());
 		return updateIDs;
+	}
+
+	private void pushLoadMsg(String id)
+	{
+		if (TextUtils.isEmpty(id))
+			return;
+
+		LoadToRedisMsg msg = new LoadToRedisMsg(MsgType.MSG_FOCUSTABLE, id);
+		pushLoadToRedisMsgService.push(msg);
 	}
 }

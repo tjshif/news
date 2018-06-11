@@ -19,6 +19,10 @@
         FROM Focus where fromUserID = #{fromUserID} and toUserID = #{toUserID};
     </select>
 
+    <select id="selectByID" resultType="com.school.Entity.FocusDTO">
+        SELECT ID, <include refid="Column_List" />
+        FROM Focus where ID = #{ID};
+    </select>
     <insert id="insert" parameterType="com.school.Entity.FocusDTO" useGeneratedKeys="true" keyProperty="ID">
         INSERT INTO Focus (<include refid="Column_List"/>) VALUES
         (
